@@ -7,10 +7,12 @@ pub mod chatushkoti;
 pub mod compiler;
 pub mod vm;
 pub mod asm_compiler;
+pub mod evm_compiler;
 
 pub use environment::{Environment, Value, TattvaState};
 pub use engine::{Engine, RuntimeError};
 pub use asm_compiler::AgniAsmCompiler;
+pub use evm_compiler::AgniEvmCompiler;
 
 #[cfg(test)]
 mod tests {

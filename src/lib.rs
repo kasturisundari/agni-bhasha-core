@@ -11,3 +11,4 @@ pub mod network;
 pub mod sangraha;
 pub mod ffi;
 pub mod vyakarana;
+pub mod rpc;

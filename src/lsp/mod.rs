@@ -39,17 +39,46 @@ impl LanguageServer for KasturiLsp {
     }
 
     async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
-        // MVP: Provide generic hover or check the dhatu registry for specific roots.
-        // In a full implementation, we'd extract the word under the cursor.
+        // Zero Mocks: True LSP Hover Extraction
+        let position = params.text_document_position_params.position;
+        let uri = params.text_document_position_params.text_document.uri;
         
-        let _position = params.text_document_position_params.position;
-        // Mock lookup for demonstration
-        let root = "sṛj"; // Hypothetical extracted word
+        let mut root_word = String::new();
         
-        if let Some(dhatu) = self.dhatu_registry.lookup(root) {
+        if let Ok(file_path) = uri.to_file_path() {
+            if let Ok(content) = std::fs::read_to_string(file_path) {
+                let lines: Vec<&str> = content.lines().collect();
+                if let Some(line) = lines.get(position.line as usize) {
+                    let char_idx = position.character as usize;
+                    
+                    // Extract word surrounding the cursor
+                    let mut start = char_idx;
+                    let mut end = char_idx;
+                    let chars: Vec<char> = line.chars().collect();
+                    
+                    if char_idx < chars.len() {
+                        while start > 0 && chars[start - 1].is_alphanumeric() {
+                            start -= 1;
+                        }
+                        while end < chars.len() && chars[end].is_alphanumeric() {
+                            end += 1;
+                        }
+                        if start < end {
+                            root_word = chars[start..end].iter().collect();
+                        }
+                    }
+                }
+            }
+        }
+        
+        if root_word.is_empty() {
+            return Ok(None);
+        }
+        
+        if let Some(dhatu) = self.dhatu_registry.lookup(&root_word) {
             let markdown = format!(
                 "**{}** (_{}_)\n\n**Meaning:** {}\n**Gana:** {:?}",
-                root, dhatu.devanagari, dhatu.meaning, dhatu.gana
+                root_word, dhatu.devanagari, dhatu.meaning, dhatu.gana
             );
             Ok(Some(Hover {
                 contents: HoverContents::Scalar(MarkedString::String(markdown)),
@@ -57,7 +86,7 @@ impl LanguageServer for KasturiLsp {
             }))
         } else {
             Ok(Some(Hover {
-                contents: HoverContents::Scalar(MarkedString::String("Vedic Dhatu not recognized.".into())),
+                contents: HoverContents::Scalar(MarkedString::String(format!("Vedic Dhatu not recognized: {}", root_word))),
                 range: None,
             }))
         }

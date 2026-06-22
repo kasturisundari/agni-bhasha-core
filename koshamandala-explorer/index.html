@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KasturiScan | Sovereign Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-mesh"></div>
+    
+    <header class="glass-header">
+        <div class="logo">
+            <span class="om">ॐ</span>
+            <h1>KasturiScan</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for Block, Tx, or Wallet...">
+            <button id="searchBtn">Search</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="stats-grid">
+            <div class="stat-card glass-panel">
+                <h3>KASTURI Price</h3>
+                <p class="value gradient-text">$ 108.00</p>
+            </div>
+            <div class="stat-card glass-panel">
+                <h3>Mining Power (TPS)</h3>
+                <p class="value" id="liveTps">45,000</p>
+            </div>
+            <div class="stat-card glass-panel">
+                <h3>Latest Block</h3>
+                <p class="value" id="latestBlock">8,402</p>
+            </div>
+        </section>
+
+        <section class="data-tables">
+            <div class="table-container glass-panel">
+                <h2>Live Blocks (Live Blocks)</h2>
+                <table id="blocksTable">
+                    <thead>
+                        <tr>
+                            <th>Block</th>
+                            <th>Age</th>
+                            <th>Transactions</th>
+                            <th>Miner (Miner)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blocksBody">
+                        <!-- Populated by app.js -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container glass-panel">
+                <h2>Data Transactions (Transactions)</h2>
+                <table id="txTable">
+                    <thead>
+                        <tr>
+                            <th>Hash</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Value (KAS)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="txBody">
+                        <!-- Populated by app.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

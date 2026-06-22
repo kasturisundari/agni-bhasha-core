@@ -22,6 +22,8 @@ pub enum Opcode {
     JumpIfFalse(usize),
     /// Unconditional jump relative
     Jump(usize),
+    /// Unconditional jump backward relative
+    JumpBack(usize),
     /// Call function with N arguments
     Call(String, usize),
     /// Return from function
@@ -94,6 +96,26 @@ impl BytecodeCompiler {
             Statement::Return(expr) => {
                 self.compile_expr(expr)?;
                 self.instructions.push(Opcode::Return);
+            }
+            Statement::WhileLoop { condition, body } => {
+                let loop_start = self.instructions.len();
+                
+                self.compile_expr(condition)?;
+                
+                let jump_if_false_idx = self.instructions.len();
+                self.instructions.push(Opcode::JumpIfFalse(0)); // Placeholder
+                
+                for s in body {
+                    self.compile_statement(s)?;
+                }
+                
+                // Jump back to loop start
+                let jump_back_offset = self.instructions.len() - loop_start + 1;
+                self.instructions.push(Opcode::JumpBack(jump_back_offset));
+                
+                // Patch exit jump
+                let exit_offset = self.instructions.len() - jump_if_false_idx - 1;
+                self.instructions[jump_if_false_idx] = Opcode::JumpIfFalse(exit_offset);
             }
             // Other statements are deferred for the fully complete VM
             _ => {

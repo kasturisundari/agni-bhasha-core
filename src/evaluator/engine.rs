@@ -22,10 +22,10 @@ pub struct Engine {
     functions: HashMap<String, (Vec<String>, Vec<Statement>)>,
     /// Security Sandbox Mode
     pub is_sandboxed: bool,
-    /// Gas/Resonance limit per execution (None = unlimited)
-    pub resonance_limit: Option<usize>,
-    /// Gas/Resonance used so far
-    pub resonance_used: usize,
+    /// MAHARANI Gas limit per execution (None = unlimited)
+    pub maharani_gas_limit: Option<usize>,
+    /// MAHARANI Gas consumed so far
+    pub maharani_consumed: usize,
     /// Panini Grammar Engine: tracks structural depth for resonance discount
     pub ast_depth: usize,
     /// Linganushasanam Engine for strong typing and permissions
@@ -46,8 +46,8 @@ impl Engine {
             derivation: DerivationEngine::new(),
             functions: HashMap::new(),
             is_sandboxed: false,
-            resonance_limit: None, // By default unlimited (node runner can restrict)
-            resonance_used: 0,
+            maharani_gas_limit: None, // By default unlimited (node runner can restrict)
+            maharani_consumed: 0,
             ast_depth: 0,
             linga: LinganushasanamEngine::new(),
             unadi: UnadiEngine::new(),
@@ -55,9 +55,9 @@ impl Engine {
         }
     }
 
-    /// Set execution limits
-    pub fn with_resonance_limit(mut self, limit: usize) -> Self {
-        self.resonance_limit = Some(limit);
+    /// Set PYAR execution limits
+    pub fn with_maharani_gas_limit(mut self, limit: usize) -> Self {
+        self.maharani_gas_limit = Some(limit);
         self
     }
 
@@ -70,10 +70,10 @@ impl Engine {
         Ok(last)
     }
 
-    /// Consume gas/resonance (Panini Grammar Engine logic included)
-    fn consume_resonance(&mut self, mut amount: usize) -> Result<(), RuntimeError> {
+    /// Consume MAHARANI Gas (Panini Grammar Engine logic included)
+    fn consume_maharani_gas(&mut self, mut amount: usize) -> Result<(), RuntimeError> {
         // Panini Grammar Engine: Mantra Score Discount
-        // Beautiful, linear code (low depth) resonates better and costs less gas.
+        // Beautiful, linear code (low depth) resonates better and costs less MAHARANI Gas.
         // Deeply nested, chaotic code (high depth) causes dissonance and costs more.
         if self.ast_depth <= 2 {
             // High resonance! 50% gas discount (Mantra Score high)
@@ -86,10 +86,10 @@ impl Engine {
         // Never go below 1 unless amount was 0
         if amount == 0 && self.ast_depth <= 2 { amount = 1; }
 
-        self.resonance_used += amount;
-        if let Some(limit) = self.resonance_limit {
-            if self.resonance_used > limit {
-                return Err(RuntimeError::ResonanceExhausted(self.resonance_used, limit));
+        self.maharani_consumed += amount;
+        if let Some(limit) = self.maharani_gas_limit {
+            if self.maharani_consumed > limit {
+                return Err(RuntimeError::ResonanceExhausted(self.maharani_consumed, limit));
             }
         }
         Ok(())
@@ -98,7 +98,7 @@ impl Engine {
     /// Execute a single statement
     #[async_recursion]
     pub async fn execute_statement(&mut self, stmt: &Statement) -> Result<Value, RuntimeError> {
-        self.consume_resonance(1)?; // 1 unit per statement
+        self.consume_maharani_gas(1)?; // 1 unit per statement
         self.ast_depth += 1;
         
         // --- THE DEEP DIVE PATCH #4: Vritti Memory Leak Prevention ---
@@ -493,6 +493,9 @@ impl Engine {
             "parīkṣ" | "परीक्ष्" => return self.builtin_pariksh(&param_values).await,
             "saṁvad" | "संवाद" => return self.builtin_samvad(&param_values).await,
             "yant" | "यन्त्र" => return self.builtin_yant(&param_values).await,
+            "tarka" | "तर्क" => return self.builtin_tarka(&param_values).await,
+            "citr" | "चित्र" => return self.builtin_citr(&param_values).await,
+            "sgrh" | "संग्रह" => return self.builtin_sgrh(&param_values).await,
             
             // Vedic AI Cognitive Contracts (Chatushkoti)
             "bodh" | "बोध्" => {
@@ -1510,6 +1513,47 @@ impl Engine {
     }
 
     /// √yant — यन्त्र (Sutra Yantra - Dynamic Execution)
+    
+    /// Tarka (तर्क): Zero-Knowledge Proof Verification
+    pub async fn builtin_citr(&self, params: &[Value]) -> Result<Value, RuntimeError> {
+        if self.is_sandboxed {
+            return Err(RuntimeError::General("🛑 SANDBOX: FFI UI hooks (citr/चित्र) are FORBIDDEN in sandboxed execution.".into()));
+        }
+        if let Some(val) = params.get(0) {
+            println!("🎨 [OS FFI] GUI Render Hook Triggered: {}", val);
+            Ok(Value::Str(format!("NATIVE_GUI_RENDERED: {}", val)))
+        } else {
+            Err(RuntimeError::ArityMismatch(1, 0))
+        }
+    }
+
+    pub async fn builtin_sgrh(&self, params: &[Value]) -> Result<Value, RuntimeError> {
+        if self.is_sandboxed {
+            return Err(RuntimeError::General("🛑 SANDBOX: FFI DB hooks (sgrh/संग्रह) are FORBIDDEN in sandboxed execution.".into()));
+        }
+        if let Some(val) = params.get(0) {
+            println!("💾 [OS FFI] Native VedaBase Hook Triggered: {}", val);
+            Ok(Value::Str(format!("NATIVE_DB_EXECUTED: {}", val)))
+        } else {
+            Err(RuntimeError::ArityMismatch(1, 0))
+        }
+    }
+
+    pub async fn builtin_tarka(&self, params: &[Value]) -> Result<Value, RuntimeError> {
+        if params.is_empty() {
+            return Err(RuntimeError::TypeError("tarka requires a proof string".into()));
+        }
+        let proof_hex = format!("{}", params[0]);
+        
+        let is_valid = crate::network::tarka_zk::TarkaZK::verify_transaction_proof(&proof_hex);
+        
+        Ok(Value::Tattva(if is_valid { 
+            crate::evaluator::TattvaState::Sat 
+        } else { 
+            crate::evaluator::TattvaState::Asat 
+        }))
+    }
+
     pub async fn builtin_yant(&mut self, params: &[Value]) -> Result<Value, RuntimeError> {
         if params.is_empty() {
             return Err(RuntimeError::General("√yant requires code to execute".into()));
@@ -1535,11 +1579,11 @@ impl Engine {
                 
                 // Snapshot Security Context
                 let previous_sandbox = self.is_sandboxed;
-                let previous_gas_limit = self.resonance_limit;
+                let previous_gas_limit = self.maharani_gas_limit;
                 
                 // Enforce strict VM rules
                 self.is_sandboxed = true;
-                self.resonance_limit = Some(100_000); // 100k Gas limit for contracts
+                self.maharani_gas_limit = Some(100_000); // 100k Gas limit for contracts
                 
                 // Inject Context (e.g. sender, contract address, call data)
                 if params.len() > 1 {
@@ -1562,13 +1606,13 @@ impl Engine {
                     Err(e) => {
                         self.env.pop_scope();
                         self.is_sandboxed = previous_sandbox;
-                        self.resonance_limit = previous_gas_limit;
+                        self.maharani_gas_limit = previous_gas_limit;
                         return Err(e);
                     }
                 };
                 self.env.pop_scope();
                 self.is_sandboxed = previous_sandbox;
-                self.resonance_limit = previous_gas_limit;
+                self.maharani_gas_limit = previous_gas_limit;
                 Ok(val)
             }
             Err(e) => Err(RuntimeError::General(format!("Contract parse error: {:?}", e))),

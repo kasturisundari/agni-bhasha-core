@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhakti Web Wallet | KasturiChain</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QR Code Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        .wallet-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .balance-card {
+            background: linear-gradient(145deg, rgba(31, 40, 51, 0.8), rgba(255, 183, 3, 0.15));
+            border: 1px solid var(--gold-secondary);
+            text-align: center;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; right: -50%; bottom: -50%;
+            background: radial-gradient(circle at center, rgba(255, 183, 3, 0.15) 0%, transparent 50%);
+            animation: rotateGlow 10s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            100% { transform: rotate(360deg); }
+        }
+
+        .balance-amount {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--gold-primary);
+            font-family: 'Outfit', sans-serif;
+            text-shadow: 0 0 20px rgba(255, 183, 3, 0.4);
+            margin: 1rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .currency-symbol {
+            font-size: 1.5rem;
+            color: var(--gold-secondary);
+            vertical-align: top;
+            margin-left: 0.5rem;
+        }
+
+        .address-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: monospace;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--gold-primary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .copy-btn:hover {
+            color: #fff;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-send {
+            background: var(--gold-primary);
+            color: #000;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 183, 3, 0.3);
+        }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 183, 3, 0.5);
+        }
+
+        .btn-receive {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid var(--border);
+        }
+
+        .btn-receive:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--gold-secondary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .glass-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .glass-input:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+        }
+
+        /* Login Screen */
+        #login-screen {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .seed-phrase-box {
+            background: rgba(0,0,0,0.4);
+            border: 1px dashed var(--gold-secondary);
+            padding: 2rem;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--gold-primary);
+            margin: 2rem 0;
+            user-select: all;
+        }
+
+        #qr-container {
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            width: max-content;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </a>
+        <ul class="nav-links">
+            <li><a href="satyascan.html">SatyaScan Explorer</a></li>
+            <li><a href="#" class="btn-primary" onclick="logout()" id="logout-btn" style="display:none;">Disconnect</a></li>
+        </ul>
+    </nav>
+
+    <section class="section" style="padding-top: 100px;">
+        <div class="container wallet-container">
+            
+            <!-- Login / Creation Screen -->
+            <div id="login-screen" class="bento-item dark-glass">
+                <i class="fas fa-wallet" style="font-size: 4rem; color: var(--gold-primary); margin-bottom: 2rem;"></i>
+                <h1 class="massive-text" style="font-size: 3rem; margin-bottom: 1rem;">Bhakti <span class="text-gradient">Wallet</span></h1>
+                <p class="center-para" style="margin-bottom: 3rem;">Your sovereign gateway to the KasturiChain L1 Ecosystem.</p>
+
+                <div class="action-grid" style="max-width: 500px; margin: 0 auto;">
+                    <button class="action-btn btn-send" onclick="createNewWallet()">
+                        <i class="fas fa-plus-circle"></i> Create Wallet
+                    </button>
+                    <button class="action-btn btn-receive" onclick="showAccessForm()">
+                        <i class="fas fa-key"></i> Access Wallet
+                    </button>
+                </div>
+
+                <div id="access-form" style="display: none; max-width: 500px; margin: 2rem auto; text-align: left;">
+                    <div class="input-group">
+                        <label>Enter your Kasturi Private Key (Hex or Seed)</label>
+                        <input type="password" id="pk-input" class="glass-input" placeholder="e.g. 0xabcd1234...">
+                    </div>
+                    <button class="btn-primary" style="width: 100%; padding: 1rem;" onclick="loginWithKey()">Unlock Wallet</button>
+                    <p id="login-err" style="color: var(--danger); margin-top: 1rem; text-align: center;"></p>
+                </div>
+
+                <div id="new-wallet-form" style="display: none;">
+                    <h3 style="color: var(--gold-primary);">Wallet Created Successfully!</h3>
+                    <p style="color: var(--danger); font-weight: bold;">WARNING: Save this private key immediately. If you lose it, your funds are permanently lost.</p>
+                    <div class="seed-phrase-box" id="new-pk-display"></div>
+                    <button class="btn-primary" style="padding: 1rem 3rem;" onclick="proceedToDashboard()">I have saved my key securely</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Screen -->
+            <div id="dashboard-screen" style="display: none;">
+                <div class="bento-item balance-card">
+                    <div style="position: relative; z-index: 2;">
+                        <h3 style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Total Balance</h3>
+                        <div class="balance-amount" id="main-balance">
+                            <i class="fas fa-circle-notch fa-spin"></i>
+                            <span class="currency-symbol">MAHA</span>
+                        </div>
+                        
+                        <div class="address-box">
+                            <span id="wallet-address" style="word-break: break-all;">0x...</span>
+                            <button class="copy-btn" onclick="copyAddress()"><i class="fas fa-copy"></i></button>
+                        </div>
+
+                        <div class="action-grid">
+                            <button class="action-btn btn-send" onclick="switchTab('send')">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                            <button class="action-btn btn-receive" onclick="switchTab('receive')">
+                                <i class="fas fa-qrcode"></i> Receive
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="send-tab" class="bento-item dark-glass tab-content" style="margin-top: 2rem;">
+                    <h3><i class="fas fa-paper-plane" style="color: var(--gold-primary);"></i> Send Maharani</h3>
+                    <div class="input-group" style="margin-top: 1.5rem;">
+                        <label>Recipient Address</label>
+                        <input type="text" id="send-to" class="glass-input" placeholder="0x...">
+                    </div>
+                    <div class="input-group">
+                        <label>Amount (MAHA)</label>
+                        <input type="number" id="send-amount" class="glass-input" placeholder="0.00">
+                    </div>
+                    <button class="btn-primary" style="width: 100%; padding: 1rem;" onclick="sendTransaction()">Sign & Send Transaction</button>
+                    <p id="tx-status" style="margin-top: 1rem; text-align: center;"></p>
+                </div>
+
+                <div id="receive-tab" class="bento-item dark-glass tab-content" style="margin-top: 2rem; text-align: center;">
+                    <h3><i class="fas fa-qrcode" style="color: var(--gold-primary);"></i> Receive Maharani</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">Scan this QR code to receive MAHA tokens on the KasturiChain Mainnet.</p>
+                    <div id="qr-container"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- App Logic -->
+    <script>
+        const RPC_URL = "https://kasturisundari.xyz/samparka";
+        let currentWallet = null;
+
+        // Simple Hash function for demo key generation
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function rpcCall(method, params = []) {
+            try {
+                const response = await fetch(RPC_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: method, params: params, id: Date.now() })
+                });
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+                return data.result;
+            } catch (error) {
+                console.error(`RPC Error (${method}):`, error);
+                throw error;
+            }
+        }
+
+        function showAccessForm() {
+            document.getElementById('access-form').style.display = 'block';
+            document.getElementById('new-wallet-form').style.display = 'none';
+        }
+
+        async function createNewWallet() {
+            document.getElementById('access-form').style.display = 'none';
+            // Generate a random private key for demo purposes
+            const randomBytes = new Uint8Array(32);
+            crypto.getRandomValues(randomBytes);
+            const pk = '0x' + Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+            
+            // Derive address (Demo logic: hash of PK)
+            const addrHash = await sha256(pk);
+            const address = '0x' + addrHash.substring(0, 40);
+
+            currentWallet = { privateKey: pk, address: address };
+            
+            document.getElementById('new-pk-display').innerText = pk;
+            document.getElementById('new-wallet-form').style.display = 'block';
+        }
+
+        async function loginWithKey() {
+            const pk = document.getElementById('pk-input').value.trim();
+            if(!pk) {
+                document.getElementById('login-err').innerText = "Please enter a valid private key.";
+                return;
+            }
+            // Derive address
+            const addrHash = await sha256(pk);
+            const address = '0x' + addrHash.substring(0, 40);
+            
+            currentWallet = { privateKey: pk, address: address };
+            proceedToDashboard();
+        }
+
+        function proceedToDashboard() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard-screen').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'block';
+            
+            document.getElementById('wallet-address').innerText = currentWallet.address;
+            
+            // Generate QR
+            document.getElementById('qr-container').innerHTML = '';
+            new QRCode(document.getElementById("qr-container"), {
+                text: currentWallet.address,
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            refreshBalance();
+            // Auto refresh
+            setInterval(refreshBalance, 10000);
+        }
+
+        function logout() {
+            currentWallet = null;
+            document.getElementById('login-screen').style.display = 'block';
+            document.getElementById('dashboard-screen').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'none';
+            document.getElementById('access-form').style.display = 'none';
+            document.getElementById('new-wallet-form').style.display = 'none';
+            document.getElementById('pk-input').value = '';
+        }
+
+        async function refreshBalance() {
+            if(!currentWallet) return;
+            try {
+                const balance = await rpcCall("get_balance", [currentWallet.address]);
+                document.getElementById('main-balance').innerHTML = `${balance.toLocaleString()} <span class="currency-symbol">MAHA</span>`;
+            } catch (e) {
+                document.getElementById('main-balance').innerHTML = `0 <span class="currency-symbol">MAHA</span>`;
+            }
+        }
+
+        function switchTab(tab) {
+            document.getElementById('send-tab').classList.remove('active');
+            document.getElementById('receive-tab').classList.remove('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+
+        function copyAddress() {
+            navigator.clipboard.writeText(currentWallet.address);
+            alert("Address copied to clipboard!");
+        }
+
+        async function sendTransaction() {
+            const to = document.getElementById('send-to').value.trim();
+            const amount = parseFloat(document.getElementById('send-amount').value);
+            const statusEl = document.getElementById('tx-status');
+            
+            if(!to || isNaN(amount) || amount <= 0) {
+                statusEl.innerText = "Invalid recipient or amount.";
+                statusEl.style.color = "var(--danger)";
+                return;
+            }
+
+            statusEl.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Signing and broadcasting to network...";
+            statusEl.style.color = "var(--gold-primary)";
+
+            try {
+                // In a real wallet, we would sign locally and send signed TX.
+                // For this UI demo to the live RPC, we'll try to invoke a transfer if the node supports it without signature,
+                // or use a mock response to demonstrate the UI flow if raw tx signing in JS isn't fully implemented here.
+                
+                // Using agni_transact directly for the demo
+                const txCode = `
+                    # Transaction Script
+                    send_tokens("${to}", ${amount});
+                `;
+                
+                const result = await rpcCall("agni_transact", [
+                    currentWallet.address,
+                    to,
+                    "0xradha_krishna_prasad_charity_0000000000",
+                    txCode
+                ]);
+
+                if(result) {
+                    statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Transaction Successful! Hash: ${result.tx_hash.substring(0, 16)}...`;
+                    statusEl.style.color = "#00ff88";
+                    document.getElementById('send-amount').value = '';
+                    refreshBalance();
+                } else {
+                    throw new Error("RPC returned null");
+                }
+            } catch (e) {
+                statusEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Broadcast Failed: ${e.message}`;
+                statusEl.style.color = "var(--danger)";
+            }
+        }
+    </script>
+</body>
+</html>

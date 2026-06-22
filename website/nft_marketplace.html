@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kala - KasturiChain NFT Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0510;
+            --primary: #9b4dff;
+            --secondary: #ff3366;
+            --accent: #00f0ff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-muted: #8b8599;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Background */
+        .ambient-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0.15;
+            filter: blur(80px);
+            z-index: -1;
+            top: -100px;
+            left: -100px;
+            animation: float 10s ease-in-out infinite alternate;
+        }
+
+        .ambient-glow.pink {
+            background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+            bottom: -200px;
+            right: -100px;
+            top: auto;
+            left: auto;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 5%;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
+        }
+
+        .connect-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(155, 77, 255, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .hero-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 64px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+
+        .hero-text h1 span {
+            color: var(--accent);
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            padding: 14px 32px;
+            border-radius: 50px;
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            background: rgba(155, 77, 255, 0.1);
+        }
+
+        /* Featured NFT Card (Glassmorphism) */
+        .featured-nft {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            width: 400px;
+            transform: rotate(2deg);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .featured-nft:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .nft-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, #2a1b3d, #4a154b);
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .nft-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .nft-creator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .nft-title {
+            font-weight: 700;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .nft-price-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            display: block;
+            text-align: right;
+        }
+
+        .nft-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        /* Trending Section */
+        .trending {
+            padding: 50px 5%;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .nft-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nft-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .nft-card .nft-image {
+            height: 280px;
+            border-radius: 16px;
+        }
+
+        .nft-card .nft-title {
+            font-size: 18px;
+        }
+
+        .nft-card .nft-price {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow pink"></div>
+
+    <nav>
+        <div class="logo">Kala (कला)</div>
+        <div class="nav-links">
+            <a href="#" class="active">Explore</a>
+            <a href="#">Drops</a>
+            <a href="#">Create</a>
+            <a href="#">Yajna Lottery</a>
+        </div>
+        <button class="connect-btn">Connect Bhakti Wallet</button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Discover & Collect <br>Vedic <span>Digital Art</span></h1>
+            <p>The first decentralized NFT marketplace built natively on KasturiChain using Agni Bhasha KIP-721 standards with built-in creator royalties.</p>
+            <div class="action-btns">
+                <button class="connect-btn" style="padding: 16px 40px; font-size: 16px;">Explore Now</button>
+                <button class="btn-outline">Mint NFT</button>
+            </div>
+        </div>
+        
+        <div class="featured-nft">
+            <!-- Using a gradient placeholder, but structurally ready for images -->
+            <div class="nft-image" style="background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop') center/cover;"></div>
+            <div class="nft-info">
+                <div>
+                    <div class="nft-creator">
+                        <div class="avatar" style="background: url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100&auto=format&fit=crop') center/cover;"></div>
+                        <span style="color: var(--text-muted); font-size: 14px;">@SaraswatiArts</span>
+                    </div>
+                    <h3 class="nft-title">Cosmic Lotus #001</h3>
+                </div>
+                <div>
+                    <span class="nft-price-label">Current Bid</span>
+                    <h4 class="nft-price">4.5 MAHARANI</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trending">
+        <div class="section-header">
+            <h2>Trending Collections</h2>
+            <button class="btn-outline">View All</button>
+        </div>
+        <div class="grid">
+            <div class="nft-card">
+                <div class="nft-image" style="background: url('https://images.unsplash.com/photo-1634152962476-4b8a00e1915c?q=80&w=1000&auto=format&fit=crop') center/cover;"></div>
+                <div class="nft-info">
+                    <div>
+                        <h3 class="nft-title">Vedic Mandala</h3>
+                        <span style="color: var(--text-muted); font-size: 12px;">Yajna Gifted</span>
+                    </div>
+                    <div>
+                        <span class="nft-price-label">Price</span>
+                        <h4 class="nft-price">1.2 MHRNI</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="nft-card">
+                <div class="nft-image" style="background: url('https://images.unsplash.com/photo-1644361566696-3d442b5b482a?q=80&w=1000&auto=format&fit=crop') center/cover;"></div>
+                <div class="nft-info">
+                    <div>
+                        <h3 class="nft-title">Agni Spirit #44</h3>
+                    </div>
+                    <div>
+                        <span class="nft-price-label">Price</span>
+                        <h4 class="nft-price">0.8 MHRNI</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="nft-card">
+                <div class="nft-image" style="background: url('https://images.unsplash.com/photo-1614850715649-1d0106293cb1?q=80&w=1000&auto=format&fit=crop') center/cover;"></div>
+                <div class="nft-info">
+                    <div>
+                        <h3 class="nft-title">Astral Geometry</h3>
+                    </div>
+                    <div>
+                        <span class="nft-price-label">Price</span>
+                        <h4 class="nft-price">2.5 MHRNI</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="nft-card">
+                <div class="nft-image" style="background: url('https://images.unsplash.com/photo-1633613286991-611fe299c4be?q=80&w=1000&auto=format&fit=crop') center/cover;"></div>
+                <div class="nft-info">
+                    <div>
+                        <h3 class="nft-title">Golden Ratio</h3>
+                    </div>
+                    <div>
+                        <span class="nft-price-label">Price</span>
+                        <h4 class="nft-price">5.0 MHRNI</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -140,7 +140,7 @@
 
     <nav class="navbar">
         <div class="logo">
-            <span class="om">ॐ</span> KasturiChain
+            <span class="om">Ã Â¥Â</span> KasturiChain
         </div>
         <ul class="nav-links">
             <li><a href="index.html#philosophy">Philosophy</a></li>
@@ -203,15 +203,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/editor/editor.main.js"></script>
     
     <script>
-        const NODE_URL = "https://node.kasturisundari.xyz/rpc";
+        const NODE_URL = "https://kasturisundari.xyz/samparka";
         let editor;
 
-        const defaultCode = `◇ KasturiChain First Smart Contract
-सूत्र मुख्या() {
-    √वच्+ति·"Greetings from the Sovereign Vedic L1!"
-    √स्मृ+ति·"Message"·"Hello World"
+        const defaultCode = `Ã¢â€”â€¡ KasturiChain First Smart Contract
+Ã Â¤Â¸Ã Â¥â€šÃ Â¤Â¤Ã Â¥ÂÃ Â¤Â° Ã Â¤Â®Ã Â¥ÂÃ Â¤â€“Ã Â¥ÂÃ Â¤Â¯Ã Â¤Â¾() {
+    Ã¢Ë†Å¡Ã Â¤ÂµÃ Â¤Å¡Ã Â¥Â+Ã Â¤Â¤Ã Â¤Â¿Ã‚Â·"Greetings from the Sovereign Vedic L1!"
+    Ã¢Ë†Å¡Ã Â¤Â¸Ã Â¥ÂÃ Â¤Â®Ã Â¥Æ’+Ã Â¤Â¤Ã Â¤Â¿Ã‚Â·"Message"Ã‚Â·"Hello World"
     
-    √सृज्+ति·phala ← √दृश्+ति·"Message"
+    Ã¢Ë†Å¡Ã Â¤Â¸Ã Â¥Æ’Ã Â¤Å“Ã Â¥Â+Ã Â¤Â¤Ã Â¤Â¿Ã‚Â·phala Ã¢â€ Â Ã¢Ë†Å¡Ã Â¤Â¦Ã Â¥Æ’Ã Â¤Â¶Ã Â¥Â+Ã Â¤Â¤Ã Â¤Â¿Ã‚Â·"Message"
     phala
 }`;
 
@@ -244,26 +244,43 @@
             }
             
             return {
-                प्रेषक: pubKey,
-                प्रापक: document.getElementById('contractAddress').value || "नेटवर्क",
-                मात्रा: 0,
-                हस्ताक्षर: "IDE_TEST_SIGNATURE",
-                प्रकार: type,
-                सङ्केतलिपि: contractCode,
-                आह्वान: callData,
+                Ã Â¤ÂªÃ Â¥ÂÃ Â¤Â°Ã Â¥â€¡Ã Â¤Â·Ã Â¤â€¢: pubKey,
+                Ã Â¤ÂªÃ Â¥ÂÃ Â¤Â°Ã Â¤Â¾Ã Â¤ÂªÃ Â¤â€¢: document.getElementById('contractAddress').value || "Ã Â¤Â¨Ã Â¥â€¡Ã Â¤Å¸Ã Â¤ÂµÃ Â¤Â°Ã Â¥ÂÃ Â¤â€¢",
+                Ã Â¤Â®Ã Â¤Â¾Ã Â¤Â¤Ã Â¥ÂÃ Â¤Â°Ã Â¤Â¾: 0,
+                Ã Â¤Â¹Ã Â¤Â¸Ã Â¥ÂÃ Â¤Â¤Ã Â¤Â¾Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â·Ã Â¤Â°: "IDE_TEST_SIGNATURE",
+                Ã Â¤ÂªÃ Â¥ÂÃ Â¤Â°Ã Â¤â€¢Ã Â¤Â¾Ã Â¤Â°: type,
+                Ã Â¤Â¸Ã Â¤â„¢Ã Â¥ÂÃ Â¤â€¢Ã Â¥â€¡Ã Â¤Â¤Ã Â¤Â²Ã Â¤Â¿Ã Â¤ÂªÃ Â¤Â¿: contractCode,
+                Ã Â¤â€ Ã Â¤Â¹Ã Â¥ÂÃ Â¤ÂµÃ Â¤Â¾Ã Â¤Â¨: callData,
                 IDE_PRIV: privKey
             };
         }
 
-        async function deployContract() {
+                async function deployContract() {
             const code = editor.getValue();
-            log("[Info] Compiling and packaging contract...");
+            log("[Info] Compiling and sending contract to node...");
             
-            const tx = await createTransaction("सन्धिपत्र", code, "");
-            if(!tx) return;
-
             try {
-                const res = await fetch(`${NODE_URL}/कर्मबिन्दु`, {
+                const res = await fetch(NODE_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "sutra_eval",
+                        params: [code],
+                        id: Date.now()
+                    })
+                });
+                const data = await res.json();
+                
+                if (data.result) {
+                    log([Success] Output:\n + data.result);
+                } else if (data.error) {
+                    log([Failed]  + data.error.message);
+                }
+            } catch (e) {
+                log([Error] Node connection failed. Ensure the server is online.);
+            }
+        }/Ã Â¤â€¢Ã Â¤Â°Ã Â¥ÂÃ Â¤Â®Ã Â¤Â¬Ã Â¤Â¿Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¦Ã Â¥Â`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(tx)
@@ -280,19 +297,43 @@
             }
         }
 
-        async function callContract() {
+                async function callContract() {
             const addr = document.getElementById('contractAddress').value.trim();
             if(!addr) {
                 log("[Error] Contract Address is required.");
                 return;
             }
+            log([Info] Querying contract state...);
+            
+            try {
+                const res = await fetch(NODE_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "sutra_call",
+                        params: [addr, "main"],
+                        id: Date.now()
+                    })
+                });
+                const data = await res.json();
+                
+                if (data.result) {
+                    log([Success] Call result:\n + data.result);
+                } else {
+                    log([Failed]  + (data.error ? data.error.message : "Unknown error"));
+                }
+            } catch (e) {
+                log([Error] Node connection failed.);
+            }
+        }
             log(`[Info] Executing contract ${addr.substring(0,6)}...`);
             
-            const tx = await createTransaction("आह्वान", "", "exec");
+            const tx = await createTransaction("Ã Â¤â€ Ã Â¤Â¹Ã Â¥ÂÃ Â¤ÂµÃ Â¤Â¾Ã Â¤Â¨", "", "exec");
             if(!tx) return;
 
             try {
-                const res = await fetch(`${NODE_URL}/कर्मबिन्दु`, {
+                const res = await fetch(`${NODE_URL}/Ã Â¤â€¢Ã Â¤Â°Ã Â¥ÂÃ Â¤Â®Ã Â¤Â¬Ã Â¤Â¿Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¦Ã Â¥Â`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(tx)

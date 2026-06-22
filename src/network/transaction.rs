@@ -82,7 +82,7 @@ impl Transaction {
         // --- THE APOCALYPSE PATCH: Cross-Chain Replay Protection ---
         // By embedding a strict CHAIN_ID, transactions signed on testnet 
         // will have a completely different hash than on mainnet.
-        let chain_id = "kasturichain-mainnet-v1";
+        let chain_id = "108108";
         let signable = format!(
             "{}:{}:{}:{}:{}:{}:{}",
             chain_id, self.from, self.to, self.amount, self.nonce, self.timestamp, self.data

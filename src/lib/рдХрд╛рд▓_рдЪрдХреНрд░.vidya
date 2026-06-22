@@ -1,0 +1,59 @@
+◇ ----------------------------------------------------
+◇ अग्नि भाषा (Agni Bhasha) : काल चक्र (Vedic Concurrency / Epoll Event Loop)
+◇ ----------------------------------------------------
+
+आयात "सञ्चार.vidya"
+
+◇ Epoll Constants
+√सृज्+ति·EPOLLIN ← 1
+√सृज्+ति·EPOLLOUT ← 4
+√सृज्+ति·EPOLL_CTL_ADD ← 1
+√सृज्+ति·EPOLL_CTL_MOD ← 3
+√सृज्+ति·EPOLL_CTL_DEL ← 2
+
+सूत्र काल_चक्र_सृज्() {
+    √वच्+ति·"काल चक्र (Time Wheel) सृजन प्रारम्भ..."
+    
+    ◇ sys_epoll_create1 (Syscall 291)
+    √सृज्+ति·epoll_fd ← 0
+    सङ्केत {
+        mov rax, 291
+        xor rdi, rdi      ; flags = 0
+        syscall
+        mov [epoll_fd], rax
+    }
+    
+    प्रतिदा epoll_fd
+}
+
+सूत्र काल_चक्र_योजय(epoll_fd, socket_fd, घटना) {
+    √वच्+ति·"काल चक्र में सॉकेट योजन (Adding Socket to Epoll)..."
+    
+    ◇ sys_epoll_ctl (Syscall 233)
+    सङ्केत {
+        mov rax, 233
+        mov rdi, [epoll_fd]
+        mov rsi, 1        ; EPOLL_CTL_ADD
+        mov rdx, [socket_fd]
+        ; pointer to epoll_event struct...
+        syscall
+    }
+}
+
+सूत्र काल_चक्र_प्रतीक्षा(epoll_fd) {
+    √वच्+ति·"घटनाओं की प्रतीक्षा (Awaiting Epoll Events)..."
+    
+    ◇ sys_epoll_wait (Syscall 232)
+    √सृज्+ति·घटना_सङ्ख्या ← 0
+    सङ्केत {
+        mov rax, 232
+        mov rdi, [epoll_fd]
+        ; pointer to events array
+        mov rdx, 64       ; max events
+        mov r10, -1       ; timeout (infinite)
+        syscall
+        mov [घटना_सङ्ख्या], rax
+    }
+    
+    प्रतिदा घटना_सङ्ख्या
+}

@@ -70,7 +70,7 @@ impl RakshasaSentry {
         }
 
         if is_fraudulent {
-            println!("👁️  राक्षس (Rakshasa): FRAUD DETECTED from Peer {}!", peer_id);
+            println!("👁️  राक्षस (Rakshasa): FRAUD DETECTED from Peer {}!", peer_id);
             println!("   ⮑ Reason: {}", fraud_reason);
             
             return Some(FraudProof {
@@ -87,7 +87,7 @@ impl RakshasaSentry {
 
     /// Submits a FraudProof to the Network (Sabha) for immediate slashing
     pub fn execute_slash(&self, proof: &FraudProof) {
-        println!("⚔️  राक्षس (Rakshasa): EXECUTING SLASH ON {}...", proof.offender_node_id);
+        println!("⚔️  राक्षस (Rakshasa): EXECUTING SLASH ON {}...", proof.offender_node_id);
         let mut db = ACCOUNT_DB.lock().unwrap();
         
         // Slash 50% of the offender's staked balance as penalty

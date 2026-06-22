@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 unicode-segmentation = "1.11"
 tokio = { version = "1.32", features = ["full"] }
-reqwest = { version = "0.11", features = ["json"] }
+reqwest = { version = "0.11", features = ["json", "multipart"] }
 async-recursion = "1.0"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
@@ -38,6 +38,8 @@ tower-lsp = "0.20.0"
 # Zero-Knowledge Proofs (TarkaZK / Groth16)
 bellman = "0.14"
 bls12_381 = "0.8"
+
+
 ff = "0.13"
 
 # EVM Cross-Chain Interaction

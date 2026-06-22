@@ -265,7 +265,7 @@ impl Scanner {
             "विकल्प" => TokenKind::Vikalpa,
             "प्रदक्षिणा" => TokenKind::Pradakshina,
             "प्रयत्न" => TokenKind::Prayatna,
-            "دोष" | "दोष" => TokenKind::Dosha,
+            "दोष" => TokenKind::Dosha,
             "स्वरूप" => TokenKind::Swaroopa,
             "अष्टाध्यायी" => TokenKind::Ashtadhyayi,
             "आयात" => TokenKind::Aayat,
@@ -324,11 +324,11 @@ impl Scanner {
     }
 
     fn is_identifier_start(&self, c: char) -> bool {
-        c.is_alphabetic() || c == '_' || ('\u{0900}' <= c && c <= '\u{097F}')
+        c == '_' || ('\u{0900}' <= c && c <= '\u{097F}')
     }
 
     fn is_identifier_char(&self, c: char) -> bool {
-        c.is_alphanumeric() || c == '_' || ('\u{0900}' <= c && c <= '\u{097F}')
+        c == '_' || ('\u{0900}' <= c && c <= '\u{097F}') || c.is_ascii_digit()
     }
 
     fn is_after_operator(&self) -> bool {

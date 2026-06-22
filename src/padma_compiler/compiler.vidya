@@ -4,10 +4,10 @@
 
 आयात "सञ्चिका.vidya"
 
-सूत्र مترجم_بادما(سورس_فايل) {
+सूत्र padma_compiler(source_file) {
     √वच्+ति·"Padma Bhasha Compiler: Compiling Smart Contract..."
     
-    √सृज्+ति·सङ्केत ← सञ्चिका_पठ(سورس_فايل)
+    √सृज्+ति·सङ्केत ← सञ्चिका_पठ(source_file)
     
     ◇ Lexical Analysis specific to Padma syntax (.padma)
     √सृज्+ति·bytecode ← []
@@ -19,7 +19,7 @@
         bytecode ← bytecode + "0x02" ◇ OP_ASSERT
     }
     
-    √सृज्+ति·output_file ← سورس_فايل + ".vbc"
+    √सृज्+ति·output_file ← source_file + ".vbc"
     सञ्चिका_लिख(output_file, bytecode)
     
     √वच्+ति·"Compilation Complete. Vedic Bytecode Generated: " + output_file

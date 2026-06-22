@@ -129,6 +129,12 @@ impl KasturiVM {
                     }
                     self.pc = target;
                 }
+                OpCode::JumpBack(offset) => {
+                    if offset > self.pc {
+                        return Err(format!("JumpBack offset {} underflows pc {}", offset, self.pc));
+                    }
+                    self.pc -= offset;
+                }
                 OpCode::JumpIfTrue(target) => {
                     let val = self.stack.pop().unwrap_or(Value::Shunya);
                     if self.is_truthy(&val) {

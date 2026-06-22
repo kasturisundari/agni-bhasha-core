@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasturi Studio | Sovereign IDE</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .studio-container {
+            display: flex;
+            flex: 1;
+            margin-top: 70px;
+            height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.8);
+            border-right: 1px solid var(--border);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .editor-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toolbar {
+            background: rgba(10, 10, 10, 0.9);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-input {
+            flex: 1;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            padding: 20px;
+            border: none;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        .terminal-area {
+            height: 200px;
+            background: #000;
+            border-top: 1px solid var(--border);
+            padding: 10px;
+            font-family: monospace;
+            color: #2ecc71;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-item:hover, .file-item.active {
+            background: rgba(255, 183, 3, 0.1);
+            color: var(--primary);
+        }
+
+        .deploy-panel {
+            background: rgba(255, 183, 3, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 183, 3, 0.2);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" style="position: absolute; width: 100%; top: 0;">
+        <div class="logo">
+            <span class="om">ॐ</span> Kasturi Studio
+        </div>
+        <ul class="nav-links">
+            <li><span id="network-status" style="color: #2ecc71;"><i class="fas fa-circle"></i> Connected to Samparka RPC</span></li>
+        </ul>
+    </nav>
+
+    <div class="studio-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3 style="color: #fff; margin: 0 0 10px 0; font-family: 'Outfit';">Explorer</h3>
+            
+            <div class="file-item active">
+                <i class="fas fa-file-code"></i> svarupa.agni
+            </div>
+            <div class="file-item">
+                <i class="fas fa-file-code"></i> sabha_dao.agni
+            </div>
+            <div class="file-item">
+                <i class="fas fa-file-code"></i> karma_launchpad.agni
+            </div>
+
+            <div class="deploy-panel">
+                <h4 style="color: #fff; margin: 0 0 10px 0;">Deployment</h4>
+                <div style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">Environment: Injected Kasturi Provider</div>
+                <button class="btn-primary" style="width: 100%; padding: 10px;" onclick="compileAndDeploy()">
+                    Compile & Deploy <i class="fas fa-rocket"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Editor Area -->
+        <div class="editor-area">
+            <div class="toolbar">
+                <div style="color: #fff; font-family: monospace;">svarupa.agni</div>
+                <div>
+                    <button class="btn-secondary" style="padding: 5px 15px; font-size: 0.8rem;" onclick="formatCode()">Format</button>
+                </div>
+            </div>
+            
+            <textarea class="code-input" id="editor" spellcheck="false">
+◇ Svarupa (₹) Stablecoin - KasturiChain
+◇ A KIP-20 implementation for the EVM Bridged Stablecoin
+
+अधिकार SvarupaToken {
+    स्वरूप TokenData {
+        name: सूत्र
+        symbol: सूत्र
+        decimals: सङ्ख्या
+        totalSupply: सङ्ख्या
+        owner: सूत्र
+    }
+
+    ◇ State Variables
+    √sṛj+ति·token ← TokenData("Svarupa Stablecoin", "₹", 18, 0, "0xSetuBridge")
+    √sṛj+ति·balances ← कोष()
+
+    ◇ Constructor
+    सूत्र SvarupaToken_Init() {
+        √वच्+ति·"Svarupa (₹) Contract Deployed."
+        प्रतिदा सत्य
+    }
+}
+            </textarea>
+
+            <!-- Terminal -->
+            <div class="terminal-area" id="terminal">
+                <div>[Kasturi VM] Studio Environment Initialized.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logToTerminal(msg, type="info") {
+            const terminal = document.getElementById('terminal');
+            const color = type === "error" ? "#e74c3c" : (type === "success" ? "#2ecc71" : "#f1c40f");
+            terminal.innerHTML += `<div style="color: ${color}">> ${msg}</div>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        async function compileAndDeploy() {
+            const code = document.getElementById('editor').value;
+            logToTerminal("Compiling Agni Bhasha AST and sending to node...", "info");
+            
+            try {
+                const res = await fetch("https://kasturisundari.xyz/samparka", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "sutra_eval",
+                        params: [code],
+                        id: Date.now()
+                    })
+                });
+                const data = await res.json();
+                
+                if (data.result) {
+                    logToTerminal(`Execution Successful! Output:\n${data.result}`, "success");
+                    logToTerminal("==========================================", "info");
+                } else if (data.error) {
+                    logToTerminal(`[Failed] ${data.error.message}`, "error");
+                }
+            } catch (e) {
+                logToTerminal(`[Error] Node connection failed. Ensure the server is online.`, "error");
+            }
+        }
+
+        function formatCode() {
+            logToTerminal("Formatted Agni Bhasha code.");
+        }
+    </script>
+</body>
+</html>

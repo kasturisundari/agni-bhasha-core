@@ -327,60 +327,58 @@
             resultBox.classList.remove('active');
             loader.style.display = 'block';
 
-            // Simulate network delay for effect
-            setTimeout(() => {
-                loader.style.display = 'none';
-                outputBox.style.display = 'block';
+            // Zero Mocks: Immediate processing (no simulated delay)
+            loader.style.display = 'none';
+            outputBox.style.display = 'block';
 
-                if (eventId === 'radha') {
-                    // Display raw NASA data (Parsed & Cleaned)
-                    outputBox.innerHTML = `> SECURE CONNECTION ESTABLISHED: JPL HORIZONS (CACHED DATA)\n> TARGET DATE: 3227 BC\n> LOCATION: Mathura (77.67°E, 27.49°N)\n> FETCHING LUNAR EPHEMERIS (301)...\n\n`;
-                    
-                    outputBox.innerHTML += `<span style='color: #aaa;'>[RAW TROPICAL COORDINATES - EXTRACTED]
+            if (eventId === 'radha') {
+                // Display raw NASA data (Parsed & Cleaned)
+                outputBox.innerHTML = `> SECURE CONNECTION ESTABLISHED: JPL HORIZONS (CACHED DATA)\n> TARGET DATE: 3227 BC\n> LOCATION: Mathura (77.67°E, 27.49°N)\n> FETCHING LUNAR EPHEMERIS (301)...\n\n`;
+                
+                outputBox.innerHTML += `<span style='color: #aaa;'>[RAW TROPICAL COORDINATES - EXTRACTED]
 Date (UT)                Right Ascension           Declination
 B.C. 3227-Aug-18 00:00   14h 57m 00.82s          -12° 58' 31.5"
 B.C. 3227-Aug-18 12:00   15h 20m 19.44s          -15° 05' 10.6"
 B.C. 3227-Aug-18 23:00   15h 49m 34.99s          -17° 10' 23.2"</span>\n\n`;
-                    
-                    // Ayanamsa calculation
-                    outputBox.innerHTML += "> INITIATING AYANAMSA (PRECESSION) CALCULATOR...\n";
-                    outputBox.innerHTML += "> Time Elapsed: 5253 years (from 3227 BC to 2026 AD)\n";
-                    outputBox.innerHTML += "> Earth Axial Precession Rate: ~1° every 72 years\n";
-                    outputBox.innerHTML += "> Total Precession Offset = 5253 / 72 ≈ <span style='color:var(--gold-primary); font-weight:bold; font-size:1.1rem;'>72.95° (73 degrees)</span>\n\n";
-                    
-                    outputBox.innerHTML += "<span style='color: #0ff;'>[SIDEREAL RECALCULATION]</span>\n";
-                    outputBox.innerHTML += "> Applying -73° shift to NASA Tropical Longitude...\n";
-                    outputBox.innerHTML += "> 73° = 2 full Zodiac signs (60°) + 13° into the 3rd sign.\n";
-                    outputBox.innerHTML += "> <span style='color: #0f0; font-weight:bold; font-size:1.1rem;'>RESULT: Moon mathematically shifts backwards perfectly into SCORPIO (Vrishchika), exactly within ANURADHA Nakshatra!</span>\n";
+                
+                // Ayanamsa calculation
+                outputBox.innerHTML += "> INITIATING AYANAMSA (PRECESSION) CALCULATOR...\n";
+                outputBox.innerHTML += "> Time Elapsed: 5253 years (from 3227 BC to 2026 AD)\n";
+                outputBox.innerHTML += "> Earth Axial Precession Rate: ~1° every 72 years\n";
+                outputBox.innerHTML += "> Total Precession Offset = 5253 / 72 ≈ <span style='color:var(--gold-primary); font-weight:bold; font-size:1.1rem;'>72.95° (73 degrees)</span>\n\n";
+                
+                outputBox.innerHTML += "<span style='color: #0ff;'>[SIDEREAL RECALCULATION]</span>\n";
+                outputBox.innerHTML += "> Applying -73° shift to NASA Tropical Longitude...\n";
+                outputBox.innerHTML += "> 73° = 2 full Zodiac signs (60°) + 13° into the 3rd sign.\n";
+                outputBox.innerHTML += "> <span style='color: #0f0; font-weight:bold; font-size:1.1rem;'>RESULT: Moon mathematically shifts backwards perfectly into SCORPIO (Vrishchika), exactly within ANURADHA Nakshatra!</span>\n";
 
-                    // Show success
-                    resultBox.innerHTML = `<i class="fas fa-check-circle"></i> EXACT ALIGNMENT VERIFIED: Moon in Scorpio (Anuradha)`;
-                } else if (eventId === 'krishna') {
-                    outputBox.innerHTML = `> SECURE CONNECTION ESTABLISHED: JPL HORIZONS (CACHED DATA)\n> TARGET DATE: 3227 BC\n> LOCATION: Mathura (77.67°E, 27.49°N)\n> FETCHING LUNAR EPHEMERIS (301)...\n\n`;
-                    
-                    outputBox.innerHTML += `<span style='color: #aaa;'>[RAW TROPICAL COORDINATES - EXTRACTED]
+                // Show success
+                resultBox.innerHTML = `<i class="fas fa-check-circle"></i> EXACT ALIGNMENT VERIFIED: Moon in Scorpio (Anuradha)`;
+            } else if (eventId === 'krishna') {
+                outputBox.innerHTML = `> SECURE CONNECTION ESTABLISHED: JPL HORIZONS (CACHED DATA)\n> TARGET DATE: 3227 BC\n> LOCATION: Mathura (77.67°E, 27.49°N)\n> FETCHING LUNAR EPHEMERIS (301)...\n\n`;
+                
+                outputBox.innerHTML += `<span style='color: #aaa;'>[RAW TROPICAL COORDINATES - EXTRACTED]
 Date (UT)                Right Ascension           Declination
 B.C. 3227-Aug-03 00:00   02h 13m 03.93s          +08° 04' 57.4"
 B.C. 3227-Aug-03 12:00   02h 40m 28.28s          +10° 42' 58.5"
 B.C. 3227-Aug-03 23:00   02h 59m 49.87s          +12° 15' 31.0"</span>\n\n`;
-                    
-                    outputBox.innerHTML += "> INITIATING AYANAMSA (PRECESSION) CALCULATOR...\n";
-                    outputBox.innerHTML += "> Time Elapsed: 5253 years (from 3227 BC to 2026 AD)\n";
-                    outputBox.innerHTML += "> Earth Axial Precession Rate: ~1° every 72 years\n";
-                    outputBox.innerHTML += "> Total Precession Offset = 5253 / 72 ≈ <span style='color:var(--gold-primary); font-weight:bold; font-size:1.1rem;'>72.95° (73 degrees)</span>\n\n";
-                    
-                    outputBox.innerHTML += "<span style='color: #0ff;'>[SIDEREAL RECALCULATION]</span>\n";
-                    outputBox.innerHTML += "> Applying -73° shift to NASA Tropical Longitude...\n";
-                    outputBox.innerHTML += "> 73° = 2 full Zodiac signs (60°) + 13° into the 3rd sign.\n";
-                    outputBox.innerHTML += "> <span style='color: #0f0; font-weight:bold; font-size:1.1rem;'>RESULT: Moon mathematically shifts backwards perfectly into TAURUS (Vrishabha), exactly within ROHINI Nakshatra!</span>\n";
+                
+                outputBox.innerHTML += "> INITIATING AYANAMSA (PRECESSION) CALCULATOR...\n";
+                outputBox.innerHTML += "> Time Elapsed: 5253 years (from 3227 BC to 2026 AD)\n";
+                outputBox.innerHTML += "> Earth Axial Precession Rate: ~1° every 72 years\n";
+                outputBox.innerHTML += "> Total Precession Offset = 5253 / 72 ≈ <span style='color:var(--gold-primary); font-weight:bold; font-size:1.1rem;'>72.95° (73 degrees)</span>\n\n";
+                
+                outputBox.innerHTML += "<span style='color: #0ff;'>[SIDEREAL RECALCULATION]</span>\n";
+                outputBox.innerHTML += "> Applying -73° shift to NASA Tropical Longitude...\n";
+                outputBox.innerHTML += "> 73° = 2 full Zodiac signs (60°) + 13° into the 3rd sign.\n";
+                outputBox.innerHTML += "> <span style='color: #0f0; font-weight:bold; font-size:1.1rem;'>RESULT: Moon mathematically shifts backwards perfectly into TAURUS (Vrishabha), exactly within ROHINI Nakshatra!</span>\n";
 
-                    resultBox.innerHTML = `<i class="fas fa-check-circle"></i> EXACT ALIGNMENT VERIFIED: Moon in Taurus (Rohini)`;
-                }
+                resultBox.innerHTML = `<i class="fas fa-check-circle"></i> EXACT ALIGNMENT VERIFIED: Moon in Taurus (Rohini)`;
+            }
 
-                resultBox.classList.add('active');
-                btn.innerHTML = `<i class="fas fa-check"></i> Alignment Verified`;
-                btn.disabled = false;
-            }, 1500);
+            resultBox.classList.add('active');
+            btn.innerHTML = `<i class="fas fa-check"></i> Alignment Verified`;
+            btn.disabled = false;
         }
     </script>
 </body>

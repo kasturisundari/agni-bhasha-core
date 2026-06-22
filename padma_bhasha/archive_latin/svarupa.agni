@@ -1,0 +1,66 @@
+◇ Svarupa  Stablecoin - KasturiChain
+◇ A KIP-20 implementation for the EVM Bridged Stablecoin
+
+अधिकार SvarupaToken {
+    स्वरूप TokenData {
+        name: सूत्र
+        symbol: सूत्र
+        decimals: सङ्ख्या
+        totalSupply: सङ्ख्या
+        owner: सूत्र
+    }
+
+    ◇ State Variables
+    √सृज्+ति·token ← TokenData
+    √सृज्+ति·balances ← कोष
+    √सृज्+ति·allowances ← कोष
+
+    ◇ Constructor
+    सूत्र SvarupaToken_Init {
+        √वच्+ति·"Svarupa  Contract Deployed by EVM Bridge."
+        प्रतिदा सत्य
+    }
+
+    ◇ Mint 
+    सूत्र mint {
+        यदि  {
+            √वच्+ति·"Error: Only Setu Bridge can mint Svarupa ₹"
+            प्रतिदा असत्य
+        }
+        
+        balances[to] ←  + amount
+        token.totalSupply ← token.totalSupply + amount
+        
+        √वच्+ति·"Minted " + amount + " ₹ to " + to
+        प्रतिदा सत्य
+    }
+
+    ◇ Burn 
+    सूत्र burn {
+        यदि  < amount) {
+            प्रतिदा असत्य
+        }
+        
+        balances[प्रेषक] ← balances[प्रेषक] - amount
+        token.totalSupply ← token.totalSupply - amount
+        
+        √वच्+ति·"Burned " + amount + " ₹ for bridging back to EVM"
+        प्रतिदा सत्य
+    }
+
+    ◇ Transfer
+    सूत्र transfer {
+        यदि  < amount) {
+            प्रतिदा असत्य
+        }
+        balances[प्रेषक] ← balances[प्रेषक] - amount
+        balances[to] ←  + amount
+        प्रतिदा सत्य
+    }
+
+    ◇ Get Balance
+    सूत्र balanceOf {
+        प्रतिदा 
+    }
+}
+

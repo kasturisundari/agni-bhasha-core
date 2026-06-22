@@ -3,370 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SatyaScan | KasturiChain Block Explorer</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SatyaScan | The Sovereign Explorer</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .explorer-container {
-            max-width: 1200px;
-            margin: 120px auto 40px;
-            padding: 0 20px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: rgba(15, 12, 41, 0.7);
-            border: 1px solid rgba(249, 212, 35, 0.2);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(249, 212, 35, 0.5);
-            box-shadow: 0 8px 25px rgba(249, 212, 35, 0.15);
-        }
-
-        .stat-card h3 {
-            font-family: 'Outfit', sans-serif;
-            color: #ccc;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-card .value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #f9d423 0%, #ff4e50 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-card .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ff4e50;
-            margin-right: 8px;
-            box-shadow: 0 0 10px #ff4e50;
-        }
-        .stat-card .status-indicator.online {
-            background-color: #00ff87;
-            box-shadow: 0 0 10px #00ff87;
-        }
-
-        .blocks-container {
-            background: rgba(15, 12, 41, 0.7);
-            border: 1px solid rgba(249, 212, 35, 0.2);
-            border-radius: 12px;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .blocks-header {
-            padding: 20px 25px;
-            border-bottom: 1px solid rgba(249, 212, 35, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .blocks-header h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #fff;
-        }
-
-        .refresh-btn {
-            background: transparent;
-            border: 1px solid #f9d423;
-            color: #f9d423;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .refresh-btn:hover {
-            background: rgba(249, 212, 35, 0.1);
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th, td {
-            padding: 15px 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        th {
-            font-family: 'Outfit', sans-serif;
-            color: #888;
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-        }
-
-        td {
-            color: #ddd;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover td {
-            background: rgba(255,255,255,0.02);
-        }
-
-        .hash-tag {
-            background: rgba(249, 212, 35, 0.1);
-            color: #f9d423;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            border: 1px solid rgba(249, 212, 35, 0.3);
-        }
-
-        .badge-nakshatra {
-            background: rgba(0, 255, 135, 0.1);
-            color: #00ff87;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(0, 255, 135, 0.3);
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-            font-style: italic;
-        }
-
-        .spinner {
-            animation: spin 2s linear infinite;
-            color: #f9d423;
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="bg-glow orb-1"></div>
     <div class="bg-glow orb-2"></div>
 
     <nav class="navbar">
-        <div class="logo">
-            <a href="https://kasturisundari.xyz/index.html" style="color: inherit; text-decoration: none;"><span class="om">ॐ</span> KasturiChain</a>
-        </div>
+        <a href="index.html" class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </a>
         <ul class="nav-links">
-            <li><a href="https://kasturisundari.xyz/index.html#philosophy">Philosophy</a></li>
-            <li><a href="https://kasturisundari.xyz/sanatan.html">Sanatan Dharma</a></li>
-            <li><a href="https://kasturisundari.xyz/dao.html">Sabha DAO</a></li>
-            <li><a href="https://satya.kasturisundari.xyz/" class="active">SatyaScan (Explorer)</a></li>
+            <li><a href="wallet.html" class="btn-primary">Bhakti Wallet</a></li>
+            <li><a href="index.html">Home</a></li>
         </ul>
     </nav>
 
-    <div class="explorer-container">
-        <div style="text-align: center; margin-bottom: 40px;">
-            <div class="section-tag" style="justify-content: center;">सत्यस्कैन</div>
-            <h1 class="glitch" data-text="SatyaScan Explorer" style="font-size: 3rem; margin-bottom: 10px;">SatyaScan Explorer</h1>
-            <p style="color: #aaa; max-width: 600px; margin: 0 auto;">Live Sovereign Blockchain Analytics powered by Astromechanical Consensus.</p>
+    <section class="section" style="padding-top: 100px;">
+        <div class="container">
+            <header style="border-bottom: 1px solid var(--border); padding-bottom: 2rem; margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: center;">
+                <h1 class="massive-text" style="font-size: 3rem; margin:0;"><span class="text-gradient">Satya</span>Scan</h1>
+                <div style="color: #00ff88; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">
+                    <i class="fas fa-circle" style="animation: pulse 2s infinite;"></i> MAINNET LIVE
+                </div>
+            </header>
+
+        <div class="bento-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 3rem;">
+            <div class="bento-item dark-glass" style="text-align: center;">
+                <i class="fas fa-cubes" style="font-size: 2rem; color: var(--gold-secondary); margin-bottom: 1rem;"></i>
+                <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Total Blocks</div>
+                <div id="total-blocks" style="font-size: 2.5rem; font-weight: 800; color: #fff; font-family: 'Outfit', sans-serif;">--</div>
+            </div>
+            <div class="bento-item dark-glass" style="text-align: center;">
+                <i class="fas fa-coins" style="font-size: 2rem; color: var(--gold-secondary); margin-bottom: 1rem;"></i>
+                <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Total Supply</div>
+                <div style="font-size: 2.5rem; font-weight: 800; color: #fff; font-family: 'Outfit', sans-serif;">16M</div>
+            </div>
+            <div class="bento-item dark-glass" style="text-align: center;">
+                <i class="fas fa-clock" style="font-size: 2rem; color: var(--gold-secondary); margin-bottom: 1rem;"></i>
+                <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Cosmic Nakshatra</div>
+                <div id="current-nakshatra" style="font-size: 1.5rem; font-weight: 800; color: #fff; font-family: 'Outfit', sans-serif;">--</div>
+            </div>
+            <div class="bento-item dark-glass" style="text-align: center;">
+                <i class="fas fa-users" style="font-size: 2rem; color: var(--gold-secondary); margin-bottom: 1rem;"></i>
+                <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Consensus</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #00ff88; font-family: 'Outfit', sans-serif; margin-top: 10px;">Karma Active</div>
+            </div>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Network Status</h3>
-                <div class="value" style="font-size: 1.5rem; margin-top: 15px;">
-                    <span id="node-status-indicator" class="status-indicator"></span>
-                    <span id="node-status-text" style="color: #fff;">Connecting...</span>
+        <!-- Radha Krishna Prasad Charity Section -->
+        <div class="bento-item" style="margin-bottom: 2rem; background: linear-gradient(145deg, rgba(31, 40, 51, 0.9), rgba(255, 183, 3, 0.15)); border: 1px solid var(--gold-secondary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 183, 3, 0.2);">
+                <h2 style="color: var(--gold-primary); font-size: 1.8rem; margin: 0;"><i class="fas fa-om"></i> Radha Krishna Prasad - Divine Treasury</h2>
+                <div style="color: var(--gold-primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; animation: pulse 3s infinite;">
+                    <i class="fas fa-shield-alt"></i> 100% On-Chain Transparency
                 </div>
             </div>
-            <div class="stat-card">
-                <h3>Total Blocks</h3>
-                <div class="value" id="stat-blocks">--</div>
-            </div>
-            <div class="stat-card">
-                <h3>Total Bindus (State DB)</h3>
-                <div class="value" id="stat-bindus">--</div>
-            </div>
-            <div class="stat-card">
-                <h3>Current Nakshatra</h3>
-                <div class="value" id="stat-nakshatra" style="font-size: 1.8rem;">--</div>
+            
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <p style="line-height: 1.8; color: #e0e0e0;">
+                        KasturiChain is built on the Vedic principle of <strong>Seva</strong> (Selfless Service). 
+                        By Divine Consensus, <strong style="color: #ffb703;">50% of all network revenue</strong> (Transaction Fees and Block Rewards) 
+                        is cryptographically routed to the <em>Radha Krishna Prasad Treasury</em>.
+                    </p>
+                    <p style="line-height: 1.8; color: var(--text-muted); font-size: 0.9rem;">
+                        These funds are strictly dedicated to the protection of cows (Goshala), the maintenance of Braj Dham, and feeding the needy. 
+                        No human can alter this lawÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Âit is mathematically bound to the genesis block.
+                    </p>
+                    <div style="margin-top: 1.5rem; background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 8px; font-family: monospace; border: 1px solid rgba(255, 183, 3, 0.2);">
+                        <span style="color: var(--text-muted);">Treasury Address:</span><br>
+                        <span id="charity-address-text" style="color: #ffb703; word-break: break-all;">0xradha_krishna_prasad_charity_0000000000</span>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; background: rgba(255, 183, 3, 0.05); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255, 183, 3, 0.1);">
+                    <i class="fas fa-hand-holding-heart" style="font-size: 3rem; color: #ffb703; margin-bottom: 1rem;"></i>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Treasury Balance</div>
+                    <div id="charity-balance" style="font-size: 2.5rem; font-weight: 800; color: #ffb703; font-family: 'Outfit', sans-serif; margin: 0.5rem 0;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem;"></i>
+                    </div>
+                    <div style="color: var(--text-muted); font-size: 0.8rem;">MAHARANI TOKENS (Live)</div>
+                </div>
             </div>
         </div>
 
-        <div class="blocks-container">
-            <div class="blocks-header">
-                <h2><i class="fas fa-cubes"></i> Latest Blocks (खण्डाः)</h2>
-                <button class="refresh-btn" onclick="fetchExplorerData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        <div class="bento-item dark-glass" style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                <h2 style="margin: 0; font-weight: 500; font-size: 1.8rem;"><i class="fas fa-layer-group"></i> Recent Blocks</h2>
+                <button onclick="fetchBlocks()" class="btn-primary" style="padding: 0.5rem 1rem;">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
             </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Block Index (अङ्)</th>
-                            <th>Block Hash (मुद्रा)</th>
-                            <th>Nakshatra Signature</th>
-                            <th>Transactions</th>
-                            <th>Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tbody id="blocks-table-body">
-                        <tr>
-                            <td colspan="5" class="loading">
-                                <i class="fas fa-dharmachakra spinner"></i><br>
-                                Synchronizing with Kasturi Node...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            
+            <div id="blocks-container">
+                <!-- Blocks will be injected here -->
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin"></i> Fetching blocks from node...
+                </div>
             </div>
         </div>
-    </div>
+        <div class="bento-item dark-glass" style="margin-bottom: 3rem;">
+            <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                <h2 style="margin: 0; font-weight: 500; font-size: 1.8rem;"><i class="fas fa-search"></i> Address History (Phase 12 Indexer)</h2>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                <input type="text" id="address-input" placeholder="Enter Kasturi Address (0x...)" style="flex: 1; padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff;">
+                <button onclick="fetchHistory()" style="background: var(--primary); color: #000; padding: 1rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;">Search</button>
+            </div>
+            <div id="history-container">
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Enter an address to view indexed transactions.</div>
+            </div>
+        </div>
+            </div>
+        </div>
+        </div>
+    </section>
 
     <script>
-        // The Live VPS Node URL
-        const NODE_URL = 'https://kasturisundari.xyz/rpc/';
+        const RPC_URL = "https://kasturisundari.xyz/samparka";
 
-        async function fetchExplorerData() {
+        async function rpcCall(method, params = []) {
             try {
-                // 1. Fetch Node State (JSON-RPC kosha_sthiti)
-                const stateRes = await fetch(NODE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        "jsonrpc": "2.0",
-                        "method": "kosha_sthiti",
-                        "params": [],
-                        "id": 1
-                    })
+                const response = await fetch(RPC_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: method, params: params, id: 1 })
                 });
-                const stateJson = await stateRes.json();
-                const stateData = stateJson.result || {};
-                
-                document.getElementById('node-status-indicator').classList.add('online');
-                document.getElementById('node-status-text').innerText = 'Mainnet Live';
-                document.getElementById('node-status-text').style.color = '#00ff87';
-                document.getElementById('stat-bindus').innerText = stateData.kosha_size || '--';
-
-                // 2. Fetch Blockchain Blocks (JSON-RPC shringkhala_sthiti)
-                const chainRes = await fetch(NODE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        "jsonrpc": "2.0",
-                        "method": "shringkhala_sthiti",
-                        "params": [],
-                        "id": 2
-                    })
-                });
-                
-                const chainJson = await chainRes.json();
-                const chainData = chainJson.result;
-                
-                let blocks = [];
-                // Sutra dicts might be returned as an object or array. 
-                // In Kasturichain, खण्डाः is usually a dict {"0": block0, "1": block1}
-                if (typeof chainData === 'object' && chainData !== null) {
-                    blocks = Object.values(chainData).sort((a, b) => b['अङ्'] - a['अङ्']);
-                }
-
-                document.getElementById('stat-blocks').innerText = blocks.length;
-
-                // 3. Render Blocks Table
-                const tbody = document.getElementById('blocks-table-body');
-                tbody.innerHTML = '';
-
-                if (blocks.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No blocks found. Waiting for Genesis.</td></tr>';
-                    return;
-                }
-
-                blocks.forEach(block => {
-                    const idx = block['अङ्'] ?? 0;
-                    const hash = block['मुद्रा'] ? block['मुद्रा'].substring(0, 16) + '...' : 'Unknown';
-                    const cosmicSig = block['क्षत्र'] ?? 'N/A';
-                    
-                    // Transactions could be an array or dict, we just count them
-                    let txCount = 0;
-                    if (block['कर्मबिन्दु'] && typeof block['कर्मबिन्दु'] === 'object') {
-                        txCount = Object.keys(block['कर्मबिन्दु']).length;
-                    }
-                    if (block['कर्मबिन्दु'] === 'GENESIS') txCount = 'Genesis Txs';
-
-                    const timeStamp = block['काल'] ? new Date(block['काल'] * 1000).toLocaleString() : 'N/A';
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><strong>${idx}</strong></td>
-                        <td><span class="hash-tag">${hash}</span></td>
-                        <td><span class="badge-nakshatra">${cosmicSig}</span></td>
-                        <td>${txCount}</td>
-                        <td>${timeStamp}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                // Set latest nakshatra from the latest block if possible
-                if (blocks.length > 0 && blocks[0]['क्षत्र']) {
-                    document.getElementById('stat-nakshatra').innerText = blocks[0]['क्षत्र'];
-                }
-
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+                return data.result;
             } catch (error) {
-                console.error("Explorer Error:", error);
-                document.getElementById('node-status-indicator').classList.remove('online');
-                document.getElementById('node-status-text').innerText = 'Node Offline';
-                document.getElementById('node-status-text').style.color = '#ff4e50';
+                console.error(`RPC Error (${method}):`, error);
+                return null;
+            }
+        }
+
+        async function fetchStats() {
+            const naks = await rpcCall("nakshatra_kala");
+            if (naks) {
+                document.getElementById('current-nakshatra').innerText = naks.nakshatra_name;
+            }
+        }
+
+        async function fetchBlocks() {
+            const blocksData = await rpcCall("shringkhala_sthiti");
+            const container = document.getElementById('blocks-container');
+            
+            if (!blocksData) {
+                container.innerHTML = `<div style="text-align: center; padding: 2rem; color: #ff4b4b;">Failed to connect to KasturiNode. Is the daemon running?</div>`;
+                return;
+            }
+
+            // blocksData is expected to be an object {"0": {...}, "1": {...}}
+            const blockHeights = Object.keys(blocksData).map(Number).sort((a, b) => b - a);
+            document.getElementById('total-blocks').innerText = blockHeights.length.toString();
+
+            if (blockHeights.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No blocks found. Waiting for Genesis...</div>`;
+                return;
+            }
+
+            let html = `
+                <div style="display: grid; grid-template-columns: 1fr 2fr 1fr 2fr; padding: 1rem; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; align-items: center; gap: 1rem;">
+                    <div>Block #</div>
+                    <div>Proposer (Karma Contributor)</div>
+                    <div>Transactions</div>
+                    <div>Block Hash</div>
+                </div>
+            `;
+
+            for (const height of blockHeights.slice(0, 50)) { // Show last 50 blocks
+                const block = blocksData[height.toString()];
+                if(!block) continue;
                 
-                document.getElementById('blocks-table-body').innerHTML = `
-                    <tr>
-                        <td colspan="5" class="loading" style="color: #ff4e50;">
-                            <i class="fas fa-exclamation-triangle"></i><br>
-                            Failed to connect to Kasturi Node (${NODE_URL}).<br>
-                            Make sure the node is running and CORS is enabled.
-                        </td>
-                    </tr>
+                const proposer = block["ÃƒÂ Ã‚Â¤Ã‚Â¹ÃƒÂ Ã‚Â¤Ã‚Â¸ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â¤ÃƒÂ Ã‚Â¤Ã‚Â¾ÃƒÂ Ã‚Â¤Ã¢â‚¬Â¢ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â·ÃƒÂ Ã‚Â¤Ã‚Â°"] || block["ÃƒÂ Ã‚Â¤Ã¢â‚¬â€œÃƒÂ Ã‚Â¤Ã‚Â¨ÃƒÂ Ã‚Â¤Ã¢â‚¬Â¢_ÃƒÂ Ã‚Â¤Ã‚ÂªÃƒÂ Ã‚Â¤Ã‚Â¤ÃƒÂ Ã‚Â¤Ã‚Â¾"] || "Unknown";
+                const hash = block["ÃƒÂ Ã‚Â¤Ã‚Â®ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â¦ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â°ÃƒÂ Ã‚Â¤Ã‚Â¾"] || "N/A";
+                
+                // Get transaction count (if it exists in the block object)
+                let txCount = 0;
+                if (block["ÃƒÂ Ã‚Â¤Ã¢â‚¬Â¢ÃƒÂ Ã‚Â¤Ã‚Â°ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â®ÃƒÂ Ã‚Â¤Ã‚Â¬ÃƒÂ Ã‚Â¤Ã‚Â¿ÃƒÂ Ã‚Â¤Ã‚Â¨ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â¦ÃƒÂ Ã‚Â¥Ã‚Â"] && Array.isArray(block["ÃƒÂ Ã‚Â¤Ã¢â‚¬Â¢ÃƒÂ Ã‚Â¤Ã‚Â°ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â®ÃƒÂ Ã‚Â¤Ã‚Â¬ÃƒÂ Ã‚Â¤Ã‚Â¿ÃƒÂ Ã‚Â¤Ã‚Â¨ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â¦ÃƒÂ Ã‚Â¥Ã‚Â"])) {
+                    txCount = block["ÃƒÂ Ã‚Â¤Ã¢â‚¬Â¢ÃƒÂ Ã‚Â¤Ã‚Â°ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â®ÃƒÂ Ã‚Â¤Ã‚Â¬ÃƒÂ Ã‚Â¤Ã‚Â¿ÃƒÂ Ã‚Â¤Ã‚Â¨ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â¦ÃƒÂ Ã‚Â¥Ã‚Â"].length;
+                } else if (block["ÃƒÂ Ã‚Â¤Ã¢â‚¬Â¢ÃƒÂ Ã‚Â¤Ã‚Â°ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â®ÃƒÂ Ã‚Â¤Ã‚Â¬ÃƒÂ Ã‚Â¤Ã‚Â¿ÃƒÂ Ã‚Â¤Ã‚Â¨ÃƒÂ Ã‚Â¥Ã‚ÂÃƒÂ Ã‚Â¤Ã‚Â¦ÃƒÂ Ã‚Â¥Ã‚Â"] === "GENESIS") {
+                    txCount = "GENESIS";
+                }
+
+                html += `
+                    <div style="display: grid; grid-template-columns: 1fr 2fr 1fr 2fr; padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; gap: 1rem; transition: background 0.2s;">
+                        <div><span style="background: rgba(255, 183, 3, 0.1); color: var(--gold-primary); padding: 0.4rem 0.8rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem; display: inline-block;">${height}</span></div>
+                        <div style="color: var(--gold-secondary);">${proposer}</div>
+                        <div>${txCount}</div>
+                        <div style="font-family: monospace; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${hash}</div>
+                    </div>
                 `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        async function fetchHistory() {
+            const addr = document.getElementById('address-input').value;
+            if(!addr) return;
+            
+            const container = document.getElementById('history-container');
+            container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Fetching history...</div>`;
+            
+            const history = await rpcCall("get_history", [addr]);
+            if(!history || history.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No transactions found for this address.</div>`;
+                return;
+            }
+            
+            let html = '';
+            for(const txHash of history) {
+                html += `
+                    <div style="background: rgba(255,255,255,0.02); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 0.5rem; font-family: monospace; color: var(--primary);">
+                        <i class="fas fa-exchange-alt"></i> TX Hash: ${txHash}
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        async function fetchCharityBalance() {
+            const balance = await rpcCall("get_balance", ["0xradha_krishna_prasad_charity_0000000000"]);
+            if (balance !== null) {
+                document.getElementById('charity-balance').innerText = balance.toLocaleString();
+            } else {
+                document.getElementById('charity-balance').innerText = "0";
             }
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', fetchExplorerData);
-        // Refresh every 10 seconds
-        setInterval(fetchExplorerData, 10000);
+        fetchStats();
+        fetchBlocks();
+        fetchCharityBalance();
+        
+        // Auto refresh every 10 seconds
+        setInterval(() => {
+            fetchStats();
+            fetchBlocks();
+            fetchCharityBalance();
+        }, 10000);
     </script>
 </body>
 </html>

@@ -39,6 +39,7 @@ impl SamparkaGateway {
 
         let app = Router::new()
             .route("/samparka", post(handle_samparka_request))
+            .route("/api/supply", axum::routing::get(handle_supply_request))
             .layer(cors);
 
         let addr = SocketAddr::from(([0, 0, 0, 0], 10808));
@@ -73,12 +74,17 @@ fn get_valid_hash(path: &str) -> Option<&'static str> {
         "shastra/atharvaveda/book_8.json" => Some("4470aa646cc13fa737e9f50e0387b009cfdfecaf3f06d45be5a335217e758c41"),
         "shastra/atharvaveda/book_9.json" => Some("7f964f84b30ecd789e619172707561c73acd5aa1d91b31ee696980ac670d113f"),
         "shastra/bhagavatam/bhagavatam.json" => Some("0d114c794b0c78b012e7d344470abfc561d983fa5fc51865094a02b6d18ab381"),
+        "shastra/bhagavatam/canto1_parsed.json" => Some("b9ce39f4670eeda73c8b10100f373403a4ebf90fec3c2dd0e41256027ad22a5e"),
         "shastra/brahma_samhita/brahma.json" => Some("b5df0c0d97991e33b09b829be6138e85063e08f5a9b3568ce09d476f2d2418bc"),
         "shastra/caitanya_caritamrta/cc.json" => Some("891ca10484ec0b0957f6376d4ac6313ce7b3c3f1ebaba131b60d03fbab57f841"),
+        "shastra/chaitanyaupanishad/chaitanyaupanishad.json" => Some("d844ac1e2d70d0059ccd0afabcc343205f23399b5a384fe622bc1e25efbd033b"),
+        "shastra/gautamiyatantra/gautamiyatantra.json" => Some("75639401382541e01b53a4d566864dc3ea5b5bce1586cae5d12a1ccf9a2677ee"),
         "shastra/gita/gita.json" => Some("b96a7b2b0adde028f4d0b3a77d3d8ca821dfcca6f20393a5827acda197b5e82c"),
         "shastra/gopalatapani/gopalatapani.json" => Some("af82ddc7c5580f3654d408d2ea716ccd061f555fe4cb8a483abdd8200ab97d4a"),
         "shastra/isha_upanishad/isha.json" => Some("fca4af30e5dd57df01d976ec7f26e47be6619b5c5a8116934732d849632dc979"),
         "shastra/krishnayajurveda/krishnayajurveda.json" => Some("ada7dcffcb37107da6e041d308524ba6533dcd99845adf6b913d28827fadab72"),
+        "shastra/lakshmi_tantra/lakshmi_tantra.json" => Some("1acc7e21dba0ea00d276e419a500c35f87f1bad1b61b5311645f51a64dae3ad6"),
+        "shastra/lakshmitantra/lakshmitantra.json" => Some("1acc7e21dba0ea00d276e419a500c35f87f1bad1b61b5311645f51a64dae3ad6"),
         "shastra/mahabharata/book_1.json" => Some("072e05fc2a97b1b351f4149c0a1b29cc0c0b9d42a771052b581149422da569a8"),
         "shastra/mahabharata/book_10.json" => Some("42ae566b9ec986859042fe5ff5bdd4e05c011b0d309a22acea129bbfa3c04eb8"),
         "shastra/mahabharata/book_11.json" => Some("247be6da44f8a25c8b77fd1dac7c39a695131ba56fec0c92b630936f3ba4d5c7"),
@@ -97,6 +103,7 @@ fn get_valid_hash(path: &str) -> Option<&'static str> {
         "shastra/mahabharata/book_7.json" => Some("7223982bcb0793d9b1b06c45c396b6bc355db47b127dd4b13e4f0fe1d66bace3"),
         "shastra/mahabharata/book_8.json" => Some("8301858331de827a75feecc5df73fbba8a2ee4e8486d67dccef84ea97f735908"),
         "shastra/mahabharata/book_9.json" => Some("2653711cec397137d25306317927518db38f6f85ea33934a6a4e82aac8b9e80c"),
+        "shastra/naradapancaratra/naradapancaratra.json" => Some("d0289e33fe91385216dab47279f1c3a1228db36636ccdf9f39bdefb83f486aaa"),
         "shastra/radha_sahasranama/radha.json" => Some("ba1113a364d74eb74c64f1a64939b5fc08e8b5eb0d25dcc3af54392ebb5f1782"),
         "shastra/radhika_tapani/radhika.json" => Some("3cfa86f174760df2b0da5cae9580e1ba54a1f564ac71a8e2e129cd3fa6dc4e22"),
         "shastra/ramayana/book_1.json" => Some("e1ce581e81fee1c5dad360626e03004db909960f048800905d928d05e54765cc"),
@@ -127,13 +134,9 @@ fn get_valid_hash(path: &str) -> Option<&'static str> {
         "shastra/samaveda/samaveda.json" => Some("2ff641c95d478e1b3236c8cb133cbbbef091e73f7844b24113d3210ce257a729"),
         "shastra/samaveda/updated-final-Devanagari.json" => Some("525a787fad19e1d34da5909c5d41d8c456954574239d9e1c919fe99b22c234c1"),
         "shastra/samaveda_sample.json" => Some("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
+        "shastra/sammohanatantra/sammohanatantra.json" => Some("712b58ad4cedf7070e558952de7433272828f2bd627748e6c768bd5e7a7d803f"),
         "shastra/upanishads/upanishads.json" => Some("0a6737ed7fd063cd3ff030693772f5bbd31ef98b8c2ccc7cf0fbc223dfb58b3f"),
         "shastra/yajurveda/yajurveda.json" => Some("ca5f1e0052ee522cf2ef131bc577cad2f5ebea256c17a5a6d0648a1db2743de1"),
-        "shastra/chaitanyaupanishad/chaitanyaupanishad.json" => Some("d844ac1e2d70d0059ccd0afabcc343205f23399b5a384fe622bc1e25efbd033b"),
-        "shastra/lakshmitantra/lakshmitantra.json" => Some("1acc7e21dba0ea00d276e419a500c35f87f1bad1b61b5311645f51a64dae3ad6"),
-        "shastra/gautamiyatantra/gautamiyatantra.json" => Some("75639401382541e01b53a4d566864dc3ea5b5bce1586cae5d12a1ccf9a2677ee"),
-        "shastra/sammohanatantra/sammohanatantra.json" => Some("712b58ad4cedf7070e558952de7433272828f2bd627748e6c768bd5e7a7d803f"),
-        "shastra/naradapancaratra/naradapancaratra.json" => Some("d0289e33fe91385216dab47279f1c3a1228db36636ccdf9f39bdefb83f486aaa"),
         _ => None,
     }
 }
@@ -163,7 +166,7 @@ async fn handle_samparka_request(
                     // and make HTTP requests (क्षिप्) on the host server.
                     let mut engine = Engine::new();
                     engine.is_sandboxed = true;
-                    engine.resonance_limit = Some(5000); // Hard gas limit for RPC calls
+                    engine.maharani_gas_limit = Some(5000); // Hard gas limit for RPC calls
                     let mut scanner = Scanner::new(code);
                     let tokens = scanner.scan_tokens();
                     let mut parser = SutraParser::new(tokens);
@@ -290,7 +293,7 @@ async fn handle_samparka_request(
                         if let Some(crate::evaluator::Value::Str(code)) = code_val {
                             let mut engine = Engine::new();
                             engine.is_sandboxed = true;
-                            engine.resonance_limit = Some(500_000); // Higher limit for contracts
+                            engine.maharani_gas_limit = Some(500_000); // Higher limit for contracts
                             
                             // Inject Contract Address
                             engine.env.define("यन्त्र_पता".to_string(), crate::evaluator::Value::Str(addr.to_string()));
@@ -462,22 +465,42 @@ async fn handle_samparka_request(
                     if path.is_empty() {
                         json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32602, "message": "Unknown Shastra"}})
                     } else {
-                        match fs::read_to_string(&path) {
-                            Ok(content) => {
-                                let mut hasher = Sha256::new();
-                                hasher.update(content.as_bytes());
-                                let hash_result = hasher.finalize();
-                                let hash_hex = hex::encode(hash_result);
+                        // Zero Mocks: Make file resolution robust regardless of where the daemon is started
+                        let paths_to_try = [
+                            path.clone(),
+                            format!("website/{}", path),
+                            format!("../{}", path),
+                            format!("/opt/kasturichain/{}", path)
+                        ];
 
-                                if let Some(expected_hash) = get_valid_hash(&path) {
-                                    if hash_hex != expected_hash {
-                                        return Json(json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32603, "message": "Tampered Shastra Detected: Hash Anchoring Failed"}}));
-                                    }
-                                } else {
-                                    return Json(json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32603, "message": "Tampered Shastra Detected: No Hash Anchor Found"}}));
+                        let mut file_content = String::new();
+                        let mut found_path = String::new();
+
+                        for p in paths_to_try.iter() {
+                            if let Ok(content) = fs::read_to_string(p) {
+                                file_content = content;
+                                found_path = p.clone();
+                                break;
+                            }
+                        }
+
+                        if file_content.is_empty() {
+                            json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32602, "message": "Shastra file not found on node"}})
+                        } else {
+                            let mut hasher = Sha256::new();
+                            hasher.update(file_content.as_bytes());
+                            let hash_result = hasher.finalize();
+                            let hash_hex = hex::encode(hash_result);
+
+                            if let Some(expected_hash) = get_valid_hash(&path) {
+                                if hash_hex != expected_hash {
+                                    return Json(json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32603, "message": "Tampered Shastra Detected: Hash Anchoring Failed"}}));
                                 }
+                            } else {
+                                return Json(json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32603, "message": "Tampered Shastra Detected: No Hash Anchor Found"}}));
+                            }
 
-                                match serde_json::from_str::<Value>(&content) {
+                            match serde_json::from_str::<Value>(&file_content) {
                                     Ok(json_data) => {
                                         json!({
                                             "jsonrpc": "2.0",
@@ -494,11 +517,7 @@ async fn handle_samparka_request(
                                         json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32603, "message": format!("Failed to parse Shastra JSON: {}", e)}})
                                     }
                                 }
-                            },
-                            Err(_) => {
-                                json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32602, "message": "Shastra file not found on node"}})
                             }
-                        }
                     }
                 } else {
                     json!({"jsonrpc": "2.0", "id": payload.id, "error": {"code": -32602, "message": "params[0] must be book name string"}})
@@ -622,3 +641,10 @@ mod tests {
         assert_eq!(req.id.as_i64().unwrap(), 42);
     }
 }
+
+async fn handle_supply_request() -> String {
+    let db = crate::network::account::ACCOUNT_DB.lock().unwrap();
+    let total = db.total_supply();
+    format!("{}", total)
+}
+

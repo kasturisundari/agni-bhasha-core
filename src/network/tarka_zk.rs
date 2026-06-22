@@ -152,14 +152,15 @@ impl TarkaZK {
         let params = Self::setup();
 
         // 2. Create the Circuit with actual values
-        // For simplicity, we just take the first tx amount as a proof-of-concept
-        let amount_val = transactions[0]
-            .get("amount")
-            .and_then(|v| v.as_u64())
-            .unwrap_or(0);
+        let first_tx = &transactions[0];
+        let amount_val = first_tx.get("amount").and_then(|v| v.as_u64()).unwrap_or(0);
+        let from_addr = first_tx.get("from").and_then(|v| v.as_str()).unwrap_or("");
             
-        // We mock a balance of amount + 100 to make it valid
-        let balance_val = amount_val + 100;
+        // Zero Mocks: Fetch real balance from AccountDB
+        let balance_val = {
+            let db = crate::network::account::ACCOUNT_DB.lock().unwrap();
+            db.get_balance(from_addr)
+        };
 
         let circuit = TarkaTransferCircuit {
             balance: Some(Scalar::from(balance_val)),

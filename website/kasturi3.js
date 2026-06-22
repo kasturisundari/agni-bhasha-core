@@ -4,7 +4,7 @@
  */
 
 class KasturiProvider {
-    constructor(rpcUrl = "http://127.0.0.1:10808/samparka") {
+    constructor(rpcUrl = "https://kasturisundari.xyz/samparka") {
         this.rpcUrl = rpcUrl;
     }
 

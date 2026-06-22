@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seva (Divine Gift) | KasturiChain</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow secondary" style="bottom: -200px; left: -200px; top: auto; right: auto;"></div>
+
+    <nav>
+        <div class="logo">KasturiChain</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="satyascan.html">Explorer</a>
+            <a href="#" class="active">Seva Department</a>
+        </div>
+    </nav>
+
+    <div class="container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 80px 20px; max-width: 1200px; margin: 0 auto; align-items: center;">
+        <div class="hero-text">
+            <h1 style="font-size: 56px; line-height: 1.2; margin-bottom: 20px;">Initiative <span>Seva (Divine Gift)</span></h1>
+            <p style="font-size: 20px; color: var(--text-muted); line-height: 1.8; margin-bottom: 40px;">I am here to build with you. If you have a great idea for a decentralized application (DApp) and lack programming experience, write your idea here and I will personally program it for you in Agni Bhasha and deliver it to you as a gift ready to run on the KasturiChain network and profit from it.</p>
+            
+            <ul class="features" style="list-style: none; padding: 0; margin: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; font-size: 18px;">
+                    <div class="icon" style="background: rgba(155, 77, 255, 0.2); color: var(--secondary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">✓</div>
+                    <div><strong>Exclusive Programming by My Hand:</strong> I will personally write the code in Agni Bhasha to adapt your idea to work with the highest efficiency and privacy.</div>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; font-size: 18px;">
+                    <div class="icon" style="background: rgba(155, 77, 255, 0.2); color: var(--secondary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">✓</div>
+                    <div><strong>Full Ownership for You:</strong> I will hand over the keys of ownership to you so that you can get the profits and fees in full.</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bento-card" style="padding: 40px;">
+            <h3 style="margin-top: 0; font-size: 24px; margin-bottom: 24px;">Request Your Seva Now</h3>
+            <form onsubmit="event.preventDefault(); alert('Your idea has been received! I will study it and program it for you as soon as possible.');">
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--text-muted);">Your Name or Title</label>
+                    <input type="text" class="glass-btn" style="width: 100%; text-align: right; background: rgba(0,0,0,0.3);" placeholder="Example: Satoshi">
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--text-muted);">Your Bhakti Wallet Address</label>
+                    <input type="text" class="glass-btn" style="width: 100%; text-align: left;" placeholder="0x..." required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--text-muted);">Explain your idea in detail</label>
+                    <textarea class="glass-btn" style="width: 100%; text-align: right; min-height: 120px; background: rgba(0,0,0,0.3);" placeholder="I want a decentralized platform for..." required></textarea>
+                </div>
+
+                <button type="submit" class="glass-btn" style="width: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); border: none; font-weight: bold; font-size: 18px; color: white;">Submit Request to Founder 🚀</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ready Made Gifts Section -->
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px 80px;">
+        <h2 style="font-size: 32px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; margin-bottom: 30px;">Ready-to-Receive Projects (Instant Seva)</h2>
+        <p style="color: var(--text-muted); margin-bottom: 30px;">These are projects I have programmed previously and are ready for whoever asks for them first to be fully theirs.</p>
+        
+        <div class="bento-grid">
+            <div class="bento-card">
+                <h3>Voting Platform (DAO)</h3>
+                <p style="color: var(--text-muted); font-size: 14px;">Integrated smart contract in Agni Bhasha for managing communities and decentralized voting.</p>
+                <button class="glass-btn" onclick="alert('The request to receive the voting platform is being processed.')">Request to Receive it</button>
+            </div>
+            <div class="bento-card">
+                <h3>  </h3>
+                <p style="color: var(--text-muted); font-size: 14px;">        KasturiChain.</p>
+                <button class="glass-btn" onclick="alert('    .')">Request to Receive it</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

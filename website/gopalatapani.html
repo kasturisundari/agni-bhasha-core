@@ -15,7 +15,7 @@
 
     <nav class="navbar">
         <div class="logo">
-            <span class="om">ॐ</span> KasturiChain
+            <span class="om">Ã Â¥Â</span> KasturiChain
         </div>
         <ul class="nav-links">
             <li><a href="sanatan.html"><i class="fas fa-arrow-left"></i> Back to Sanatan Dharma</a></li>
@@ -32,10 +32,10 @@
             <div class="gita-reader dark-glass">
                 <div class="reader-controls" style="display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap;">
                     <div class="control-group">
-                        <label for="chapter-select">Chapter (Tapanī)</label>
+                        <label for="chapter-select">Chapter (TapanÃ„Â«)</label>
                         <select id="chapter-select" class="glass-select">
-                            <option value="1">Pūrva Tapanī (पूर्वतापिनी)</option>
-                            <option value="2">Uttara Tapanī (उत्तरतापिनी)</option>
+                            <option value="1">PÃ…Â«rva TapanÃ„Â« (Ã Â¤ÂªÃ Â¥â€šÃ Â¤Â°Ã Â¥ÂÃ Â¤ÂµÃ Â¤Â¤Ã Â¤Â¾Ã Â¤ÂªÃ Â¤Â¿Ã Â¤Â¨Ã Â¥â‚¬)</option>
+                            <option value="2">Uttara TapanÃ„Â« (Ã Â¤â€°Ã Â¤Â¤Ã Â¥ÂÃ Â¤Â¤Ã Â¤Â°Ã Â¤Â¤Ã Â¤Â¾Ã Â¤ÂªÃ Â¤Â¿Ã Â¤Â¨Ã Â¥â‚¬)</option>
                         </select>
                     </div>
                     <button onclick="prevVerse()" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
@@ -57,7 +57,7 @@
     <footer>
         <div class="container footer-content">
             <div class="footer-brand">
-                <span class="om">ॐ</span> KasturiChain
+                <span class="om">Ã Â¥Â</span> KasturiChain
             </div>
         </div>
         <div class="copyright">
@@ -76,7 +76,7 @@
                 document.getElementById('sanskrit').innerHTML = "Fetching secure cryptographic state... <i class='fas fa-circle-notch fa-spin'></i>";
                 document.getElementById('translit').innerHTML = "";
                 
-                const response = await fetch("https://kasturisundari.xyz/rpc/", {
+                const response = await fetch("https://kasturisundari.xyz/samparka", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({

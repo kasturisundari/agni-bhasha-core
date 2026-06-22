@@ -94,6 +94,21 @@ async fn main() {
             return;
         }
 
+        if args[1] == "node" && args.len() > 2 && args[2] == "start" {
+            println!("ॐ KasturiChain Mainnet Daemon Starting...");
+            
+            // Spawn Samparka RPC Gateway on a separate async task
+            tokio::spawn(async {
+                if let Err(e) = crate::network::samparka::SamparkaGateway::new().start().await {
+                    eprintln!("Samparka Gateway Error: {}", e);
+                }
+            });
+
+            // Start the Karma Contributor Daemon (which spawns P2P and builds blocks)
+            crate::network::daemon::start_miner_daemon().await;
+            return;
+        }
+
         if args[1] == "format" && args.len() > 2 {
             let file_path = &args[2];
             format_file(file_path).await;
@@ -103,6 +118,12 @@ async fn main() {
         if args[1] == "compile" && args.len() > 2 {
             let file_path = &args[2];
             compile_file_to_asm(file_path).await;
+            return;
+        }
+
+        if args[1] == "evm-compile" && args.len() > 2 {
+            let file_path = &args[2];
+            compile_file_to_evm(file_path).await;
             return;
         }
 
@@ -263,6 +284,49 @@ async fn compile_file_to_asm(path: &str) {
                     println!("To build executable, run:");
                     println!("nasm -f elf64 {} -o {}.o", asm_file, path);
                     println!("ld -o {}.exe {}.o", path, path);
+                }
+                Err(e) => eprintln!("✗ त्रुटिः: {}", e),
+            }
+        }
+        Err(e) => eprintln!("✗ वाक्यरचनादोषात् सङ्कलन कर्तुं न शक्यते: {:?}", e),
+    }
+}
+
+/// Compile a .agni file directly to an EVM-Compatible Solidity (.sol) Smart Contract
+async fn compile_file_to_evm(path: &str) {
+    let source = match tokio::fs::read_to_string(path).await {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!("✗ सज्जिका पठने त्रुटिः: {}", e);
+            std::process::exit(1);
+        }
+    };
+
+    let mut scanner = Scanner::new(&source);
+    let tokens = scanner.scan_tokens();
+    let mut parser = SutraParser::new(tokens);
+    
+    match parser.parse() {
+        Ok(prog) => {
+            let mut evm_comp = evaluator::evm_compiler::AgniEvmCompiler::new();
+            let sol_code = evm_comp.compile(&prog.statements);
+            
+            // Generate output path (e.g., File.agni -> File.sol)
+            let base_name = if path.ends_with(".agni") {
+                &path[..path.len()-5]
+            } else if path.ends_with(".sutra") {
+                &path[..path.len()-6]
+            } else if path.ends_with(".padma") {
+                &path[..path.len()-6]
+            } else {
+                path
+            };
+            
+            let sol_file = format!("{}.sol", base_name);
+            match tokio::fs::write(&sol_file, sol_code).await {
+                Ok(_) => {
+                    println!("✅ ॐ ईवीएम सङ्कलन सिद्धम्! (EVM Transpilation Complete: {})", sol_file);
+                    println!("Agni Bhasha is now EVM-Compatible! You can deploy this using Hardhat/Foundry/Remix.");
                 }
                 Err(e) => eprintln!("✗ त्रुटिः: {}", e),
             }

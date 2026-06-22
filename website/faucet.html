@@ -91,7 +91,7 @@
 
     <nav class="navbar">
         <div class="logo">
-            <span class="om">ॐ</span> KasturiChain
+            <span class="om">Ã Â¥Â</span> KasturiChain
         </div>
         <ul class="nav-links">
             <li><a href="index.html#philosophy">Philosophy</a></li>
@@ -107,7 +107,7 @@
 
     <main class="container">
         <div class="glass-panel">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🚰</div>
+            <div style="font-size: 3rem; margin-bottom: 1rem;">Ã°Å¸Å¡Â°</div>
             <h1 class="glitch" data-text="Tirtha Faucet" style="font-size: 2.5rem; margin-bottom: 1rem; color: #d4af37;">Tirtha Faucet</h1>
             <p style="color: #cbd5e1; margin-bottom: 2.5rem; line-height: 1.6;">
                 Receive <strong>5 Pyar</strong> testnet tokens instantly.<br>
@@ -125,7 +125,7 @@
     </main>
 
     <script>
-        const NODE_URL = "https://node.kasturisundari.xyz/rpc";
+        const NODE_URL = "https://kasturisundari.xyz/samparka";
 
         async function requestCoins() {
             const address = document.getElementById('walletAddress').value.trim();
@@ -141,11 +141,11 @@
             statusBox.innerHTML = "<i class='fas fa-circle-notch fa-spin'></i> Submitting request to Astromechanics pool...";
 
             try {
-                // Request format matches node.sutra /तीर्थ endpoint
-                const response = await fetch(`${NODE_URL}/तीर्थ`, {
+                // Request format matches node.sutra /Ã Â¤Â¤Ã Â¥â‚¬Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¥ endpoint
+                const response = await fetch(`${NODE_URL}/Ã Â¤Â¤Ã Â¥â‚¬Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¥`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ पता: address })
+                    body: JSON.stringify({ Ã Â¤ÂªÃ Â¤Â¤Ã Â¤Â¾: address })
                 });
 
                 const data = await response.json();
@@ -153,7 +153,7 @@
                 if (response.ok) {
                     showStatus("<i class='fas fa-check-circle'></i> Success! Transaction is in the mempool awaiting mining.", true);
                 } else {
-                    showStatus(`<i class='fas fa-exclamation-triangle'></i> Error: ${data.दोष || "Transaction failed"}`, false);
+                    showStatus(`<i class='fas fa-exclamation-triangle'></i> Error: ${data.Ã Â¤Â¦Ã Â¥â€¹Ã Â¤Â· || "Transaction failed"}`, false);
                 }
             } catch (e) {
                 showStatus("<i class='fas fa-exclamation-circle'></i> Connection failed. Ensure the Kasturi node is running.", false);

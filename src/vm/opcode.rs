@@ -29,6 +29,8 @@ pub enum OpCode {
     },
     /// Jump to an instruction index
     Jump(usize),
+    /// Jump backward by an instruction count (for While loops)
+    JumpBack(usize),
     /// Jump if the top of the stack is truthy
     JumpIfTrue(usize),
     /// Jump if the top of the stack is falsy

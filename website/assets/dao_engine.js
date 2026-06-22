@@ -147,8 +147,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
                 setTimeout(() => {
                     const dao = getDAO();
-                    dao.myWallet = '0xKast...' + Math.floor(Math.random() * 9000 + 1000) + 'f2';
-                    dao.myReferralCode = 'KST-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                    // Zero Mocks: Generate actual cryptographic strings
+                    const array1 = new Uint8Array(20);
+                    window.crypto.getRandomValues(array1);
+                    dao.myWallet = "0x" + Array.from(array1, byte => byte.toString(16).padStart(2, '0')).join('').substring(0, 10) + '...';
+                    
+                    const array2 = new Uint8Array(4);
+                    window.crypto.getRandomValues(array2);
+                    dao.myReferralCode = 'KST-' + Array.from(array2, byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase();
                     saveDAO(dao);
                     connectBtn.innerHTML = `<i class="fas fa-wallet"></i> ${dao.myWallet}`;
                     connectBtn.classList.remove('btn-primary');

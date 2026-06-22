@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KasturiChain | The Whitepaper</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .paper-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 3rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            line-height: 1.8;
+            color: #e0e0e0;
+        }
+
+        .paper-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid rgba(255, 183, 3, 0.2);
+            padding-bottom: 2rem;
+        }
+
+        .paper-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .paper-header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .paper-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .paper-section h2 {
+            font-family: 'Outfit', sans-serif;
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .paper-section h2::before {
+            content: 'ॐ';
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .paper-section h3 {
+            color: var(--secondary);
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(255, 183, 3, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .tokenomics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .token-card {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .token-card h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-muted);
+        }
+
+        .token-card .value {
+            font-size: 2rem;
+            font-family: 'Outfit', sans-serif;
+            color: var(--primary);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="launchpad.html">Launchpad</a></li>
+            <li><a href="swap.html">DEX</a></li>
+            <li><a href="docs.html">Documentation</a></li>
+        </ul>
+    </nav>
+
+    <div class="paper-container">
+        <div class="paper-header">
+            <h1>KASTURICHAIN</h1>
+            <p>The First Sovereign Vedic Layer-1 Blockchain</p>
+            <div style="margin-top: 1rem; color: var(--secondary); font-family: monospace;">Version 1.0.0 | Agni Bhasha Architecture</div>
+        </div>
+
+        <div class="paper-section">
+            <h2>Abstract</h2>
+            <p>KasturiChain is a specialized Layer-1 blockchain built entirely from scratch in Rust, utilizing a novel smart contract Virtual Machine (Agni Bhasha) designed around ancient Vedic linguistics (Sanskrit). The network introduces the "Seva Consensus" algorithm, a regenerative economic model where cryptographic security directly funds humanitarian public goods.</p>
+        </div>
+
+        <div class="paper-section">
+            <h2>1. The Agni Bhasha VM</h2>
+            <p>Unlike Ethereum's EVM, which relies on Solidity, KasturiChain introduces <strong>Agni Bhasha</strong>, a Turing-complete smart contract language utilizing Sanskrit lexemes. By embedding classical linguistic rules (like Sandhi and Vyakarana) into the compiler's Abstract Syntax Tree, KasturiChain achieves deterministic state execution with mathematically proven safety guarantees while actively preserving cultural heritage.</p>
+        </div>
+
+        <div class="paper-section">
+            <h2>2. Seva Consensus & Humanitarian Protocol</h2>
+            <p>KasturiChain replaces Proof-of-Work's energy waste with <strong>Karma Consensus (Seva Mining)</strong>. The protocol inherently taxes network activity at the consensus layer to fund global public goods.</p>
+            
+            <div class="highlight-box">
+                <strong>The Divine Law (Protocol Rule #108):</strong>
+                <p>Exactly <strong>50%</strong> of all block rewards and transaction fees are cryptographically routed to the <em>Radha Krishna Prasad Treasury</em>. This address is hardcoded into the genesis block and is immutable.</p>
+            </div>
+            
+            <p>The Treasury funds are exclusively dedicated to:</p>
+            <ul>
+                <li><strong>Animal Sanctuaries:</strong> Sustaining cow protection centers (Goshalas).</li>
+                <li><strong>Feeding the Impoverished:</strong> Distributing Prasad (free food) globally.</li>
+                <li><strong>Ecological Heritage:</strong> Preserving historical and spiritual regions like Braj Dham.</li>
+            </ul>
+        </div>
+
+        <div class="paper-section">
+            <h2>3. Tokenomics (PYAR)</h2>
+            <p>The native currency of KasturiChain is <strong>PYAR</strong> (Divine Love). The maximum supply is strictly capped at 16,000,000 to maintain extreme deflationary pressure.</p>
+            
+            <div class="tokenomics-grid">
+                <div class="token-card">
+                    <h4>Charity Treasury (50%)</h4>
+                    <div class="value">8,000,000</div>
+                    <div style="font-size: 0.8rem; color: #888;">Immutable On-Chain Route</div>
+                </div>
+                <div class="token-card">
+                    <h4>Karma Launchpad (30%)</h4>
+                    <div class="value">4,800,000</div>
+                    <div style="font-size: 0.8rem; color: #888;">Public Bonding Curve Liquidity</div>
+                </div>
+                <div class="token-card">
+                    <h4>Ecosystem Rewards (15%)</h4>
+                    <div class="value">2,400,000</div>
+                    <div style="font-size: 0.8rem; color: #888;">Validators & Seva Mining</div>
+                </div>
+                <div class="token-card">
+                    <h4>Founder Wallet (5%)</h4>
+                    <div class="value">800,000</div>
+                    <div style="font-size: 0.8rem; color: #888;">Core Operations</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-section">
+            <h2>4. The Karma Launchpad (IBCO)</h2>
+            <p>To prevent Venture Capital manipulation, KasturiChain utilizes a Zero-Capital Initial Bonding Curve Offering (IBCO). The network launches with $0 in liquidity. As investors deposit USDT into the Launchpad contract, PYAR tokens are minted automatically. The deposited USDT is permanently locked, forming the ultimate Decentralized Exchange (DEX) liquidity pool.</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 4rem; color: var(--text-muted); font-size: 0.9rem;">
+            "Technology serving humanity. Code preserving heritage."<br>
+            <strong>KasturiChain Foundation</strong>
+        </div>
+    </div>
+</body>
+</html>

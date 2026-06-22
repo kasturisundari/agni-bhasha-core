@@ -9,12 +9,13 @@
     <style>
         :root {
             --bg-color: #0b0c10;
-            --surface: rgba(31, 40, 51, 0.7);
-            --border: rgba(102, 252, 241, 0.15);
-            --primary: #66fcf1;
-            --secondary: #45a29e;
-            --text-main: #c5c6c7;
-            --text-muted: #888;
+            --surface: rgba(31, 40, 51, 0.4);
+            --border: rgba(142, 202, 230, 0.15);
+            --primary: #ffb703;
+            --secondary: #fb8500;
+            --text-main: #f8f9fa;
+            --text-muted: #8ecae6;
+            --accent: #219ebc;
         }
 
         body {
@@ -223,7 +224,7 @@
                     </p>
                     <p style="line-height: 1.8; color: var(--text-muted); font-size: 0.9rem;">
                         These funds are strictly dedicated to the protection of cows (Goshala), the maintenance of Braj Dham, and feeding the needy. 
-                        No human can alter this law—it is mathematically bound to the genesis block.
+                        No human can alter this lawÃ¢â‚¬â€it is mathematically bound to the genesis block.
                     </p>
                     <div style="margin-top: 1.5rem; background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 8px; font-family: monospace; border: 1px solid rgba(255, 183, 3, 0.2);">
                         <span style="color: var(--text-muted);">Treasury Address:</span><br>
@@ -272,7 +273,7 @@
     </div>
 
     <script>
-        const RPC_URL = "http://127.0.0.1:10808/samparka";
+        const RPC_URL = "https://kasturisundari.xyz/samparka";
 
         async function rpcCall(method, params = []) {
             try {
@@ -328,14 +329,14 @@
                 const block = blocksData[height.toString()];
                 if(!block) continue;
                 
-                const proposer = block["हस्ताक्षर"] || block["खनक_पता"] || "Unknown";
-                const hash = block["मुद्रा"] || "N/A";
+                const proposer = block["Ã Â¤Â¹Ã Â¤Â¸Ã Â¥ÂÃ Â¤Â¤Ã Â¤Â¾Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â·Ã Â¤Â°"] || block["Ã Â¤â€“Ã Â¤Â¨Ã Â¤â€¢_Ã Â¤ÂªÃ Â¤Â¤Ã Â¤Â¾"] || "Unknown";
+                const hash = block["Ã Â¤Â®Ã Â¥ÂÃ Â¤Â¦Ã Â¥ÂÃ Â¤Â°Ã Â¤Â¾"] || "N/A";
                 
                 // Get transaction count (if it exists in the block object)
                 let txCount = 0;
-                if (block["कर्मबिन्दु"] && Array.isArray(block["कर्मबिन्दु"])) {
-                    txCount = block["कर्मबिन्दु"].length;
-                } else if (block["कर्मबिन्दु"] === "GENESIS") {
+                if (block["Ã Â¤â€¢Ã Â¤Â°Ã Â¥ÂÃ Â¤Â®Ã Â¤Â¬Ã Â¤Â¿Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¦Ã Â¥Â"] && Array.isArray(block["Ã Â¤â€¢Ã Â¤Â°Ã Â¥ÂÃ Â¤Â®Ã Â¤Â¬Ã Â¤Â¿Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¦Ã Â¥Â"])) {
+                    txCount = block["Ã Â¤â€¢Ã Â¤Â°Ã Â¥ÂÃ Â¤Â®Ã Â¤Â¬Ã Â¤Â¿Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¦Ã Â¥Â"].length;
+                } else if (block["Ã Â¤â€¢Ã Â¤Â°Ã Â¥ÂÃ Â¤Â®Ã Â¤Â¬Ã Â¤Â¿Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¦Ã Â¥Â"] === "GENESIS") {
                     txCount = "GENESIS";
                 }
 

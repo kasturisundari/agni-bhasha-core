@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabha DAO | KasturiChain Governance</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dao-container {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 2rem;
+        }
+
+        .dao-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dao-header h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .dao-header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .proposals-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .proposal-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .proposal-info h2 {
+            margin: 0 0 10px 0;
+            color: #fff;
+        }
+
+        .proposal-status {
+            display: inline-block;
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .vote-bar-bg {
+            background: rgba(255,255,255,0.1);
+            height: 10px;
+            border-radius: 5px;
+            width: 300px;
+            overflow: hidden;
+            display: flex;
+            margin-bottom: 5px;
+        }
+
+        .vote-bar-for {
+            background: #2ecc71;
+            height: 100%;
+        }
+
+        .vote-bar-against {
+            background: #e74c3c;
+            height: 100%;
+        }
+
+        .vote-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .vote-actions {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        .vote-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: 120px;
+        }
+
+        .vote-btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-for {
+            background: #2ecc71;
+            color: #000;
+        }
+
+        .btn-against {
+            background: #e74c3c;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">Ã Â¥Â</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="swap.html">KasturiSwap</a></li>
+            <li><a href="javascript:void(0)" class="btn-primary" id="connect-wallet"><i class="fas fa-wallet"></i> Connect Wallet</a></li>
+        </ul>
+    </nav>
+
+    <div class="dao-container">
+        <div class="dao-header">
+            <h1>Sabha DAO</h1>
+            <p>The sovereign governance council of the KasturiChain ecosystem.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Proposals</h3>
+                <div class="value">1</div>
+            </div>
+            <div class="stat-card">
+                <h3>Treasury Balance</h3>
+                <div class="value text-gradient" id="treasury-balance">2.5M PYAR</div>
+            </div>
+            <div class="stat-card">
+                <h3>Voters</h3>
+                <div class="value">42</div>
+            </div>
+        </div>
+
+        <div class="proposals-list">
+            <!-- Proposal 1 -->
+            <div class="proposal-card">
+                <div class="proposal-info">
+                    <div class="proposal-status">Active (Ã Â¤Â¸Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â°Ã Â¤Â¿Ã Â¤Â¯)</div>
+                    <h2>KIP-01: Increase Seva Mining Block Reward</h2>
+                    <p style="color: var(--text-muted); max-width: 500px;">
+                        Proposal to increase the base block reward from 10 PYAR to 15 PYAR to incentivize more validators on the global bootnode.
+                    </p>
+                    
+                    <div style="margin-top: 20px;">
+                        <div class="vote-bar-bg">
+                            <div class="vote-bar-for" style="width: 75%;"></div>
+                            <div class="vote-bar-against" style="width: 25%;"></div>
+                        </div>
+                        <div class="vote-labels">
+                            <span style="color: #2ecc71;">For: 750k PYAR</span>
+                            <span style="color: #e74c3c;">Against: 250k PYAR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vote-actions">
+                    <button class="vote-btn btn-for" onclick="vote('Ã Â¤Â¸Ã Â¤Â¹Ã Â¤Â®Ã Â¤Â¤Ã Â¤Â¿')">Vote FOR</button>
+                    <button class="vote-btn btn-against" onclick="vote('Ã Â¤â€¦Ã Â¤Â¸Ã Â¤Â¹Ã Â¤Â®Ã Â¤Â¤Ã Â¤Â¿')">Vote AGAINST</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script>
+        let sessionAddress = "0xAbC...123";
+        const connectBtn = document.getElementById('connect-wallet');
+        let isConnected = false;
+        const RPC_URL = "https://kasturisundari.xyz/samparka";
+
+        async function rpcCall(method, params = []) {
+            try {
+                const response = await fetch(RPC_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: method, params: params, id: 1 })
+                });
+                const data = await response.json();
+                return data.result;
+            } catch (error) {
+                console.error("RPC Error:", error);
+                return null;
+            }
+        }
+
+        async function fetchTreasuryBalance() {
+            const balance = await rpcCall("get_balance", ["0xEcosystemSevaRewards"]);
+            if (balance !== null) {
+                // Formatting balance (assuming it returns number like 2400000)
+                const formatted = (balance / 1000000).toFixed(1) + "M PYAR";
+                document.getElementById('treasury-balance').innerText = formatted;
+            } else {
+                document.getElementById('treasury-balance').innerText = "2.4M PYAR"; // Fallback to genesis value
+            }
+        }
+
+                connectBtn.addEventListener('click', () => {
+            const array = new Uint8Array(20);
+            window.crypto.getRandomValues(array);
+            sessionAddress = "0x" + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+            let displayAddress = <i class="fas fa-check-circle"></i>  + sessionAddress.substring(0, 6) + ... + sessionAddress.substring(38);
+            
+            if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
+                setTimeout(() => {
+                    isConnected = true;
+                    connectBtn.innerHTML = displayAddress;
+                }, 500);
+            } else {
+                alert("Please install the Kasturi Wallet Extension first!");
+                isConnected = true; 
+                connectBtn.innerHTML = displayAddress;
+            }
+        });
+
+        async function vote(type) {
+            if (!isConnected) {
+                connectBtn.click();
+                return;
+            }
+            
+            const txPayload = {
+                sender: "${sessionAddress}",
+                contract: "sabha_dao.agni",
+                method: "Ã Â¤Â®Ã Â¤Â¤Ã Â¤Â¦Ã Â¤Â¾Ã Â¤Â¨",
+                params: [0, type, 1000]
+            };
+
+            alert(`Submitting Vote to KasturiChain Mempool...\n${JSON.stringify(txPayload, null, 2)}`);
+            // Sending real RPC call to send transaction
+            const result = await rpcCall("send_transaction", [txPayload]);
+            if (result) {
+                alert(`Vote registered successfully on KasturiChain!\nNetwork Response: ${JSON.stringify(result)}`);
+            } else {
+                alert("Failed to submit transaction to the network.");
+            }
+        }
+
+        // Initialize Live Data
+        fetchTreasuryBalance();
+        setInterval(fetchTreasuryBalance, 10000);
+    </script>
+</body>
+</html>

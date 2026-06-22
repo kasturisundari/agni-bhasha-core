@@ -25,15 +25,13 @@ impl ShardRouter {
             hash = ((hash << 5).wrapping_add(hash)).wrapping_add(b as u64);
         }
 
-        // Add cosmic time variance
-        let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-        // Shift hash slightly based on current hour to simulate cosmic rotation
-        let cosmic_hash = hash.wrapping_add(now / 3600);
-
+        // Zero Mocks: Deterministic Sharding
+        // We use pure Avalanche Hash without time variance to ensure permanent data retrieval.
+        // True Cosmic alignment is geometry, not fleeting time.
         ShardCoordinate {
-            shiva_dimension: (cosmic_hash % 14) as u8,
-            nakshatra_sector: ((cosmic_hash / 14) % 27) as u8,
-            rashi_ring: ((cosmic_hash / (14 * 27)) % 12) as u8,
+            shiva_dimension: (hash % 14) as u8,
+            nakshatra_sector: ((hash / 14) % 27) as u8,
+            rashi_ring: ((hash / (14 * 27)) % 12) as u8,
         }
     }
 }

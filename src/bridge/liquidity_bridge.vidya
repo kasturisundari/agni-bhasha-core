@@ -3,9 +3,9 @@
 ◇ ----------------------------------------------------
 
 आयात "सञ्चार.vidya"
-आयात "पञ्चतत्व_إجماع.vidya"
+आयात "panchatatva_consensus.vidya"
 
-सूत्र جسر_السيولة_प्रारम्भ() {
+सूत्र liquidity_bridge_प्रारम्भ() {
     √वच्+ति·"Ethereum Bridge Listener Started..."
     
     ◇ Connect to Infura / Alchemy Ethereum RPC
@@ -31,7 +31,7 @@
                 "हस्ताक्षर": "SYSTEM_SIG"
             ]
             
-            स्मृति_تجمع_योजय(mint_tx)
+            स्मृति_pool_योजय(mint_tx)
             √वच्+ति·"Cross-Chain Mint Transaction Submitted to Mempool."
         }
         
