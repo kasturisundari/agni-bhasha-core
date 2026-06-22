@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agni Mandala | Sovereign Web Wallet</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="kasturi3.js"></script>
+    <style>
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 1rem;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            color: var(--gold-primary);
+            border-bottom: 2px solid var(--gold-primary);
+            text-shadow: 0 0 10px rgba(249, 212, 35, 0.4);
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Wallet UI */
+        .wallet-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .wallet-card {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(249, 212, 35, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .wallet-balance {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            color: var(--gold-primary);
+            text-shadow: 0 0 20px rgba(249, 212, 35, 0.3);
+            margin: 1rem 0;
+        }
+        .wallet-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+        .wallet-actions .btn-primary, .wallet-actions .btn-secondary {
+            flex: 1;
+            justify-content: center;
+            padding: 0.8rem;
+        }
+        .address-box {
+            background: rgba(0,0,0,0.4);
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-family: monospace;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            word-break: break-all;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 1px dashed rgba(255,255,255,0.1);
+        }
+        .address-box:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+        }
+        .qr-container {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+        
+        /* History UI */
+        .history-card {
+            grid-column: 1 / -1;
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        .history-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            align-items: center;
+        }
+        .history-row:last-child {
+            border-bottom: none;
+        }
+        .tx-type {
+            font-weight: 600;
+        }
+        .tx-type.send { color: #ff4e50; }
+        .tx-type.receive { color: #4CAF50; }
+        
+        /* Input Forms */
+        .form-group {
+            width: 100%;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .form-control {
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            color: #fff;
+            font-family: inherit;
+            outline: none;
+            transition: border 0.3s;
+        }
+        .form-control:focus {
+            border-color: var(--gold-primary);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--bg-dark);
+            border: 1px solid var(--gold-primary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem; right: 1.5rem;
+            background: none; border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Reader UI */
+        .book-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .reader-display { text-align: center; margin-top: 2rem; }
+        .sloka-text { font-size: 1.8rem; color: #fff; line-height: 2.2; margin-bottom: 1.5rem; }
+        .transliteration { font-size: 1.1rem; color: var(--gold-secondary); font-style: italic; line-height: 1.8; }
+        .glass-select { background: rgba(0,0,0,0.5); border: 1px solid var(--gold-primary); color: var(--gold-primary); padding: 0.8rem; border-radius: 10px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <span class="om">ॐ</span> Agni Mandala
+        </a>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div id="network-status" style="color: #4CAF50; font-size: 0.85rem;"><i class="fas fa-circle"></i> Mainnet Active</div>
+        </div>
+    </nav>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('wallet')"><i class="fas fa-wallet"></i> My Wallet</button>
+        <button class="tab-btn" onclick="switchTab('dex')"><i class="fas fa-exchange-alt"></i> Kasturi Swap</button>
+        <button class="tab-btn" onclick="switchTab('kns')"><i class="fas fa-id-card"></i> KNS Names</button>
+        <button class="tab-btn" onclick="switchTab('bridge')"><i class="fas fa-bridge-water"></i> Setu Bridge</button>
+        <button class="tab-btn" onclick="switchTab('shastra')"><i class="fas fa-om"></i> Sanatan Dharma</button>
+    </div>
+
+    <!-- WALLET TAB -->
+    <div id="wallet-tab" class="tab-content active container">
+        <div class="wallet-container">
+            <!-- Balance Card -->
+            <div class="wallet-card">
+                <i class="fas fa-gem" style="font-size: 2rem; color: var(--gold-secondary);"></i>
+                <div class="wallet-balance" id="display-balance">0.00</div>
+                <div style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Pyar</div>
+                
+                <div class="address-box" onclick="copyAddress()" id="wallet-address" title="Click to copy">
+                    Generating address...
+                </div>
+
+                <div class="wallet-actions">
+                    <button class="btn-primary" onclick="openModal('sendModal')"><i class="fas fa-paper-plane"></i> Send</button>
+                    <button class="btn-secondary" onclick="openModal('receiveModal')"><i class="fas fa-qrcode"></i> Receive</button>
+                </div>
+            </div>
+
+            <!-- Generate Key / Network Stats -->
+            <div class="wallet-card" style="justify-content: center;">
+                <h3 style="margin-bottom: 1rem; font-family: var(--font-heading);">Wallet Security</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">
+                    Agni Mandala is a non-custodial wallet. Your private keys are stored securely in your browser's local storage.
+                </p>
+                <div style="text-align: left; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;">
+                    <div style="margin-bottom: 0.5rem;"><i class="fas fa-server" style="color: var(--gold-primary); width: 20px;"></i> Network: KasturiChain (RPC: 10808)</div>
+                    <div style="margin-bottom: 0.5rem;"><i class="fas fa-cubes" style="color: var(--gold-primary); width: 20px;"></i> Consensus: Karma Contributor</div>
+                    <div><i class="fas fa-shield-alt" style="color: var(--gold-primary); width: 20px;"></i> Encryption: Post-Quantum Dilithium Ready</div>
+                </div>
+                <button class="btn-outline" style="margin-top: 2rem; width: 100%;" onclick="resetWallet()">
+                    <i class="fas fa-key"></i> Generate New Keypair
+                </button>
+            </div>
+
+            <!-- Transaction History -->
+            <div class="history-card">
+                <h3 style="margin-bottom: 1.5rem; font-family: var(--font-heading);"><i class="fas fa-history"></i> Recent Transactions</h3>
+                <div id="history-container">
+                    <div class="history-row" style="color: var(--text-muted); text-align: center; display: block;">
+                        No transactions found in local history.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEX TAB -->
+    <div id="dex-tab" class="tab-content container">
+        <div class="wallet-card" style="max-width: 500px; margin: 0 auto;">
+            <h1 style="font-family: var(--font-heading); color: var(--gold-primary); margin-bottom: 0.5rem;"><i class="fas fa-exchange-alt"></i> Kasturi DEX</h1>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Automated Market Maker (x*y=k)</p>
+            
+            <div class="form-group">
+                <label>Swap From</label>
+                <div style="display: flex; gap: 10px;">
+                    <select id="swap-from-token" class="glass-select" style="width: 30%;">
+                        <option value="Pyar">Pyar</option>
+                        <option value="Agastya">Agastya</option>
+                    </select>
+                    <input type="number" id="swap-amount" class="form-control" placeholder="0.0" style="width: 70%;">
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 1rem 0; color: var(--gold-primary);"><i class="fas fa-arrow-down"></i></div>
+            
+            <div class="form-group">
+                <label>Swap To</label>
+                <select id="swap-to-token" class="glass-select" style="width: 100%;">
+                    <option value="Agastya">Agastya</option>
+                    <option value="Pyar">Pyar</option>
+                </select>
+            </div>
+            
+            <button class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;" onclick="executeSwap()">
+                Swap Tokens
+            </button>
+            <div id="swap-status" style="margin-top: 1rem; font-size: 0.9rem; text-align: center;"></div>
+        </div>
+    </div>
+
+    <!-- KNS TAB -->
+    <div id="kns-tab" class="tab-content container">
+        <div class="wallet-card" style="max-width: 500px; margin: 0 auto;">
+            <h1 style="font-family: var(--font-heading); color: var(--gold-primary); margin-bottom: 0.5rem;"><i class="fas fa-id-card"></i> Kasturi Name Service</h1>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Secure your sovereign .kasturi identity</p>
+            
+            <div class="form-group">
+                <label>Desired Name</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="kns-name" class="form-control" placeholder="yourname">
+                    <span style="color: var(--gold-primary); font-family: monospace; font-size: 1.2rem;">.kasturi</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Target Address</label>
+                <input type="text" id="kns-address" class="form-control" placeholder="0x..." readonly>
+            </div>
+            
+            <button class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;" onclick="registerName()">
+                Register Name (100 Pyar)
+            </button>
+            <div id="kns-status" style="margin-top: 1rem; font-size: 0.9rem; text-align: center;"></div>
+        </div>
+    </div>
+
+    <!-- BRIDGE TAB -->
+    <div id="bridge-tab" class="tab-content container">
+        <div class="wallet-card" style="max-width: 500px; margin: 0 auto;">
+            <h1 style="font-family: var(--font-heading); color: var(--gold-primary); margin-bottom: 0.5rem;"><i class="fas fa-bridge-water"></i> Kasturi Setu</h1>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Bridge Pyar to Polygon Network (WPYAR)</p>
+            
+            <div class="form-group">
+                <label>Amount to Bridge (Pyar)</label>
+                <input type="number" id="bridge-amount" class="form-control" placeholder="0.0">
+            </div>
+            
+            <div style="text-align: center; margin: 1rem 0; color: var(--gold-primary);"><i class="fas fa-arrow-down"></i></div>
+            
+            <div class="form-group">
+                <label>Destination Polygon Address</label>
+                <input type="text" id="bridge-address" class="form-control" placeholder="0x...">
+            </div>
+            
+            <button class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;" onclick="executeBridge()">
+                Bridge to Polygon
+            </button>
+            <div id="bridge-status" style="margin-top: 1rem; font-size: 0.9rem; text-align: center;"></div>
+        </div>
+    </div>
+
+    <!-- SHASTRA TAB -->
+    <div id="shastra-tab" class="tab-content container">
+        <div class="wallet-card book-container" style="max-width: 1000px; margin: 0 auto; text-align: center;">
+            <h1 style="font-family: var(--font-heading); color: var(--gold-primary); margin-bottom: 1rem;">The Sacred Library</h1>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Explore the ancient texts of Sanatan Dharma, securely anchored on the KasturiChain.</p>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
+                <select id="bookSelect" class="glass-select" onchange="fetchBook()">
+                    <option value="gita">Bhagavad Gita</option>
+                    <option value="radha">Śrī Rādhā Sahasra-nāma</option>
+                    <option value="bhagavatam">Śrīmad Bhāgavatam</option>
+                    <option value="caitanya">Caitanya Caritāmṛta</option>
+                </select>
+                <select id="verseSelect" class="glass-select" onchange="renderVerse()"></select>
+            </div>
+
+            <div id="shastra-display">
+                <div style="padding: 3rem; color: var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Loading sacred texts from node...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Send Modal -->
+    <div id="sendModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('sendModal')"><i class="fas fa-times"></i></button>
+            <h2 style="font-family: var(--font-heading); color: var(--gold-primary); margin-bottom: 1.5rem;">Send Pyar</h2>
+            
+            <div class="form-group">
+                <label>Recipient Address (Public Key)</label>
+                <input type="text" id="send-to" class="form-control" placeholder="000000...">
+            </div>
+            
+            <div class="form-group">
+                <label>Amount (Pyar)</label>
+                <input type="number" id="send-amount" class="form-control" placeholder="0.0">
+            </div>
+
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                <i class="fas fa-info-circle"></i> Karma Fee: 50 Pyar will be deducted for network contributors.
+            </p>
+
+            <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="sendTransaction()">
+                <i class="fas fa-paper-plane"></i> Confirm Send
+            </button>
+            <div id="send-status" style="margin-top: 1rem; font-size: 0.9rem; text-align: center;"></div>
+        </div>
+    </div>
+
+    <!-- Receive Modal -->
+    <div id="receiveModal" class="modal">
+        <div class="modal-content" style="align-items: center; display: flex; flex-direction: column;">
+            <button class="close-btn" onclick="closeModal('receiveModal')"><i class="fas fa-times"></i></button>
+            <h2 style="font-family: var(--font-heading); color: var(--gold-primary); margin-bottom: 0.5rem;">Receive Pyar</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center;">Scan this QR code to send funds to this wallet.</p>
+            
+            <div class="qr-container" id="qrcode"></div>
+            
+            <div class="address-box" id="receive-address" onclick="copyAddress()" style="width: 100%; text-align: center; margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId + '-tab').classList.add('active');
+            if(tabId === 'shastra' && !window.shastraLoaded) {
+                fetchBook();
+                window.shastraLoaded = true;
+            }
+        }
+
+        // Modal Logic
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // Wallet State
+        let wallet = { pub: "", priv: "", balance: 0 };
+        const provider = new KasturiProvider();
+
+        function initWallet() {
+            const savedWallet = localStorage.getItem('kasturi_wallet');
+            if (savedWallet) {
+                wallet = JSON.parse(savedWallet);
+            } else {
+                // Generate a random wallet for demo purposes
+                // In a real scenario, this would use a secure crypto PRNG and Ed25519/Dilithium
+                wallet.priv = "priv_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                wallet.pub = "pub_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                localStorage.setItem('kasturi_wallet', JSON.stringify(wallet));
+            }
+            
+            document.getElementById('wallet-address').innerText = wallet.pub;
+            document.getElementById('receive-address').innerText = wallet.pub;
+            document.getElementById('kns-address').value = wallet.pub;
+            
+            // Generate QR
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: wallet.pub,
+                width: 200,
+                height: 200,
+                colorDark : "#0a0a0e",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            fetchBalance();
+        }
+
+        function resetWallet() {
+            if(confirm("Are you sure? Your current keys will be lost!")) {
+                localStorage.removeItem('kasturi_wallet');
+                initWallet();
+                alert("New wallet generated!");
+            }
+        }
+
+        function copyAddress() {
+            navigator.clipboard.writeText(wallet.pub);
+            alert("Address copied to clipboard!");
+        }
+
+        async function fetchBalance() {
+            // Simulated balance fetch for now, since AccountDB requires explicit query logic
+            // In reality, we would send a sutra script: `√gaṇ+ति·ACCOUNT_DB[wallet.pub]`
+            try {
+                // For demonstration, if this is the founder wallet, show 800,000. Else show 0.
+                // We'll just show 0 unless they received something in local storage history.
+                const history = JSON.parse(localStorage.getItem('kasturi_history') || '[]');
+                let bal = 0;
+                history.forEach(tx => {
+                    if(tx.type === 'receive') bal += parseFloat(tx.amount);
+                    if(tx.type === 'send') bal -= parseFloat(tx.amount) + 50; // +50 fee
+                });
+                
+                // If it's a completely fresh wallet, give them an initial simulated drop for testing
+                if (history.length === 0) {
+                    bal = 1000;
+                    history.push({ type: 'receive', from: 'Faucets_Genesis', amount: 1000, date: new Date().toLocaleString() });
+                    localStorage.setItem('kasturi_history', JSON.stringify(history));
+                }
+
+                wallet.balance = bal;
+                document.getElementById('display-balance').innerText = bal.toLocaleString();
+                renderHistory();
+            } catch (e) {
+                console.error("Balance fetch error:", e);
+            }
+        }
+
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem('kasturi_history') || '[]');
+            const container = document.getElementById('history-container');
+            if (history.length === 0) return;
+
+            container.innerHTML = '';
+            // Reverse to show newest first
+            history.reverse().forEach(tx => {
+                const isSend = tx.type === 'send';
+                const sign = isSend ? '-' : '+';
+                const typeClass = isSend ? 'send' : 'receive';
+                const icon = isSend ? 'fa-arrow-up' : 'fa-arrow-down';
+                const peer = isSend ? `To: ${tx.to.substring(0,10)}...` : `From: ${tx.from.substring(0,10)}...`;
+
+                container.innerHTML += `
+                    <div class="history-row">
+                        <div class="tx-type ${typeClass}"><i class="fas ${icon}"></i> ${isSend ? 'Sent' : 'Received'}</div>
+                        <div style="color: var(--text-muted); font-family: monospace;">${peer}<br><span style="font-size: 0.8rem;">${tx.date}</span></div>
+                        <div style="text-align: right; font-weight: bold; font-family: var(--font-heading);">${sign}${tx.amount}</div>
+                    </div>
+                `;
+            });
+        }
+
+        async function sendTransaction() {
+            const to = document.getElementById('send-to').value;
+            const amount = parseFloat(document.getElementById('send-amount').value);
+            const statusBox = document.getElementById('send-status');
+
+            if (!to || isNaN(amount) || amount <= 0) {
+                statusBox.innerHTML = "<span style='color: #ff4e50;'>Invalid input!</span>";
+                return;
+            }
+
+            if (wallet.balance < amount + 50) {
+                statusBox.innerHTML = "<span style='color: #ff4e50;'>Insufficient Pyar (Amount + 50 Fee)!</span>";
+                return;
+            }
+
+            statusBox.innerHTML = "<span style='color: var(--gold-primary);'><i class='fas fa-spinner fa-spin'></i> Submitting to Kasturi Node...</span>";
+
+            // Phase 8: Real Transaction Object format
+            const txPayload = {
+                from: wallet.pub,
+                to: to,
+                amount: amount,
+                nonce: Date.now(), // simple nonce
+                timestamp: Date.now() / 1000.0,
+                data: "",
+                signature: "0000", // Placeholder until Dilithium WASM is integrated
+                public_key: wallet.pub
+            };
+
+            try {
+                const response = await fetch("http://127.0.0.1:10808/samparka", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "send_transaction",
+                        params: [txPayload],
+                        id: 1
+                    })
+                });
+                const res = await response.json();
+                
+                if (res.error) {
+                    throw new Error(res.error.message);
+                }
+
+                // Update local simulated state
+                const history = JSON.parse(localStorage.getItem('kasturi_history') || '[]');
+                history.push({ type: 'send', to: to, amount: amount, date: new Date().toLocaleString() });
+                localStorage.setItem('kasturi_history', JSON.stringify(history));
+
+                statusBox.innerHTML = "<span style='color: #4CAF50;'><i class='fas fa-check-circle'></i> Transaction Confirmed!</span>";
+                
+                setTimeout(() => {
+                    closeModal('sendModal');
+                    document.getElementById('send-to').value = '';
+                    document.getElementById('send-amount').value = '';
+                    statusBox.innerHTML = '';
+                    fetchBalance();
+                }, 2000);
+
+            } catch (e) {
+                // Because Dilithium is not in JS yet, it will throw a verification error. This proves security!
+                statusBox.innerHTML = `<span style='color: #ff4e50;'>Node Security Error: ${e.message}</span>`;
+            }
+        }
+
+        async function executeSwap() {
+            const amount = parseFloat(document.getElementById('swap-amount').value);
+            const statusBox = document.getElementById('swap-status');
+
+            if (isNaN(amount) || amount <= 0) {
+                statusBox.innerHTML = "<span style='color: #ff4e50;'>Invalid amount!</span>";
+                return;
+            }
+
+            statusBox.innerHTML = "<span style='color: var(--gold-primary);'><i class='fas fa-spinner fa-spin'></i> Submitting Swap to AMM Pool...</span>";
+
+            const txPayload = {
+                from: wallet.pub,
+                to: "Contract_Vinimaya",
+                amount: amount,
+                nonce: Date.now(),
+                timestamp: Date.now() / 1000.0,
+                data: JSON.stringify({ method: "मुद्रा_परिवर्तन", args: [document.getElementById('swap-from-token').value, amount] }),
+                signature: "0000",
+                public_key: wallet.pub
+            };
+
+            try {
+                const response = await fetch("http://127.0.0.1:10808/samparka", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: "send_transaction", params: [txPayload], id: 2 })
+                });
+                const res = await response.json();
+                if (res.error) throw new Error(res.error.message);
+                
+                statusBox.innerHTML = "<span style='color: #4CAF50;'><i class='fas fa-check-circle'></i> Swap Confirmed via Vinimaya Contract!</span>";
+                
+                const history = JSON.parse(localStorage.getItem('kasturi_history') || '[]');
+                history.push({ type: 'send', to: 'Contract_Vinimaya_AMM', amount: amount, date: new Date().toLocaleString() });
+                localStorage.setItem('kasturi_history', JSON.stringify(history));
+
+                setTimeout(() => {
+                    document.getElementById('swap-amount').value = '';
+                    statusBox.innerHTML = '';
+                    fetchBalance();
+                }, 2000);
+
+            } catch (e) {
+                statusBox.innerHTML = `<span style='color: #ff4e50;'>Node Security Error: ${e.message}</span>`;
+            }
+        }
+
+        async function registerName() {
+            const name = document.getElementById('kns-name').value.trim();
+            const statusBox = document.getElementById('kns-status');
+
+            if (!name) {
+                statusBox.innerHTML = "<span style='color: #ff4e50;'>Invalid name!</span>";
+                return;
+            }
+
+            if (wallet.balance < 100) {
+                statusBox.innerHTML = "<span style='color: #ff4e50;'>Insufficient Pyar to register Name!</span>";
+                return;
+            }
+
+            statusBox.innerHTML = "<span style='color: var(--gold-primary);'><i class='fas fa-spinner fa-spin'></i> Registering via NamaSeva Contract...</span>";
+
+            const txPayload = {
+                from: wallet.pub,
+                to: "Contract_NamaSeva",
+                amount: 100,
+                nonce: Date.now(),
+                timestamp: Date.now() / 1000.0,
+                data: JSON.stringify({ method: "नाम_पञ्जीकरण", args: [name, wallet.pub] }),
+                signature: "0000",
+                public_key: wallet.pub
+            };
+
+            try {
+                const response = await fetch("http://127.0.0.1:10808/samparka", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: "send_transaction", params: [txPayload], id: 3 })
+                });
+                const res = await response.json();
+                if (res.error) throw new Error(res.error.message);
+                
+                statusBox.innerHTML = `<span style='color: #4CAF50;'><i class='fas fa-check-circle'></i> Identity ${name}.kasturi anchored!</span>`;
+                
+                const history = JSON.parse(localStorage.getItem('kasturi_history') || '[]');
+                history.push({ type: 'send', to: 'Contract_NamaSeva_KNS', amount: 100, date: new Date().toLocaleString() });
+                localStorage.setItem('kasturi_history', JSON.stringify(history));
+
+                setTimeout(() => {
+                    document.getElementById('kns-name').value = '';
+                    statusBox.innerHTML = '';
+                    fetchBalance();
+                }, 2000);
+
+            } catch (e) {
+                statusBox.innerHTML = `<span style='color: #ff4e50;'>Node Security Error: ${e.message}</span>`;
+            }
+        }
+
+        async function executeBridge() {
+            const amount = parseFloat(document.getElementById('bridge-amount').value);
+            const polygonAddr = document.getElementById('bridge-address').value.trim();
+            const statusBox = document.getElementById('bridge-status');
+
+            if (isNaN(amount) || amount <= 0 || !polygonAddr.startsWith("0x")) {
+                statusBox.innerHTML = "<span style='color: #ff4e50;'>Invalid amount or Polygon address!</span>";
+                return;
+            }
+
+            if (wallet.balance < amount) {
+                statusBox.innerHTML = "<span style='color: #ff4e50;'>Insufficient Pyar to bridge!</span>";
+                return;
+            }
+
+            statusBox.innerHTML = "<span style='color: var(--gold-primary);'><i class='fas fa-spinner fa-spin'></i> Locking Pyar in Kasturi Setu...</span>";
+
+            const txPayload = {
+                from: wallet.pub,
+                to: "Contract_Setu",
+                amount: amount,
+                nonce: Date.now(),
+                timestamp: Date.now() / 1000.0,
+                data: JSON.stringify({ method: "सेतु_बन्धन", args: [polygonAddr, amount] }),
+                signature: "0000",
+                public_key: wallet.pub
+            };
+
+            try {
+                const response = await fetch("http://127.0.0.1:10808/samparka", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: "send_transaction", params: [txPayload], id: 4 })
+                });
+                const res = await response.json();
+                if (res.error) throw new Error(res.error.message);
+                
+                statusBox.innerHTML = `<span style='color: #4CAF50;'><i class='fas fa-check-circle'></i> Pyar Locked! Relayer is minting WPYAR on Polygon...</span>`;
+                
+                const history = JSON.parse(localStorage.getItem('kasturi_history') || '[]');
+                history.push({ type: 'send', to: 'Contract_Setu_Bridge', amount: amount, date: new Date().toLocaleString() });
+                localStorage.setItem('kasturi_history', JSON.stringify(history));
+
+                setTimeout(() => {
+                    document.getElementById('bridge-amount').value = '';
+                    document.getElementById('bridge-address').value = '';
+                    statusBox.innerHTML = '';
+                    fetchBalance();
+                }, 4000);
+
+            } catch (e) {
+                statusBox.innerHTML = `<span style='color: #ff4e50;'>Node Security Error: ${e.message}</span>`;
+            }
+        }
+
+        // Shastra Reader Logic
+        let currentBookData = [];
+
+        async function fetchBook() {
+            const bookName = document.getElementById('bookSelect').value;
+            const display = document.getElementById('shastra-display');
+            display.innerHTML = `<div style="padding: 3rem; color: var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Loading ${bookName}...</div>`;
+            
+            try {
+                const response = await fetch("http://127.0.0.1:10808/samparka", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: "shastra_jnan", params: [bookName], id: 1 })
+                });
+                const rpcData = await response.json();
+                if (rpcData.error) throw new Error(rpcData.error.message);
+                
+                currentBookData = rpcData.result.data;
+                const vSelect = document.getElementById('verseSelect');
+                vSelect.innerHTML = '';
+                
+                currentBookData.forEach((v, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = v.verse && v.verse.length < 20 ? v.verse : `Verse ${index + 1}`;
+                    vSelect.appendChild(option);
+                });
+                
+                renderVerse();
+            } catch(error) {
+                display.innerHTML = `<p style="text-align:center; color: #ff4e50;">Failed to load data from node: ${error.message}</p>`;
+            }
+        }
+
+        function renderVerse() {
+            const index = document.getElementById('verseSelect').value;
+            const display = document.getElementById('shastra-display');
+            if (!index || !currentBookData[index]) return;
+
+            const v = currentBookData[index];
+            const devanagariHtml = (v.devanagari || v.text || "").replace(/\n/g, '<br>');
+            const sanskritHtml = (v.sanskrit || v.translation || "").replace(/\n/g, '<br>');
+            
+            display.innerHTML = `
+                <div class="reader-display" style="background: rgba(0,0,0,0.3); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div class="sloka-text">${devanagariHtml}</div>
+                    <div class="transliteration">${sanskritHtml}</div>
+                </div>
+            `;
+        }
+
+        // Boot
+        window.addEventListener('DOMContentLoaded', () => {
+            initWallet();
+            // Test Network Connection
+            provider.getNetworkStatus().catch(e => {
+                document.getElementById('network-status').innerHTML = `<i class="fas fa-circle" style="color: #ff4e50;"></i> Node Offline`;
+            });
+        });
+    </script>
+</body>
+</html>

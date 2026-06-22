@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KasturiScan | The Sovereign Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --surface: rgba(31, 40, 51, 0.7);
+            --border: rgba(102, 252, 241, 0.15);
+            --primary: #66fcf1;
+            --secondary: #45a29e;
+            --text-main: #c5c6c7;
+            --text-muted: #888;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(69, 162, 158, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(102, 252, 241, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0 3rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(102, 252, 241, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .blocks-section {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .blocks-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .blocks-header h2 {
+            margin: 0;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .block-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 2fr;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            align-items: center;
+            gap: 1rem;
+            transition: background 0.2s;
+        }
+
+        .block-row:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .block-badge {
+            background: rgba(102, 252, 241, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .hash-text {
+            font-family: monospace;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .proposer-text {
+            color: var(--secondary);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; text-shadow: 0 0 10px var(--primary); }
+            100% { opacity: 0.6; }
+        }
+
+        .live-indicator {
+            color: var(--primary);
+            font-size: 0.8rem;
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="#" class="logo">KasturiScan</a>
+            <div class="live-indicator">
+                <i class="fas fa-circle"></i> MAINNET LIVE
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-cubes stat-icon"></i>
+                <span class="stat-label">Total Blocks</span>
+                <span class="stat-value" id="total-blocks">--</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-coins stat-icon"></i>
+                <span class="stat-label">Total Supply</span>
+                <span class="stat-value">16,000,000</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock stat-icon"></i>
+                <span class="stat-label">Cosmic Nakshatra</span>
+                <span class="stat-value" id="current-nakshatra">--</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-users stat-icon"></i>
+                <span class="stat-label">Network Status</span>
+                <span class="stat-value" style="color: #66fcf1; font-size: 1.2rem; align-self: center; margin-top: 10px;">Karma Consensus Active</span>
+            </div>
+        </div>
+
+        <!-- Radha Krishna Prasad Charity Section -->
+        <div class="blocks-section" style="margin-bottom: 2rem; border-color: #ffb703; background: linear-gradient(145deg, rgba(31, 40, 51, 0.9), rgba(255, 183, 3, 0.05));">
+            <div class="blocks-header" style="border-bottom-color: rgba(255, 183, 3, 0.2);">
+                <h2 style="color: #ffb703;"><i class="fas fa-om"></i> Radha Krishna Prasad - Divine Treasury</h2>
+                <div class="live-indicator" style="color: #ffb703; animation: pulse 3s infinite;">
+                    <i class="fas fa-heart"></i> 100% On-Chain Transparency
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <p style="line-height: 1.8; color: #e0e0e0;">
+                        KasturiChain is built on the Vedic principle of <strong>Seva</strong> (Selfless Service). 
+                        By Divine Consensus, <strong style="color: #ffb703;">50% of all network revenue</strong> (Transaction Fees and Block Rewards) 
+                        is cryptographically routed to the <em>Radha Krishna Prasad Treasury</em>.
+                    </p>
+                    <p style="line-height: 1.8; color: var(--text-muted); font-size: 0.9rem;">
+                        These funds are strictly dedicated to the protection of cows (Goshala), the maintenance of Braj Dham, and feeding the needy. 
+                        No human can alter this law—it is mathematically bound to the genesis block.
+                    </p>
+                    <div style="margin-top: 1.5rem; background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 8px; font-family: monospace; border: 1px solid rgba(255, 183, 3, 0.2);">
+                        <span style="color: var(--text-muted);">Treasury Address:</span><br>
+                        <span id="charity-address-text" style="color: #ffb703; word-break: break-all;">0xradha_krishna_prasad_charity_0000000000</span>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; background: rgba(255, 183, 3, 0.05); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255, 183, 3, 0.1);">
+                    <i class="fas fa-hand-holding-heart" style="font-size: 3rem; color: #ffb703; margin-bottom: 1rem;"></i>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Treasury Balance</div>
+                    <div id="charity-balance" style="font-size: 2.5rem; font-weight: 800; color: #ffb703; font-family: 'Outfit', sans-serif; margin: 0.5rem 0;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem;"></i>
+                    </div>
+                    <div style="color: var(--text-muted); font-size: 0.8rem;">PYAR TOKENS (Live)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blocks-section">
+            <div class="blocks-header">
+                <h2><i class="fas fa-layer-group"></i> Recent Blocks</h2>
+                <button onclick="fetchBlocks()" style="background: none; border: 1px solid var(--primary); color: var(--primary); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+            
+            <div id="blocks-container">
+                <!-- Blocks will be injected here -->
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin"></i> Fetching blocks from node...
+                </div>
+            </div>
+        </div>
+        <div class="blocks-section" style="margin-top: 2rem;">
+            <div class="blocks-header">
+                <h2><i class="fas fa-search"></i> Address History (Phase 12 Indexer)</h2>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                <input type="text" id="address-input" placeholder="Enter Kasturi Address (0x...)" style="flex: 1; padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff;">
+                <button onclick="fetchHistory()" style="background: var(--primary); color: #000; padding: 1rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;">Search</button>
+            </div>
+            <div id="history-container">
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Enter an address to view indexed transactions.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const RPC_URL = "http://127.0.0.1:10808/samparka";
+
+        async function rpcCall(method, params = []) {
+            try {
+                const response = await fetch(RPC_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: method, params: params, id: 1 })
+                });
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+                return data.result;
+            } catch (error) {
+                console.error(`RPC Error (${method}):`, error);
+                return null;
+            }
+        }
+
+        async function fetchStats() {
+            const naks = await rpcCall("nakshatra_kala");
+            if (naks) {
+                document.getElementById('current-nakshatra').innerText = naks.nakshatra_name;
+            }
+        }
+
+        async function fetchBlocks() {
+            const blocksData = await rpcCall("shringkhala_sthiti");
+            const container = document.getElementById('blocks-container');
+            
+            if (!blocksData) {
+                container.innerHTML = `<div style="text-align: center; padding: 2rem; color: #ff4b4b;">Failed to connect to KasturiNode. Is the daemon running?</div>`;
+                return;
+            }
+
+            // blocksData is expected to be an object {"0": {...}, "1": {...}}
+            const blockHeights = Object.keys(blocksData).map(Number).sort((a, b) => b - a);
+            document.getElementById('total-blocks').innerText = blockHeights.length.toString();
+
+            if (blockHeights.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No blocks found. Waiting for Genesis...</div>`;
+                return;
+            }
+
+            let html = `
+                <div class="block-row" style="border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
+                    <div>Block #</div>
+                    <div>Proposer (Karma Contributor)</div>
+                    <div>Transactions</div>
+                    <div>Block Hash</div>
+                </div>
+            `;
+
+            for (const height of blockHeights.slice(0, 50)) { // Show last 50 blocks
+                const block = blocksData[height.toString()];
+                if(!block) continue;
+                
+                const proposer = block["हस्ताक्षर"] || block["खनक_पता"] || "Unknown";
+                const hash = block["मुद्रा"] || "N/A";
+                
+                // Get transaction count (if it exists in the block object)
+                let txCount = 0;
+                if (block["कर्मबिन्दु"] && Array.isArray(block["कर्मबिन्दु"])) {
+                    txCount = block["कर्मबिन्दु"].length;
+                } else if (block["कर्मबिन्दु"] === "GENESIS") {
+                    txCount = "GENESIS";
+                }
+
+                html += `
+                    <div class="block-row">
+                        <div><span class="block-badge">${height}</span></div>
+                        <div class="proposer-text">${proposer}</div>
+                        <div>${txCount}</div>
+                        <div class="hash-text">${hash}</div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        async function fetchHistory() {
+            const addr = document.getElementById('address-input').value;
+            if(!addr) return;
+            
+            const container = document.getElementById('history-container');
+            container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Fetching history...</div>`;
+            
+            const history = await rpcCall("get_history", [addr]);
+            if(!history || history.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No transactions found for this address.</div>`;
+                return;
+            }
+            
+            let html = '';
+            for(const txHash of history) {
+                html += `
+                    <div style="background: rgba(255,255,255,0.02); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 0.5rem; font-family: monospace; color: var(--primary);">
+                        <i class="fas fa-exchange-alt"></i> TX Hash: ${txHash}
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        async function fetchCharityBalance() {
+            const balance = await rpcCall("get_balance", ["0xradha_krishna_prasad_charity_0000000000"]);
+            if (balance !== null) {
+                document.getElementById('charity-balance').innerText = balance.toLocaleString();
+            } else {
+                document.getElementById('charity-balance').innerText = "0";
+            }
+        }
+
+        // Initialize
+        fetchStats();
+        fetchBlocks();
+        fetchCharityBalance();
+        
+        // Auto refresh every 10 seconds
+        setInterval(() => {
+            fetchStats();
+            fetchBlocks();
+            fetchCharityBalance();
+        }, 10000);
+    </script>
+</body>
+</html>

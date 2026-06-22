@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasturi Tirtha | Testnet Faucet</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #050505;
+            color: #f1f5f9;
+        }
+
+        .container {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-panel {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .faucet-input {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #fff;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .faucet-input:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+        
+        .status-box {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 12px;
+            display: none;
+            font-weight: 600;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .status-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            color: #34d399;
+        }
+        
+        .status-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #f87171;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background Elements from main site -->
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html#philosophy">Philosophy</a></li>
+            <li><a href="sanatan.html">Sanatan Dharma</a></li>
+            <li><a href="dao.html">Sabha DAO</a></li>
+            <li><a href="satyascan.html">SatyaScan</a></li>
+            <li><a href="ide.html">Web IDE</a></li>
+            <li><a href="faucet.html" class="active">Faucet</a></li>
+            <li><a href="forum.html">Forum</a></li>
+            <li><a href="javascript:void(0)" id="connect-wallet-btn" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;"><i class="fas fa-wallet"></i> Connect Wallet</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div class="glass-panel">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🚰</div>
+            <h1 class="glitch" data-text="Tirtha Faucet" style="font-size: 2.5rem; margin-bottom: 1rem; color: #d4af37;">Tirtha Faucet</h1>
+            <p style="color: #cbd5e1; margin-bottom: 2.5rem; line-height: 1.6;">
+                Receive <strong>5 Pyar</strong> testnet tokens instantly.<br>
+                Use them to deploy and interact with smart contracts on the KasturiChain sovereign network.
+            </p>
+            
+            <input type="text" id="walletAddress" class="faucet-input" placeholder="Enter Wallet Address (Public Key Hex)">
+            
+            <button class="btn-primary" onclick="requestCoins()" style="width: 100%; border: none; font-size: 1.2rem; padding: 1.2rem; border-radius: 12px; cursor: pointer; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">
+                <i class="fas fa-hand-holding-water"></i> Request Pyar
+            </button>
+            
+            <div id="statusBox" class="status-box"></div>
+        </div>
+    </main>
+
+    <script>
+        const NODE_URL = "https://node.kasturisundari.xyz/rpc";
+
+        async function requestCoins() {
+            const address = document.getElementById('walletAddress').value.trim();
+            const statusBox = document.getElementById('statusBox');
+            
+            if (!address) {
+                showStatus("Error: Please enter a valid wallet address.", false);
+                return;
+            }
+
+            statusBox.style.display = 'block';
+            statusBox.className = 'status-box';
+            statusBox.innerHTML = "<i class='fas fa-circle-notch fa-spin'></i> Submitting request to Astromechanics pool...";
+
+            try {
+                // Request format matches node.sutra /तीर्थ endpoint
+                const response = await fetch(`${NODE_URL}/तीर्थ`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ पता: address })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showStatus("<i class='fas fa-check-circle'></i> Success! Transaction is in the mempool awaiting mining.", true);
+                } else {
+                    showStatus(`<i class='fas fa-exclamation-triangle'></i> Error: ${data.दोष || "Transaction failed"}`, false);
+                }
+            } catch (e) {
+                showStatus("<i class='fas fa-exclamation-circle'></i> Connection failed. Ensure the Kasturi node is running.", false);
+            }
+        }
+
+        function showStatus(message, isSuccess) {
+            const statusBox = document.getElementById('statusBox');
+            statusBox.style.display = 'block';
+            statusBox.className = `status-box ${isSuccess ? 'status-success' : 'status-error'}`;
+            statusBox.innerHTML = message;
+        }
+    </script>
+</body>
+</html>

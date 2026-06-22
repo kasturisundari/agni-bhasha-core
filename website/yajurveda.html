@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shukla Yajur Veda | KasturiChain Library</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="sanatan.html"><i class="fas fa-arrow-left"></i> Back to Sanatan Dharma</a></li>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-tag text-center" id="header-tag">SANATANA DHARMA BOOKS</div>
+            <h1 class="text-center massive-text" style="margin-bottom: 1rem;">Shukla <span class="text-gradient">Yajur Veda</span></h1>
+            <p class="center-para" style="margin-bottom: 3rem;">The Veda of prose mantras for worship rituals. Vajasaneyi Madhyandina Samhita. Immutable, translation-free pure Sanskrit & IAST.</p>
+            
+            <div class="gita-reader dark-glass">
+                <div class="reader-controls" style="display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="prevVerse()" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                    <div class="control-group">
+                        <label for="chapter-select">Adhyaya (Chapter)</label>
+                        <select id="chapter-select" class="glass-select"></select>
+                    </div>
+                    <div class="control-group">
+                        <label for="verse-select">Mantra (Verse)</label>
+                        <select id="verse-select" class="glass-select"></select>
+                    </div>
+                    <button onclick="nextVerse()" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="reader-display">
+                    <div class="sloka-text" id="sanskrit">Loading Immutable Shastra from Samparka Node...</div>
+                    <div class="transliteration" id="translit"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+
+    <!-- Reader Logic -->
+    <script>
+        let chapters = {};
+        let currentHashBadge = null;
+
+        async function fetchYajurveda() {
+            try {
+                const response = await fetch("https://kasturisundari.xyz/rpc/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "shastra_jnan",
+                        params: ["yajurveda"],
+                        id: Date.now()
+                    })
+                });
+                const rpcData = await response.json();
+                if (rpcData.error) throw new Error(rpcData.error.message);
+                
+                const shastraData = rpcData.result.data;
+                const hashStamp = rpcData.result.hash_stamp;
+                
+                // Add immutable hash display
+                const header = document.getElementById('header-tag');
+                if(header) {
+                    currentHashBadge = document.createElement('div');
+                    currentHashBadge.style.cssText = 'font-size: 0.65rem; color: var(--accent-gold); margin-top: 10px; font-family: monospace; word-break: break-all; opacity: 0.8; margin-bottom: 20px;';
+                    currentHashBadge.innerHTML = `<i class="fas fa-link"></i> SHA-256: ${hashStamp}`;
+                    header.parentNode.insertBefore(currentHashBadge, header.nextSibling);
+                }
+
+                if(typeof shastraData !== 'undefined') {
+                    const chapterSelect = document.getElementById('chapter-select');
+                    
+                    chapters = {};
+                    shastraData.forEach(verseObj => {
+                        const ch = verseObj.chapter_number;
+                        if (!chapters[ch]) {
+                            chapters[ch] = [];
+                        }
+                        chapters[ch].push(verseObj);
+                    });
+
+                    // Populate Adhyayas
+                    chapterSelect.innerHTML = '';
+                    Object.keys(chapters).forEach(chNum => {
+                        const option = document.createElement('option');
+                        option.value = chNum;
+                        option.textContent = `Adhyaya ${chNum}`;
+                        chapterSelect.appendChild(option);
+                    });
+
+                    // Initial load
+                    const firstChapter = Object.keys(chapters)[0];
+                    if(firstChapter) {
+                        populateVerses(firstChapter);
+                    }
+                } else {
+                    document.getElementById('sanskrit').textContent = "Failed to load data from node.";
+                }
+            } catch (error) {
+                document.getElementById('sanskrit').textContent = "Gateway Error: " + error.message;
+            }
+        }
+
+        const chapterSelect = document.getElementById('chapter-select');
+        const verseSelect = document.getElementById('verse-select');
+
+        // Handle Adhyaya change
+        chapterSelect.addEventListener('change', (e) => {
+            populateVerses(e.target.value);
+        });
+
+        // Handle Verse change
+        verseSelect.addEventListener('change', (e) => {
+            displayVerse(chapterSelect.value, e.target.value);
+        });
+
+        function populateVerses(chapterNum) {
+            const verses = chapters[chapterNum];
+            verseSelect.innerHTML = '';
+            verses.forEach((verseObj) => {
+                const option = document.createElement('option');
+                option.value = verseObj.verse_number;
+                option.textContent = `Mantra ${verseObj.verse_number}`;
+                verseSelect.appendChild(option);
+            });
+
+            if(verses.length > 0) {
+                displayVerse(chapterNum, verses[0].verse_number);
+            }
+        }
+
+        function displayVerse(chapterNum, verseNum) {
+            if(!chapters[chapterNum]) return;
+            const verseObj = chapters[chapterNum].find(v => v.verse_number == verseNum);
+            if (!verseObj) return;
+
+            const displayArea = document.querySelector('.reader-display');
+            displayArea.style.opacity = 0;
+            
+            setTimeout(() => {
+                document.getElementById('sanskrit').innerHTML = verseObj.text.replace(/\n/g, '<br>');
+                document.getElementById('translit').innerHTML = verseObj.transliteration.replace(/\n/g, '<br>');
+                
+                displayArea.style.opacity = 1;
+                displayArea.style.transition = 'opacity 0.4s ease';
+            }, 200);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchYajurveda();
+        });
+        
+        window.prevVerse = function() {
+            if (verseSelect.selectedIndex > 0) {
+                verseSelect.selectedIndex--;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            } else if (chapterSelect.selectedIndex > 0) {
+                chapterSelect.selectedIndex--;
+                populateVerses(chapterSelect.value);
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            }
+        };
+
+        window.nextVerse = function() {
+            if (verseSelect.selectedIndex < verseSelect.options.length - 1) {
+                verseSelect.selectedIndex++;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            } else if (chapterSelect.selectedIndex < chapterSelect.options.length - 1) {
+                chapterSelect.selectedIndex++;
+                populateVerses(chapterSelect.value);
+                verseSelect.selectedIndex = 0;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            }
+        };
+    </script>
+</body>
+</html>

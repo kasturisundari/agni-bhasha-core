@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanatan Dharma | KasturiChain</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hub-hero { text-align: center; padding: 6rem 5% 4rem; position: relative; overflow: hidden; }
+        .hub-hero h1 { font-family: var(--font-heading); font-size: 4rem; margin-bottom: 1.5rem; text-shadow: 0 0 30px rgba(249, 212, 35, 0.3); }
+        .hub-hero p { max-width: 800px; margin: 0 auto; font-size: 1.2rem; line-height: 1.8; color: var(--text-muted); }
+        
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .phil-card {
+            background: rgba(20, 20, 30, 0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .phil-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(249, 212, 35, 0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .phil-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: -webkit-linear-gradient(45deg, var(--gold-secondary), var(--gold-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .phil-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-main); }
+        .phil-card p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+
+        .library-section { padding: 4rem 5%; background: rgba(10, 10, 14, 0.8); }
+        .library-title { text-align: center; font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 3rem; color: var(--gold-primary); }
+        
+        .book-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 2rem; 
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .book-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .book-card:hover { border-color: rgba(249, 212, 35, 0.2); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .book-card:hover::before { opacity: 1; }
+        
+        .book-icon { font-size: 3rem; color: var(--gold-primary); margin-bottom: 1.5rem; text-shadow: 0 0 20px rgba(249, 212, 35, 0.3); }
+        .book-title { font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 1rem; color: #fff; }
+        .book-desc { color: var(--text-muted); font-size: 0.9rem; flex-grow: 1; margin-bottom: 2rem; line-height: 1.6; }
+        
+        .book-link {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(249, 212, 35, 0.1);
+            border: 1px solid rgba(249, 212, 35, 0.2);
+            color: var(--gold-primary);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: var(--font-body);
+        }
+        
+        .book-link:hover { background: rgba(249, 212, 35, 0.25); box-shadow: 0 0 15px rgba(249, 212, 35, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="bg-glow orb-1" style="width: 1000px; height: 1000px; opacity: 0.05;"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="sanatan.html" class="active-link">Sanatan Dharma</a></li>
+            <li><a href="dao.html">Sabha DAO</a></li>
+            <li><a href="forum.html">Community Forum</a></li>
+        </ul>
+    </nav>
+
+    <header class="hub-hero">
+        <div class="badge"><i class="fas fa-infinity"></i> The Eternal Truth</div>
+        <h1><span class="text-gradient">Sanatan Dharma</span></h1>
+        <p>Sanatan Dharma is not a religion, but the eternal, universal law of reality. It encompasses the duties, cosmic order, and the spiritual path to ultimate liberation. It is the very fabric of existence, uncreated and eternal, mapping the journey of the soul through time and space.</p>
+    </header>
+
+    <section class="philosophy-grid">
+        <div class="phil-card">
+            <div class="phil-icon"><i class="fas fa-balance-scale"></i></div>
+            <h3>Dharma</h3>
+            <p>The cosmic law underlying right behavior and social order. It is the righteous path that maintains the harmony and balance of the universe.</p>
+        </div>
+        <div class="phil-card">
+            <div class="phil-icon"><i class="fas fa-sync-alt"></i></div>
+            <h3>Karma & Samsara</h3>
+            <p>The universal principle of cause and effect, and the continuous cycle of birth, death, and rebirth driven by the soul's actions.</p>
+        </div>
+        <div class="phil-card">
+            <div class="phil-icon"><i class="fas fa-door-open"></i></div>
+            <h3>Moksha</h3>
+            <p>The ultimate goal—liberation from the cycle of Samsara. A state of absolute freedom, realization, and union with the Supreme reality.</p>
+        </div>
+    </section>
+
+    <section class="vijnana-banner" style="background: linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 14, 0.9)), url('assets/stars.jpg') center/cover; padding: 4rem 5%; text-align: center; border-top: 1px solid rgba(249, 212, 35, 0.2); border-bottom: 1px solid rgba(249, 212, 35, 0.2); margin: 2rem 0;">
+        <h2 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 1rem; color: var(--gold-primary);"><i class="fas fa-atom" style="margin-right: 15px;"></i>Vedic Vijnana</h2>
+        <p style="color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.8; font-size: 1.1rem;">Explore the absolute sciences of the ancient Rishis. From the mathematics of time (Kala-Vijnana) to sacred astronomy, mathematically verified through modern planetary engines.</p>
+        <a href="vedic_vijnana.html" class="book-link" style="display: inline-block; width: auto; padding: 1rem 2.5rem; font-size: 1.1rem;"><i class="fas fa-rocket" style="margin-right: 10px;"></i> Enter Vedic Vijnana</a>
+    </section>
+
+    <section class="library-section">
+        <h2 class="library-title">The Sacred Texts</h2>
+        <div class="book-grid">
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-om"></i></div>
+                <h3 class="book-title">Rig Veda</h3>
+                <p class="book-desc">The oldest and most important of the Vedas. It contains the sacred hymns, mantras, and eternal cosmic knowledge of the ancient sages.</p>
+                <a href="rigveda.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-fire"></i></div>
+                <h3 class="book-title">Shukla Yajur Veda</h3>
+                <p class="book-desc">The Veda of prose mantras for worship rituals. Vajasaneyi Madhyandina Samhita containing the sacred formulas.</p>
+                <a href="yajurveda.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-fire-alt"></i></div>
+                <h3 class="book-title">Krishna Yajur Veda</h3>
+                <p class="book-desc">Taittiriya Samhita (Pada Patha) of the Yajurveda, preserving the sacred accented words and prose formulas for eternal fire sacrifices.</p>
+                <a href="krishnayajurveda.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-music"></i></div>
+                <h3 class="book-title">Sama Veda</h3>
+                <p class="book-desc">Jaiminiya Samaveda Samhita, the Veda of melodies and chants, containing the pristine liturgical songs, stobhas, and musical svaras.</p>
+                <a href="samaveda.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-magic"></i></div>
+                <h3 class="book-title">Atharva Veda</h3>
+                <p class="book-desc">The fourth Veda containing sacred spells, mantras, and incantations for everyday life, healing, and cosmic preservation.</p>
+                <a href="atharvaveda.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                <h3 class="book-title">Srimad Bhagavatam</h3>
+                <p class="book-desc">The ripened fruit of all Vedic literature. The supreme Purana that focuses on the pure, unalloyed devotional service to Lord Krishna.</p>
+                <a href="bhagavatam.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-scroll"></i></div>
+                <h3 class="book-title">Valmiki Ramayana</h3>
+                <p class="book-desc">The original epic composed by Sage Valmiki, narrating the divine play and journey of Lord Ramachandra. Pure Sanskrit & IAST.</p>
+                <a href="ramayana.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-feather"></i></div>
+                <h3 class="book-title">Ramcharitmanas</h3>
+                <p class="book-desc">The beautiful retelling of the Ramayana in the Awadhi language by Goswami Tulsidas. Pure Awadhi & IAST.</p>
+                <a href="ramcharitmanas.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="book-title">Mahabharata</h3>
+                <p class="book-desc">The world's longest epic, chronicling the Kurukshetra War and the path of Dharma. Pure Sanskrit & IAST.</p>
+                <a href="mahabharata.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-dharmachakra"></i></div>
+                <h3 class="book-title">Bhagavad Gita</h3>
+                <p class="book-desc">The Song of God. The supreme philosophical conversation between Lord Krishna and Arjuna on the battlefield of Kurukshetra.</p>
+                <a href="gita.html" class="book-link">Read Text</a>
+            </div>
+            
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-sun"></i></div>
+                <h3 class="book-title">Isha Upanishad</h3>
+                <p class="book-desc">A profound text focusing on the nature of the Supreme Lord (Isha) and the soul, declaring that everything is owned and controlled by the Lord.</p>
+                <a href="isha.html" class="book-link">Read Text</a>
+            </div>
+            
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-star"></i></div>
+                <h3 class="book-title">Brahma Samhita</h3>
+                <p class="book-desc">Lord Brahma's magnificent prayers to the Supreme Personality of Godhead, Lord Govinda, describing His eternal spiritual realm.</p>
+                <a href="brahma.html" class="book-link">Read Text</a>
+            </div>
+            
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-heart"></i></div>
+                <h3 class="book-title">Radhika Tapani</h3>
+                <p class="book-desc">The esoteric Upanishad dedicated to the supreme goddess, Srimati Radharani, revealing the highest mysteries of divine love.</p>
+                <a href="radhika.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-gem"></i></div>
+                <h3 class="book-title">Radha Sahasranama</h3>
+                <p class="book-desc">The thousand transcendental names of Srimati Radharani spoken by Lord Siva to Parvati Devi from the Narada-Pancaratra.</p>
+                <a href="radha.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-water"></i></div>
+                <h3 class="book-title">Caitanya Caritamrta</h3>
+                <p class="book-desc">The nectar of the acts of Lord Caitanya Mahaprabhu. The principal theological and biographical work on the life of Sri Caitanya.</p>
+                <a href="caitanya.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-moon"></i></div>
+                <h3 class="book-title">Gopala Tapaniya</h3>
+                <p class="book-desc">The sacred Atharvaveda Upanishad dedicated to Gopala (Lord Krishna) and His eternal worship. Pure Sanskrit & IAST.</p>
+                <a href="gopalatapani.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-leaf"></i></div>
+                <h3 class="book-title">The 108 Upanishads</h3>
+                <p class="book-desc">The complete Vedic wisdom corpus containing 83 fully parsed, authenticated Upanishads. Pure Sanskrit & IAST.</p>
+                <a href="upanishads.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-sun"></i></div>
+                <h3 class="book-title">Chaitanya Upanishad</h3>
+                <p class="book-desc">The esoteric Upanishad detailing the advent of Lord Chaitanya Mahaprabhu. Immutable, translation-free pure Sanskrit & IAST.</p>
+                <a href="chaitanyaupanishad.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-lotus"></i></div>
+                <h3 class="book-title">Lakshmi Tantra</h3>
+                <p class="book-desc">A major Pancaratra text detailing the philosophy and worship of Goddess Lakshmi. Immutable, translation-free pure Sanskrit & IAST.</p>
+                <a href="lakshmitantra.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-seedling"></i></div>
+                <h3 class="book-title">Gautamiya Tantra</h3>
+                <p class="book-desc">A foundational Vaishnava Tantra focusing on Krishna worship. Immutable, translation-free pure Sanskrit & IAST.</p>
+                <a href="gautamiyatantra.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-moon"></i></div>
+                <h3 class="book-title">Sammohana Tantra</h3>
+                <p class="book-desc">An ancient Tantric text containing rare esoteric mantras. Immutable, translation-free pure Sanskrit & IAST.</p>
+                <a href="sammohanatantra.html" class="book-link">Read Text</a>
+            </div>
+
+            <div class="book-card">
+                <div class="book-icon"><i class="fas fa-crown"></i></div>
+                <h3 class="book-title">Narada Pancaratra</h3>
+                <p class="book-desc">The primary Vaishnava Pancaratra text focusing on devotion (Bhakti). Immutable, translation-free pure Sanskrit & IAST.</p>
+                <a href="naradapancaratra.html" class="book-link">Read Text</a>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content" style="margin-top: 2rem;">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

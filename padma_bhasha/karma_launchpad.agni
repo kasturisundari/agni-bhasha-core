@@ -1,0 +1,45 @@
+◇ ----------------------------------------------------
+◇ Karma Launchpad (कर्म-प्रक्षेपणम्) - Zero Capital IBCO
+◇ ----------------------------------------------------
+◇ Initial Bonding Curve Offering for KasturiChain
+◇ This contract mints PYAR automatically as investors deposit USDT.
+◇ Price increases linearly: P = base_price + (supply * slope)
+
+√sṛj+ति·मूल_मूल्यम् ← 0.0001 ◇ Base Price ($0.0001)
+√sṛj+ति·मूल्य_वृद्धि ← 0.0000001 ◇ Slope (Price increases by $0.0000001 per PYAR sold)
+√sṛj+ति·कुल_विक्रीतम् ← 0
+√sṛj+ति·संचित_USDT ← 0
+
+◇ Purchase PYAR directly from the contract (क्रयणम्)
+सूत्र क्रयण(निवेशक, usdt_मात्रा) {
+    यदि (usdt_मात्रा <= 0) {
+        √वच्+ति·"अवैध निवेश (Invalid Investment)"
+        प्रतिदा विफल
+    }
+    
+    ◇ Calculate current price
+    √sṛj+ति·वर्तमान_मूल्यम् ← मूल_मूल्यम् + (कुल_विक्रीतम् * मूल्य_वृद्धि)
+    
+    ◇ Calculate how many PYAR the investor gets
+    √sṛj+ति·प्राप्त_PYAR ← usdt_मात्रा / वर्तमान_मूल्यम्
+    
+    ◇ Mint PYAR tokens to investor
+    यदि (अस्ति·(खाता_कोष, निवेशक) == शून्य) {
+        खाता_कोष[निवेशक] ← प्राप्त_PYAR
+    } अन्यथा {
+        खाता_कोष[निवेशक] ← खाता_कोष[निवेशक] + प्राप्त_PYAR
+    }
+    
+    ◇ Lock USDT in the Treasury Liquidity Pool
+    संचित_USDT ← संचित_USDT + usdt_मात्रा
+    कुल_विक्रीतम् ← कुल_विक्रीतम् + प्राप्त_PYAR
+    
+    √वच्+ति·"सफल निवेश: " + प्राप्त_PYAR + " PYAR प्राप्तम् (Price: " + वर्तमान_मूल्यम् + ")"
+    प्रतिदा सत्य
+}
+
+◇ Get Current Token Price (वर्तमान-मूल्यम्)
+सूत्र मूल्य_दर्शन() {
+    √sṛj+ति·वर्तमान_मूल्यम् ← मूल_मूल्यम् + (कुल_विक्रीतम् * मूल्य_वृद्धि)
+    प्रतिदा वर्तमान_मूल्यम्
+}

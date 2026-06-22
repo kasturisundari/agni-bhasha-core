@@ -1,0 +1,32 @@
+◇ ----------------------------------------------------
+◇ अग्नि भाषा (Agni Bhasha) : Genesis & Mainnet Initiator
+◇ ----------------------------------------------------
+
+आयात "सञ्चिका.vidya"
+आयात "पञ्चतत्व_إجماع.vidya"
+आयात "गुह्य.vidya"
+
+सूत्र كتلة_التكوين_سृज्(genesis_path) {
+    √वच्+ति·"ॐ KasturiChain Mainnet Genesis Initiated ॐ"
+    
+    √सृज्+ति·genesis_data ← सञ्चिका_पठ(genesis_path)
+    
+    ◇ Parse Genesis Config
+    √वच्+ति·"Loading Genesis Configuration..."
+    √सृज्+ति·كتلة_صفر ← [
+        "सूचकांक": 0,
+        "पूर्व_هَاش": "0000000000000000000000000000000000000000000000000000000000000000",
+        "व्यवहाराः": ["Genesis Mint: 100M KASTURI to Master"],
+        "هَاش": गुह्य_هَاش_निर्माण(genesis_data)
+    ]
+    
+    √वच्+ति·"Genesis Block 0 Successfully Mined."
+    √वच्+ति·"Hash: " + كتلة_صفر["هَاش"]
+    
+    ◇ Start the Seed Node
+    √वच्+ति·"Starting Eternal Seed Node on Port 26656..."
+    नोड_प्रारम्भ(26656)
+}
+
+◇ Entry point
+كتلة_التكوين_سृज्("genesis.json")

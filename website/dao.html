@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabha DAO | KasturiChain Governance</title>
+    <meta name="description" content="Sabha DAO — Decentralized governance for KasturiChain. Vote on proposals, earn Pyar through Seva Mining, and grow the network with viral referrals.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+    <div class="bg-glow orb-dao"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="sanatan.html">Sanatan Dharma</a></li>
+            <li><a href="dao.html" class="active-link">Sabha DAO</a></li>
+            <li><a href="forum.html">Community Forum</a></li>
+            <li><a href="javascript:void(0)" id="connect-wallet-btn" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;"><i class="fas fa-wallet"></i> Connect Wallet</a></li>
+        </ul>
+    </nav>
+
+    <!-- DAO Hero -->
+    <header class="dao-hero">
+        <div class="dao-hero-content">
+            <div class="badge"><i class="fas fa-landmark"></i> Decentralized Governance</div>
+            <h1>सभा <span class="text-gradient">Sabha DAO</span></h1>
+            <p class="subtitle">The Supreme Council. Every token holder votes. Contribution determines weight, not wealth. Shape the future of KasturiChain.</p>
+            <div class="dao-stats-row">
+                <div class="dao-stat">
+                    <span class="dao-stat-val" id="stat-proposals">0</span>
+                    <span class="dao-stat-label">Proposals</span>
+                </div>
+                <div class="dao-stat">
+                    <span class="dao-stat-val" id="stat-members">0</span>
+                    <span class="dao-stat-label">Members</span>
+                </div>
+                <div class="dao-stat">
+                    <span class="dao-stat-val" id="stat-minted">0</span>
+                    <span class="dao-stat-label">Pyar Minted</span>
+                </div>
+                <div class="dao-stat">
+                    <span class="dao-stat-val">16M</span>
+                    <span class="dao-stat-label">Max Supply</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <section class="dao-tabs-section">
+        <div class="container">
+            <div class="dao-tabs" id="dao-tabs">
+                <button class="dao-tab active" data-tab="proposals"><i class="fas fa-scroll"></i> Proposals</button>
+                <button class="dao-tab" data-tab="submit"><i class="fas fa-plus-circle"></i> Submit</button>
+                <button class="dao-tab" data-tab="leaderboard"><i class="fas fa-trophy"></i> Leaderboard</button>
+                <button class="dao-tab" data-tab="referrals"><i class="fas fa-users"></i> Referrals</button>
+                <button class="dao-tab" data-tab="contracts"><i class="fas fa-file-code"></i> Contracts</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab Content -->
+    <section class="dao-content">
+        <div class="container">
+
+            <!-- ═══════════════════ PROPOSALS TAB ═══════════════════ -->
+            <div class="tab-panel active" id="panel-proposals">
+                <div class="panel-header">
+                    <h2><i class="fas fa-scroll"></i> Active Proposals</h2>
+                    <div class="filter-group">
+                        <select class="glass-select" id="filter-status">
+                            <option value="all">All Status</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="PASSED">Passed</option>
+                            <option value="REJECTED">Rejected</option>
+                            <option value="EXECUTED">Executed</option>
+                        </select>
+                        <select class="glass-select" id="filter-type">
+                            <option value="all">All Types</option>
+                            <option value="CODE_FEATURE">Code Feature</option>
+                            <option value="IDEA">Idea</option>
+                            <option value="REFERRAL_ACHIEVEMENT">Referral</option>
+                            <option value="NETWORK_UPGRADE">Network Upgrade</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="proposals-feed" id="proposals-feed">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- ═══════════════════ SUBMIT TAB ═══════════════════ -->
+            <div class="tab-panel" id="panel-submit">
+                <div class="panel-header">
+                    <h2><i class="fas fa-plus-circle"></i> Submit Proposal</h2>
+                </div>
+                <div class="submit-form-container">
+                    <form class="dao-form" id="proposal-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Proposal Type</label>
+                                <select class="glass-select full-width" id="prop-type" required>
+                                    <option value="">Select type...</option>
+                                    <option value="CODE_FEATURE">🔧 Code Feature (Major PR)</option>
+                                    <option value="IDEA">💡 Brilliant Idea</option>
+                                    <option value="NETWORK_UPGRADE">🚀 Network Upgrade</option>
+                                    <option value="REFERRAL_ACHIEVEMENT">👥 Referral Achievement</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Reward Tier</label>
+                                <div class="reward-display" id="reward-display">
+                                    <span class="reward-amount">—</span>
+                                    <span class="reward-label">Select a type first</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="glass-input" id="prop-title" placeholder="e.g. Implement quantum-resistant signature scheme" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="glass-textarea" id="prop-description" rows="4" placeholder="Explain your contribution in detail..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>GitHub PR / Evidence URL</label>
+                            <input type="url" class="glass-input" id="prop-url" placeholder="https://github.com/kasturisundari/sutra-lang/pull/...">
+                        </div>
+                        <button type="submit" class="btn-primary large-btn submit-btn" id="submit-proposal-btn">
+                            <i class="fas fa-paper-plane"></i> Submit to Sabha
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ═══════════════════ LEADERBOARD TAB ═══════════════════ -->
+            <div class="tab-panel" id="panel-leaderboard">
+                <div class="panel-header">
+                    <h2><i class="fas fa-trophy"></i> Seva Leaderboard</h2>
+                    <p class="panel-subtitle">Top contributors ranked by Seva Score (contribution merit)</p>
+                </div>
+                <div class="leaderboard-table-wrapper">
+                    <table class="leaderboard-table" id="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Contributor</th>
+                                <th>Seva Score</th>
+                                <th>Proposals</th>
+                                <th>Referrals</th>
+                                <th>Pyar Earned</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══════════════════ REFERRALS TAB ═══════════════════ -->
+            <div class="tab-panel" id="panel-referrals">
+                <div class="panel-header">
+                    <h2><i class="fas fa-users"></i> Referral Engine</h2>
+                    <p class="panel-subtitle">Invite 10 active contributors → Earn 200 Pyar</p>
+                </div>
+                <div class="referral-dashboard">
+                    <div class="referral-code-card">
+                        <h3>Your Referral Code</h3>
+                        <div class="referral-code-display">
+                            <span class="ref-code" id="ref-code">Connect wallet first</span>
+                            <button class="copy-ref-btn" id="copy-ref-btn" onclick="copyReferralCode()"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <div class="referral-link-display">
+                            <span class="ref-link" id="ref-link">—</span>
+                        </div>
+                    </div>
+                    <div class="referral-progress-card">
+                        <h3>Progress to Reward</h3>
+                        <div class="progress-ring-container">
+                            <div class="progress-ring" id="progress-ring">
+                                <svg viewBox="0 0 120 120">
+                                    <circle class="progress-bg" cx="60" cy="60" r="50"></circle>
+                                    <circle class="progress-fill" cx="60" cy="60" r="50" id="progress-circle"></circle>
+                                </svg>
+                                <div class="progress-text">
+                                    <span class="progress-count" id="ref-active-count">0</span>
+                                    <span class="progress-total">/ 10</span>
+                                </div>
+                            </div>
+                            <p>Active Referrals</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="referral-tree-section">
+                    <h3><i class="fas fa-project-diagram"></i> Your Referral Tree</h3>
+                    <div class="referral-tree" id="referral-tree">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+                <div class="referral-rules">
+                    <h3><i class="fas fa-info-circle"></i> How Referrals Work</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card">
+                            <div class="rule-icon"><i class="fas fa-link"></i></div>
+                            <h4>1. Share Your Code</h4>
+                            <p>Each wallet gets a unique referral code. Share it with developers, researchers, and enthusiasts.</p>
+                        </div>
+                        <div class="rule-card">
+                            <div class="rule-icon"><i class="fas fa-code-branch"></i></div>
+                            <h4>2. They Must Contribute</h4>
+                            <p>Referred members must reach 25 activity points (coding, ideas, voting, publishing) to count as "active".</p>
+                        </div>
+                        <div class="rule-card">
+                            <div class="rule-icon"><i class="fas fa-coins"></i></div>
+                            <h4>3. Earn 200 Pyar</h4>
+                            <p>When 10 referrals become active, a DAO proposal auto-triggers. The community votes to award your reward.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════ CONTRACTS TAB ═══════════════════ -->
+            <div class="tab-panel" id="panel-contracts">
+                <div class="panel-header">
+                    <h2><i class="fas fa-file-code"></i> Smart Contracts (Sutra Language)</h2>
+                    <p class="panel-subtitle">All governance logic — fully transparent, written in Sutra</p>
+                </div>
+                <div class="contracts-grid">
+                    <div class="contract-card" id="contract-sabha">
+                        <div class="contract-header">
+                            <div class="contract-icon sabha"><i class="fas fa-landmark"></i></div>
+                            <div>
+                                <h3>SabhaDAO</h3>
+                                <span class="contract-badge">Governance</span>
+                            </div>
+                        </div>
+                        <p>Master governance contract. Merit-based voting, proposal lifecycle, quorum enforcement, reward execution.</p>
+                        <div class="contract-stats">
+                            <span><i class="fas fa-code"></i> 210 lines</span>
+                            <span><i class="fas fa-cogs"></i> 9 functions</span>
+                        </div>
+                        <button class="btn-secondary view-contract-btn" onclick="toggleContract('sabha')"><i class="fas fa-eye"></i> View Source</button>
+                        <pre class="contract-source hidden" id="source-sabha"><code id="code-sabha"></code></pre>
+                    </div>
+                    <div class="contract-card" id="contract-seva">
+                        <div class="contract-header">
+                            <div class="contract-icon seva"><i class="fas fa-gem"></i></div>
+                            <div>
+                                <h3>SevaMining</h3>
+                                <span class="contract-badge">Mining</span>
+                            </div>
+                        </div>
+                        <p>Contribution-based mining. Anti-spam cooldowns, supply cap enforcement, auto-DAO proposal creation.</p>
+                        <div class="contract-stats">
+                            <span><i class="fas fa-code"></i> 140 lines</span>
+                            <span><i class="fas fa-cogs"></i> 5 functions</span>
+                        </div>
+                        <button class="btn-secondary view-contract-btn" onclick="toggleContract('seva')"><i class="fas fa-eye"></i> View Source</button>
+                        <pre class="contract-source hidden" id="source-seva"><code id="code-seva"></code></pre>
+                    </div>
+                    <div class="contract-card" id="contract-referral">
+                        <div class="contract-header">
+                            <div class="contract-icon referral"><i class="fas fa-users-cog"></i></div>
+                            <div>
+                                <h3>ReferralEngine</h3>
+                                <span class="contract-badge">Growth</span>
+                            </div>
+                        </div>
+                        <p>Viral referral tracking. Unique codes, activity verification, auto-reward trigger at 10 active referrals.</p>
+                        <div class="contract-stats">
+                            <span><i class="fas fa-code"></i> 180 lines</span>
+                            <span><i class="fas fa-cogs"></i> 8 functions</span>
+                        </div>
+                        <button class="btn-secondary view-contract-btn" onclick="toggleContract('referral')"><i class="fas fa-eye"></i> View Source</button>
+                        <pre class="contract-source hidden" id="source-referral"><code id="code-referral"></code></pre>
+                    </div>
+                    <div class="contract-card" id="contract-token">
+                        <div class="contract-header">
+                            <div class="contract-icon token"><i class="fas fa-coins"></i></div>
+                            <div>
+                                <h3>PadmaToken</h3>
+                                <span class="contract-badge">Token</span>
+                            </div>
+                        </div>
+                        <p>KST/Pyar token. Governance-gated minting, Strilinga-protected supply cap, burn mechanism.</p>
+                        <div class="contract-stats">
+                            <span><i class="fas fa-code"></i> 75 lines</span>
+                            <span><i class="fas fa-cogs"></i> 6 functions</span>
+                        </div>
+                        <button class="btn-secondary view-contract-btn" onclick="toggleContract('token')"><i class="fas fa-eye"></i> View Source</button>
+                        <pre class="contract-source hidden" id="source-token"><code id="code-token"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+                <p>The sovereign infrastructure for the next generation of decentralized civilization.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Ecosystem</h4>
+                <a href="index.html">Home</a>
+                <a href="library.html">Sacred Library</a>
+                <a href="dao.html">Sabha DAO</a>
+                <a href="https://github.com/kasturisundari/sutra-lang">GitHub</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+    <script src="assets/dao_engine.js"></script>
+</body>
+</html>

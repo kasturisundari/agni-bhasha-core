@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasturi Playground | Web IDE</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Monaco Editor -->
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/editor/editor.main.min.css">
+    
+    <style>
+        body {
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: #050505;
+            color: #f1f5f9;
+        }
+
+        .ide-container {
+            display: flex;
+            flex: 1;
+            padding: 2rem;
+            gap: 2rem;
+            height: calc(100vh - 80px);
+            margin-top: 80px; /* offset for fixed navbar */
+            z-index: 10;
+        }
+        
+        .editor-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .editor-header {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 0.8rem 1.5rem;
+            color: #d4af37;
+            font-family: monospace;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            font-weight: 600;
+        }
+        
+        #monaco-editor {
+            flex: 1;
+            width: 100%;
+        }
+        
+        .panel-section {
+            flex: 1;
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .panel-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a1a1aa;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            font-family: monospace;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .console-box {
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: #4ade80;
+            min-height: 150px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        /* Custom scrollbar for console */
+        .console-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .console-box::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background Elements from main site -->
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html#philosophy">Philosophy</a></li>
+            <li><a href="sanatan.html">Sanatan Dharma</a></li>
+            <li><a href="dao.html">Sabha DAO</a></li>
+            <li><a href="satyascan.html">SatyaScan</a></li>
+            <li><a href="ide.html">Web IDE</a></li>
+            <li><a href="faucet.html">Faucet</a></li>
+            <li><a href="forum.html">Forum</a></li>
+            <li><a href="javascript:void(0)" id="connect-wallet-btn" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;"><i class="fas fa-wallet"></i> Connect Wallet</a></li>
+        </ul>
+    </nav>
+
+    <div class="ide-container">
+        <!-- Panel -->
+        <div class="panel-section">
+            <h2><i class="fas fa-rocket" style="color: #d4af37; margin-right: 10px;"></i> Deploy Contract</h2>
+            
+            <div class="input-group">
+                <label>Private Key (Hex)</label>
+                <input type="password" id="privKey" placeholder="Required for network deployment">
+            </div>
+
+            <div class="input-group">
+                <label>Sender Address (Public Key Hex)</label>
+                <input type="text" id="pubKey" placeholder="04...">
+            </div>
+
+            <button class="btn-primary" onclick="deployContract()" style="width: 100%; border: none; font-size: 1.1rem; padding: 1rem; border-radius: 8px; cursor: pointer;">Deploy to Mainnet</button>
+
+            <h2 style="margin-top: 1rem;"><i class="fas fa-bolt" style="color: #d4af37; margin-right: 10px;"></i> Contract Interaction</h2>
+            
+            <div class="input-group">
+                <label>Contract Address</label>
+                <input type="text" id="contractAddress" placeholder="Enter contract hash">
+            </div>
+
+            <button class="btn-secondary" onclick="callContract()" style="width: 100%; border: none; font-size: 1.1rem; padding: 1rem; border-radius: 8px; cursor: pointer; border: 1px solid #d4af37; background: transparent; color: #d4af37;">Execute Function</button>
+
+            <div class="input-group">
+                <label>Terminal Output</label>
+                <div class="console-box" id="console">Kasturi VM Initialized. Ready for instructions.</div>
+            </div>
+        </div>
+
+        <!-- Editor -->
+        <div class="editor-section">
+            <div class="editor-header">
+                <span><i class="fas fa-code"></i> Main.sutra</span>
+                <span style="font-size: 0.9rem; border: 1px solid rgba(212, 175, 55, 0.4); padding: 2px 8px; border-radius: 12px; background: rgba(212, 175, 55, 0.1);">Sutra-lang v1.0</span>
+            </div>
+            <div id="monaco-editor"></div>
+        </div>
+    </div>
+
+    <!-- Monaco Scripts -->
+    <script>var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs' } };</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/editor/editor.main.nls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/editor/editor.main.js"></script>
+    
+    <script>
+        const NODE_URL = "https://node.kasturisundari.xyz/rpc";
+        let editor;
+
+        const defaultCode = `◇ KasturiChain First Smart Contract
+सूत्र मुख्या() {
+    √वच्+ति·"Greetings from the Sovereign Vedic L1!"
+    √स्मृ+ति·"Message"·"Hello World"
+    
+    √सृज्+ति·phala ← √दृश्+ति·"Message"
+    phala
+}`;
+
+        // Initialize Monaco
+        window.onload = () => {
+            editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                value: defaultCode,
+                language: 'rust', 
+                theme: 'vs-dark',
+                fontSize: 15,
+                fontFamily: 'Consolas, "Courier New", monospace',
+                minimap: { enabled: false },
+                padding: { top: 16 }
+            });
+        };
+
+        function log(msg) {
+            const c = document.getElementById('console');
+            c.innerHTML += `\n> ${msg}`;
+            c.scrollTop = c.scrollHeight;
+        }
+
+        async function createTransaction(type, contractCode, callData) {
+            const privKey = document.getElementById('privKey').value.trim();
+            const pubKey = document.getElementById('pubKey').value.trim();
+
+            if (!privKey || !pubKey) {
+                log("[Error] Missing Public/Private keys.");
+                return null;
+            }
+            
+            return {
+                प्रेषक: pubKey,
+                प्रापक: document.getElementById('contractAddress').value || "नेटवर्क",
+                मात्रा: 0,
+                हस्ताक्षर: "IDE_TEST_SIGNATURE",
+                प्रकार: type,
+                सङ्केतलिपि: contractCode,
+                आह्वान: callData,
+                IDE_PRIV: privKey
+            };
+        }
+
+        async function deployContract() {
+            const code = editor.getValue();
+            log("[Info] Compiling and packaging contract...");
+            
+            const tx = await createTransaction("सन्धिपत्र", code, "");
+            if(!tx) return;
+
+            try {
+                const res = await fetch(`${NODE_URL}/कर्मबिन्दु`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(tx)
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    log(`[Success] Contract pushed to mempool! Awaiting resonance mining...`);
+                } else {
+                    log(`[Failed] ${JSON.stringify(data)}`);
+                }
+            } catch (e) {
+                log(`[Error] Node connection failed. Ensure the server is online.`);
+            }
+        }
+
+        async function callContract() {
+            const addr = document.getElementById('contractAddress').value.trim();
+            if(!addr) {
+                log("[Error] Contract Address is required.");
+                return;
+            }
+            log(`[Info] Executing contract ${addr.substring(0,6)}...`);
+            
+            const tx = await createTransaction("आह्वान", "", "exec");
+            if(!tx) return;
+
+            try {
+                const res = await fetch(`${NODE_URL}/कर्मबिन्दु`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(tx)
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    log(`[Success] Execution request sent!`);
+                } else {
+                    log(`[Failed] ${JSON.stringify(data)}`);
+                }
+            } catch (e) {
+                log(`[Error] Node connection failed.`);
+            }
+        }
+    </script>
+</body>
+</html>

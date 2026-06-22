@@ -1,0 +1,37 @@
+◇ Kasturi Setu (The Bridge Vault)
+◇ Locks Pyar on KasturiChain and emits states for the Polygon Relayer
+
+माना सेतु_निर्माता = "0xBridgeRelayerAddress"
+माना सञ्चय = ०
+
+कार्य सेतु_बन्धन(विदेशी_पता, मात्रा) {
+    ◇ Lock native Pyar intended for Polygon WPYAR
+    सञ्चय = सञ्चय + मात्रा
+    
+    ◇ Emits a log (in our sandbox, we can write to the output or rely on the transaction data itself for the relayer)
+    √vac+ति·"LOCKED:" + यन्त्र_पता + ":" + प्रेषक + ":" + विदेशी_पता + ":" + मात्रा
+    
+    पुनरावृत्त सत्य
+}
+
+कार्य सेतु_मोचन(स्वदेशी_पता, मात्रा) {
+    ◇ Unlock native Pyar. Only the authorized Bridge Relayer can call this!
+    यदि (प्रेषक != सेतु_निर्माता) {
+        √vac+ति·"अधिकार_नास्ति"
+        पुनरावृत्त असत्य
+    }
+    
+    यदि (सञ्चय < मात्रा) {
+        √vac+ति·"अपर्याप्त_सञ्चय"
+        पुनरावृत्त असत्य
+    }
+    
+    सञ्चय = सञ्चय - मात्रा
+    
+    ◇ The actual transfer logic will be handled by the relayer initiating a zero-fee transfer from the vault,
+    ◇ or the Setu contract triggers an internal transfer (if the engine supports contract outbound transfers).
+    ◇ For Kasturi V1, the Relayer simply holds the keys to the Vault address and transfers out manually.
+    
+    √vac+ति·"UNLOCKED:" + स्वदेशी_पता + ":" + मात्रा
+    पुनरावृत्त सत्य
+}

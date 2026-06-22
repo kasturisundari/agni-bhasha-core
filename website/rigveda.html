@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rig Veda | KasturiChain Library</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="sanatan.html"><i class="fas fa-arrow-left"></i> Back to Sanatan Dharma</a></li>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-tag text-center" id="header-tag">SANATANA DHARMA BOOKS</div>
+            <h1 class="text-center massive-text" style="margin-bottom: 1rem;">The <span class="text-gradient">Rig Veda</span></h1>
+            <p class="center-para" style="margin-bottom: 3rem;">The oldest of the sacred books of Hinduism. Immutable, translation-free pure Sanskrit & IAST.</p>
+            
+            <div class="gita-reader dark-glass">
+                <div class="reader-controls" style="display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    <div class="control-group">
+                        <label for="mandala-select">Mandala (Book)</label>
+                        <select id="mandala-select" class="glass-select">
+                            <option value="1">Mandala 1</option>
+                            <option value="2">Mandala 2</option>
+                            <option value="3">Mandala 3</option>
+                            <option value="4">Mandala 4</option>
+                            <option value="5">Mandala 5</option>
+                            <option value="6">Mandala 6</option>
+                            <option value="7">Mandala 7</option>
+                            <option value="8">Mandala 8</option>
+                            <option value="9">Mandala 9</option>
+                            <option value="10">Mandala 10</option>
+                        </select>
+                    </div>
+                    <button onclick="prevVerse()" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                    <div class="control-group">
+                        <label for="chapter-select">Sukta (Hymn)</label>
+                        <select id="chapter-select" class="glass-select"></select>
+                    </div>
+                    <div class="control-group">
+                        <label for="verse-select">Rik (Verse)</label>
+                        <select id="verse-select" class="glass-select"></select>
+                    </div>
+                    <button onclick="nextVerse()" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="reader-display">
+                    <div class="sloka-text" id="rigveda-sanskrit">Loading Immutable Shastra from Samparka Node...</div>
+                    <div class="transliteration" id="rigveda-translit"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+
+    <!-- Reader Logic -->
+    <script>
+        let chapters = {};
+        let currentHashBadge = null;
+
+        async function fetchMandala(mandalaNum) {
+            try {
+                document.getElementById('rigveda-sanskrit').innerHTML = "Fetching secure cryptographic state... <i class='fas fa-circle-notch fa-spin'></i>";
+                document.getElementById('rigveda-translit').innerHTML = "";
+                
+                const response = await fetch("https://kasturisundari.xyz/rpc/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "shastra_jnan",
+                        params: [`rigveda_${mandalaNum}`],
+                        id: Date.now()
+                    })
+                });
+                const rpcData = await response.json();
+                if (rpcData.error) throw new Error(rpcData.error.message);
+                
+                const rigvedaData = rpcData.result.data;
+                const hashStamp = rpcData.result.hash_stamp;
+                
+                // Update immutable hash display
+                if(currentHashBadge) {
+                    currentHashBadge.remove();
+                }
+                const header = document.getElementById('header-tag');
+                if(header) {
+                    currentHashBadge = document.createElement('div');
+                    currentHashBadge.style.cssText = 'font-size: 0.65rem; color: var(--accent-gold); margin-top: 10px; font-family: monospace; word-break: break-all; opacity: 0.8; margin-bottom: 20px;';
+                    currentHashBadge.innerHTML = `<i class="fas fa-link"></i> SHA-256 (Mandala ${mandalaNum}): ${hashStamp}`;
+                    header.parentNode.insertBefore(currentHashBadge, header.nextSibling);
+                }
+
+                if(typeof rigvedaData !== 'undefined') {
+                    const chapterSelect = document.getElementById('chapter-select');
+                    
+                    chapters = {};
+                    rigvedaData.forEach(verseObj => {
+                        const ch = verseObj.chapter_number;
+                        if (!chapters[ch]) {
+                            chapters[ch] = [];
+                        }
+                        chapters[ch].push(verseObj);
+                    });
+
+                    // Populate Suktas
+                    chapterSelect.innerHTML = '';
+                    Object.keys(chapters).forEach(chNum => {
+                        const option = document.createElement('option');
+                        option.value = chNum;
+                        option.textContent = `Sukta ${chNum.split('.')[1]}`;
+                        chapterSelect.appendChild(option);
+                    });
+
+                    // Initial load for this Mandala
+                    const firstChapter = Object.keys(chapters)[0];
+                    if(firstChapter) {
+                        populateVerses(firstChapter);
+                    }
+                } else {
+                    document.getElementById('rigveda-sanskrit').textContent = "Failed to load data from node.";
+                }
+            } catch (error) {
+                document.getElementById('rigveda-sanskrit').textContent = "Gateway Error: " + error.message;
+            }
+        }
+
+        const chapterSelect = document.getElementById('chapter-select');
+        const verseSelect = document.getElementById('verse-select');
+        const mandalaSelect = document.getElementById('mandala-select');
+
+        // Handle Mandala change
+        mandalaSelect.addEventListener('change', (e) => {
+            fetchMandala(e.target.value);
+        });
+
+        // Handle Sukta change
+        chapterSelect.addEventListener('change', (e) => {
+            populateVerses(e.target.value);
+        });
+
+        // Handle Rik change
+        verseSelect.addEventListener('change', (e) => {
+            displayVerse(chapterSelect.value, e.target.value);
+        });
+
+        function populateVerses(chapterNum) {
+            const verses = chapters[chapterNum];
+            verseSelect.innerHTML = '';
+            verses.forEach((verseObj) => {
+                const option = document.createElement('option');
+                option.value = verseObj.verse_number;
+                option.textContent = `Rik ${verseObj.verse_number}`;
+                verseSelect.appendChild(option);
+            });
+
+            if(verses.length > 0) {
+                displayVerse(chapterNum, verses[0].verse_number);
+            }
+        }
+
+        function displayVerse(chapterNum, verseNum) {
+            if(!chapters[chapterNum]) return;
+            const verseObj = chapters[chapterNum].find(v => v.verse_number == verseNum);
+            if (!verseObj) return;
+
+            const displayArea = document.querySelector('.reader-display');
+            displayArea.style.opacity = 0;
+            
+            setTimeout(() => {
+                document.getElementById('rigveda-sanskrit').innerHTML = verseObj.text.replace(/\n/g, '<br>');
+                document.getElementById('rigveda-translit').innerHTML = verseObj.transliteration.replace(/\n/g, '<br>');
+                
+                displayArea.style.opacity = 1;
+                displayArea.style.transition = 'opacity 0.4s ease';
+            }, 200);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchMandala(1);
+        });
+        
+        window.prevVerse = function() {
+            if (verseSelect.selectedIndex > 0) {
+                verseSelect.selectedIndex--;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            } else if (chapterSelect.selectedIndex > 0) {
+                chapterSelect.selectedIndex--;
+                populateVerses(chapterSelect.value);
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            }
+        };
+
+        window.nextVerse = function() {
+            if (verseSelect.selectedIndex < verseSelect.options.length - 1) {
+                verseSelect.selectedIndex++;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            } else if (chapterSelect.selectedIndex < chapterSelect.options.length - 1) {
+                chapterSelect.selectedIndex++;
+                populateVerses(chapterSelect.value);
+                verseSelect.selectedIndex = 0;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            }
+        };
+    </script>
+</body>
+</html>

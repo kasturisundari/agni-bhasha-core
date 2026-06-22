@@ -1,0 +1,49 @@
+[package]
+name = "kasturisundari"
+version = "0.1.0"
+edition = "2021"
+authors = ["Kasturi Foundation <admin@kasturichain.com>"]
+description = "Vedic Paninian Smart Contract Language and L1 Node"
+repository = "https://github.com/kasturichain/sutra-lang"
+license = "MIT"
+keywords = ["blockchain", "compiler", "sanskrit", "panini", "crypto"]
+
+[lib]
+name = "kasturisundari"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+unicode-segmentation = "1.11"
+tokio = { version = "1.32", features = ["full"] }
+reqwest = { version = "0.11", features = ["json"] }
+async-recursion = "1.0"
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+lazy_static = "1.4.0"
+once_cell = "1.19"
+axum = "0.7.5"
+tower-http = { version = "0.5.2", features = ["cors"] }
+http-body-util = "0.1"
+rustyline = "14.0"
+sha2 = "0.11.0"
+hex = "0.4.3"
+percent-encoding = "2.3.2"
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+rand = "0.8"
+# Post-Quantum Cryptography (CRYSTALS-Dilithium / ML-DSA)
+pqcrypto-dilithium = "0.5.0"
+pqcrypto-traits = "0.3.5"
+sled = "0.34"
+tower-lsp = "0.20.0"
+# Zero-Knowledge Proofs (TarkaZK / Groth16)
+bellman = "0.14"
+bls12_381 = "0.8"
+ff = "0.13"
+
+# EVM Cross-Chain Interaction
+ethers = { version = "2.0.14", features = ["ws", "rustls"] }
+futures = "0.3"
+
+# LibP2P Global Gossip Network
+libp2p = { version = "0.52", features = ["tokio", "tcp", "noise", "yamux", "gossipsub", "kad", "mdns", "macros"] }
+tokio-stream = "0.1"

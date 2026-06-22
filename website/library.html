@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KasturiChain | Sacred Library</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            padding: 2rem;
+        }
+        .book-card {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(249, 212, 35, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 350px;
+        }
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(249, 212, 35, 0.2);
+            border-color: rgba(249, 212, 35, 0.6);
+        }
+        .book-icon {
+            font-size: 3rem;
+            color: var(--gold-primary);
+            margin-bottom: 1.5rem;
+        }
+        .book-title {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .book-desc {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+        .book-btn {
+            background: rgba(249, 212, 35, 0.1);
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-primary);
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .book-btn:hover {
+            background: var(--gold-primary);
+            color: var(--bg-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#technology">Zero-Exploit VM</a></li>
+            <li><a href="index.html#seva">Seva Mining</a></li>
+            <li><a href="https://github.com/kasturisundari/sutra-lang" class="btn-outline" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+        </ul>
+    </nav>
+
+    <section class="section">
+        <div class="container text-center">
+            <div class="section-tag">DECENTRALIZED WISDOM</div>
+            <h1 class="massive-text">The <span class="text-gradient">Sacred Library</span></h1>
+            <p class="center-para">Explore the eternal philosophy of Sanatana Dharma, permanently archived on the sovereign KasturiChain ecosystem.</p>
+
+            <div class="library-grid">
+                <!-- Bhagavad Gita -->
+                <div class="book-card">
+                    <div>
+                        <div class="book-icon"><i class="fas fa-om"></i></div>
+                        <h2 class="book-title">Bhagavad Gita</h2>
+                        <p class="book-desc">The supreme philosophical discourse spoken by Lord Krishna. 18 chapters and 700 slokas of eternal wisdom.</p>
+                    </div>
+                    <a href="gita.html" class="book-btn">Read Now</a>
+                </div>
+
+                <!-- Radhika Tapani -->
+                <div class="book-card">
+                    <div>
+                        <div class="book-icon"><i class="fas fa-seedling"></i></div>
+                        <h2 class="book-title">Radhika Tapani Upanishad</h2>
+                        <p class="book-desc">The esoteric Upanishad glorifying the supreme potency of Srimati Radharani.</p>
+                    </div>
+                    <a href="radhika.html" class="book-btn">Read Now</a>
+                </div>
+
+                <!-- Isha Upanishad -->
+                <div class="book-card">
+                    <div>
+                        <div class="book-icon"><i class="fas fa-sun"></i></div>
+                        <h2 class="book-title">Isha Upanishad</h2>
+                        <p class="book-desc">One of the principal Upanishads focusing on the pervasive nature of the Supreme Lord.</p>
+                    </div>
+                    <a href="isha.html" class="book-btn">Read Now</a>
+                </div>
+
+                <!-- Brahma Samhita -->
+                <div class="book-card">
+                    <div>
+                        <div class="book-icon"><i class="fas fa-feather-alt"></i></div>
+                        <h2 class="book-title">Brahma Samhita</h2>
+                        <p class="book-desc">The prayers of Lord Brahma glorifying the Supreme Lord Govinda, containing profound spiritual truths.</p>
+                    </div>
+                    <a href="brahma.html" class="book-btn">Read Now</a>
+                </div>
+
+                <!-- Gopala Tapaniya -->
+                <div class="book-card">
+                    <div>
+                        <div class="book-icon"><i class="fas fa-moon"></i></div>
+                        <h2 class="book-title">Gopala Tapaniya</h2>
+                        <p class="book-desc">The sacred Atharvaveda Upanishad dedicated to Gopala (Lord Krishna) and His eternal worship.</p>
+                    </div>
+                    <a href="gopalatapani.html" class="book-btn">Read Now</a>
+                </div>
+
+                <!-- 108 Upanishads -->
+                <div class="book-card">
+                    <div>
+                        <div class="book-icon"><i class="fas fa-leaf"></i></div>
+                        <h2 class="book-title">The 108 Upanishads</h2>
+                        <p class="book-desc">The complete Vedic wisdom corpus containing 83 fully parsed, authenticated Upanishads.</p>
+                    </div>
+                    <a href="upanishads.html" class="book-btn">Read Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+                <p>The sovereign infrastructure for the next generation of decentralized civilization.</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+◇ ============================================================
+◇ Referral Engine — प्रचार (Prachara) Viral Growth System
+◇ Bring 10 active contributors → Earn Bhakti rewards
+◇ Referred members must prove activity before referrer earns
+◇ ============================================================
+
+अधिकार ReferralEngine {
+
+    ◇ ═══════════════════════════════════════════
+    ◇ State Variables
+    ◇ ═══════════════════════════════════════════
+    √sṛj+ति·referral_codes ← []
+    √sṛj+ति·referral_trees ← []
+    √sṛj+ति·referral_counts ← []
+    √sṛj+ति·active_referrals ← []
+    √sṛj+ति·reward_thresholdā ← 10  ◇ Strilinga: Immutable — always 10
+    √sṛj+ति·min_activity_score ← 25
+    √sṛj+ति·claimed_rewards ← []
+
+    ◇ Activity Types with point values
+    √sṛj+ति·ACTIVITY_CODE_PR ← 20
+    √sṛj+ति·ACTIVITY_IDEA_SUBMIT ← 10
+    √sṛj+ति·ACTIVITY_PUBLISH ← 15
+    √sṛj+ति·ACTIVITY_VOTE ← 5
+    √sṛj+ति·ACTIVITY_BUG_REPORT ← 25
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Generate Referral Code
+    ◇ ═══════════════════════════════════════════
+    सूत्र generateReferralCode(wallet) {
+        √sṛj+ति·existing ← √mā+ति·referral_codes[wallet]
+        √nirṇय+ति (existing != शून्य) {
+            √vac+ति "Referral code already exists: " existing
+            √निवृत+ति existing
+        }
+
+        ◇ Generate unique code from wallet hash
+        √sṛj+ति·code ← √hash+ति·wallet·"KASTURI_REF"
+        √sṛj+ति·short_code ← √substr+ति·code·0·8
+
+        √yuj+ति·referral_codes·[wallet, short_code]
+        √yuj+ति·referral_trees·[wallet, []]
+        √yuj+ति·referral_counts·[wallet, 0]
+        √yuj+ति·active_referrals·[wallet, 0]
+
+        √vac+ति "Referral code generated: " short_code
+        √निवृत+ति short_code
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Register via Referral
+    ◇ New member signs up using someone's referral code
+    ◇ ═══════════════════════════════════════════
+    सूत्र registerWithReferral(new_member, referral_code) {
+        ◇ Find referrer by code
+        √sṛj+ति·referrer ← शून्य
+        √āvṛt+ति entry ← referral_codes {
+            √nirṇय+ति (entry[1] == referral_code) {
+                √sṛj+ति·referrer ← entry[0]
+            }
+        }
+
+        √nirṇय+ति (referrer == शून्य) {
+            √vac+ति "ERROR: Invalid referral code"
+            √निवृत+ति
+        }
+
+        ◇ Prevent self-referral
+        √nirṇय+ति (new_member == referrer) {
+            √vac+ति "ERROR: Cannot refer yourself"
+            √निवृत+ति
+        }
+
+        ◇ Add to referral tree
+        √sṛj+ति·tree ← √mā+ति·referral_trees[referrer]
+        √yuj+ति·tree·[new_member, 0, "INACTIVE"]  ◇ wallet, activity_score, status
+        √yuj+ति·referral_trees·[referrer, tree]
+
+        ◇ Increment total count
+        √sṛj+ति·count ← √mā+ति·referral_counts[referrer]
+        √yuj+ति·referral_counts·[referrer, √gaṇ+ति·count·1]
+
+        ◇ Register new member in DAO
+        √invoke+ति·SabhaDAO·registerMember(new_member)
+
+        √vac+ति new_member " joined via referral from " referrer
+        √vac+ति "Referrer total invites: " √gaṇ+ति·count·1
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Record Activity of a Referred Member
+    ◇ Called by DAO/Mining contracts when activity occurs
+    ◇ ═══════════════════════════════════════════
+    सूत्र recordActivity(member, activity_type) {
+        √sṛj+ति·points ← 0
+        √nirṇय+ति (activity_type == "CODE_PR") {
+            √sṛज+ति·points ← ACTIVITY_CODE_PR
+        }
+        √nirṇय+ति (activity_type == "IDEA_SUBMIT") {
+            √sṛj+ति·points ← ACTIVITY_IDEA_SUBMIT
+        }
+        √nirṇय+ति (activity_type == "PUBLISH") {
+            √sṛj+ति·points ← ACTIVITY_PUBLISH
+        }
+        √nirṇय+ति (activity_type == "VOTE") {
+            √sṛj+ति·points ← ACTIVITY_VOTE
+        }
+        √nirṇय+ति (activity_type == "BUG_REPORT") {
+            √sṛj+ति·points ← ACTIVITY_BUG_REPORT
+        }
+
+        ◇ Find which referrer invited this member and update their tree
+        √āvṛt+ति entry ← referral_trees {
+            √sṛj+ति·referrer ← entry[0]
+            √sṛj+ति·tree ← entry[1]
+            √āvṛt+ति ref_entry ← tree {
+                √nirṇय+ति (ref_entry[0] == member) {
+                    ◇ Update activity score
+                    √sṛj+ति·new_score ← √gaṇ+ति·ref_entry[1]·points
+                    √yuj+ति·ref_entry·[member, new_score]
+
+                    ◇ Check if member just became active
+                    √nirṇय+ति (ref_entry[2] == "INACTIVE") {
+                        √nirṇय+ति (new_score >= min_activity_score) {
+                            √yuj+ति·ref_entry·[member, new_score, "ACTIVE"]
+
+                            ◇ Increment active referral count
+                            √sṛj+ति·active_count ← √mā+ति·active_referrals[referrer]
+                            √sṛj+ति·new_active ← √gaṇ+ति·active_count·1
+                            √yuj+ति·active_referrals·[referrer, new_active]
+
+                            √vac+ति member " is now ACTIVE! Referrer " referrer " has " new_active "/10 active"
+
+                            ◇ Check if referrer hit the 10 threshold
+                            √nirṇय+ति (new_active >= reward_thresholdā) {
+                                √invoke+ति·triggerReferralReward(referrer)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Trigger Referral Reward
+    ◇ Auto-creates a DAO proposal for referral achievement
+    ◇ ═══════════════════════════════════════════
+    सूत्र triggerReferralReward(referrer) {
+        ◇ Check if already claimed
+        √sṛj+ति·claimed ← √mā+ति·claimed_rewards[referrer]
+        √निर्णय+ति (claimed == सत्य) {
+            √vac+ति "Referral reward already claimed by " referrer
+            √निवृत+ति
+        }
+
+        ◇ Submit DAO proposal for referral achievement
+        √invoke+ति·SevaMining·submitContribution(
+            referrer,
+            "REFERRAL_COMPLETE",
+            "referral://network/" referrer,
+            "Achieved 10 active referrals on KasturiChain network"
+        )
+
+        √yuj+ति·claimed_rewards·[referrer, सत्य]
+        √vac+ति "🎉 " referrer " achieved 10 active referrals!"
+        √vac+ति "Referral reward proposal auto-submitted to Sabha DAO"
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ View Functions
+    ◇ ═══════════════════════════════════════════
+    सूत्र getReferralCode(wallet) {
+        √निवृत+ति √mā+ति·referral_codes[wallet]
+    }
+
+    सूत्र getReferralCount(wallet) {
+        √निवृत+ति √mā+ति·referral_counts[wallet]
+    }
+
+    सूत्र getActiveReferralCount(wallet) {
+        √निवृत+ति √mā+ति·active_referrals[wallet]
+    }
+
+    सूत्र getReferralTree(wallet) {
+        √निवृत+ति √mā+ति·referral_trees[wallet]
+    }
+}

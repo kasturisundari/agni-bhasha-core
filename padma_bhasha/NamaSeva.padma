@@ -1,0 +1,41 @@
+◇ ----------------------------------------------------
+◇ अग्नि भाषा (Agni Bhasha) : नामसेवा (Kasturi Name Service - KNS)
+◇ ----------------------------------------------------
+◇ Allows users to register .kasturi names permanently to their Public Keys
+◇ Deployed as a Permanent Smart Contract
+◇ ----------------------------------------------------
+
+सूत्र नाम_पञ्जीकरण(नाम, सार्वजनिक_कुञ्जी) {
+    ◇ Check if the name already ends with .kasturi, else append it
+    माना पूर्ण_नाम = नाम
+    यदि (!√mukh+ति·(नाम, ".kasturi")) {
+        पूर्ण_नाम = नाम + ".kasturi"
+    }
+    
+    ◇ Check if it's already registered
+    माना वर्तमान_स्वामी = √labh+ति·पूर्ण_नाम
+    यदि (वर्तमान_स्वामी != शून्य) {
+        प्रतिदा "दोष: नाम पूर्वमेव पञ्जीकृतम् (Name already registered!)"
+    }
+    
+    ◇ Register the name to the public key
+    √sañci+ति·(पूर्ण_नाम, सार्वजनिक_कुञ्जी)
+    
+    √vac+ति·("KNS Registration Successful for: " + पूर्ण_नाम)
+    प्रतिदा सत्य
+}
+
+सूत्र नाम_अन्वेषण(नाम) {
+    माना पूर्ण_नाम = नाम
+    यदि (!√mukh+ति·(नाम, ".kasturi")) {
+        पूर्ण_नाम = नाम + ".kasturi"
+    }
+    
+    माना सार्वजनिक_कुञ्जी = √labh+ति·पूर्ण_नाम
+    
+    यदि (सार्वजनिक_कुञ्जी == शून्य) {
+        प्रतिदा "दोष: नाम न लब्धम् (Name not found)"
+    }
+    
+    प्रतिदा सार्वजनिक_कुञ्जी
+}

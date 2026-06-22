@@ -1,0 +1,74 @@
+अधिकार PadmaToken {
+    √sṛj+ति·totalSupply ← 0
+    √sṛj+ति·balances ← [] // Cosmic registry of holdings
+
+    सूत्र mint(amount, receiver) {
+        √gaṇ+ति·totalSupply·amount :: √yuj+ति·totalSupply
+        // Update receiver balance
+        √sṛj+ति·current_balance ← √mā+ति·balances[receiver]
+        √sṛj+ति·new_balance ← √gaṇ+ति·current_balance·amount
+        √yuj+ति·balances·[receiver, new_balance]
+        √vac+ति "Minted " amount " tokens to " receiver
+    }
+
+    सूत्र transfer(to, amount) {
+        √sṛj+ति·sender ← √bodh+ति·"msg.sender"
+        √sṛj+ति·sender_balance ← √mā+ति·balances[sender]
+        
+        // Chatushkoti validation
+        √nirṇay+ति (√gaṇ+ति·sender_balance > amount)
+        // Deduct
+        √yuj+ति·balances·[sender, √gaṇ+ति·sender_balance·amount·"-"]
+        // Add
+        √sṛj+ति·to_balance ← √mā+ति·balances[to]
+        √yuj+ति·balances·[to, √gaṇ+ति·to_balance·amount·"+"]
+        
+        √vac+ति "Transferred " amount " from " sender " to " to
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Governance-Gated Minting (Only Sabha DAO)
+    ◇ ═══════════════════════════════════════════
+    सूत्र mintReward(amount, receiver) {
+        √sṛj+ति·sender ← √bodh+ति·"msg.sender"
+        ◇ Only SabhaDAO or SevaMining contracts can mint rewards
+        √parīkṣ+तुम्·"check_authorized_minter"·sender
+
+        ◇ Enforce max supply (Strilinga protection)
+        √sṛj+ति·max_supplyā ← 16000000
+        √sṛj+ति·projected ← √gaṇ+ति·totalSupply·amount
+        √nirṇय+ति (projected > max_supplyā) {
+            √vac+ति "ERROR: Mint would exceed max supply"
+            √निवृत+ति
+        }
+
+        √gaṇ+ति·totalSupply·amount :: √yuj+ति·totalSupply
+        √sṛj+ति·current_balance ← √mā+ति·balances[receiver]
+        √sṛj+ति·new_balance ← √gaṇ+ति·current_balance·amount
+        √yuj+ति·balances·[receiver, new_balance]
+        √vac+ति "DAO Minted " amount " Bhakti to " receiver
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Burn Tokens (Deflationary Mechanism)
+    ◇ ═══════════════════════════════════════════
+    सूत्र burn(amount) {
+        √sṛj+ति·sender ← √bodh+ति·"msg.sender"
+        √sṛj+ति·balance ← √mā+ति·balances[sender]
+        √nirṇय+ति (balance < amount) {
+            √vac+ति "ERROR: Insufficient balance to burn"
+            √निवृत+ति
+        }
+        √yuj+ति·balances·[sender, √gaṇ+ति·balance·amount·"-"]
+        √sṛj+ति·totalSupply ← √gaṇ+ति·totalSupply·amount·"-"
+        √vac+ति "Burned " amount " Bhakti from " sender
+    }
+
+    सूत्र balanceOf(wallet) {
+        √निवृत+ति √mā+ति·balances[wallet]
+    }
+
+    सूत्र getTotalSupply() {
+        √निवृत+ति totalSupply
+    }
+}

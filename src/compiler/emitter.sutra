@@ -1,0 +1,56 @@
+◇ ----------------------------------------------------
+◇ Sutra-in-Sutra Compiler: NASM x86_64 Emitter (utsarjana)
+◇ Phase 3 of Bootstrapping: Direct Machine Assembly
+◇ ----------------------------------------------------
+
+◇ Generate Bare-Metal Assembly
+√sṛj+ति·utsarjana ← (ast_nodes) {
+    √vac+ति·"> Translating AST to x86_64 NASM Assembly..."
+    
+    ◇ Initialize NASM structure
+    √sṛj+ति·asm_code ← "global _start\n\n"
+    
+    ◇ Data Section
+    √sṛj+ति·asm_code ← asm_code + "section .data\n"
+    √sṛj+ति·asm_code ← asm_code + "    newline db 10\n\n"
+    
+    ◇ BSS Section for memory (Vritti Ribbon)
+    √sṛj+ति·asm_code ← asm_code + "section .bss\n"
+    √sṛj+ति·asm_code ← asm_code + "    vritti_memory resb 4096\n\n"
+    
+    ◇ Text Section
+    √sṛj+ति·asm_code ← asm_code + "section .text\n"
+    √sṛj+ति·asm_code ← asm_code + "_start:\n"
+    
+    ◇ Traverse AST nodes
+    √sṛj+ति·प्रति (current_node ← ast_nodes) {
+        √sṛj+ति·prakara ← current_node["prakara"]
+        
+        ◇ Variable Declaration node
+        √यदि (prakara == "VarDecl") {
+            √sṛj+ति·mulya ← current_node["mulya"]
+            √sṛj+ति·asm_code ← asm_code + "    ; " + current_node["naama"] + " ← " + mulya + "\n"
+            √sṛj+ति·asm_code ← asm_code + "    mov rax, " + mulya + "\n"
+            √sṛj+ति·asm_code ← asm_code + "    push rax\n\n"
+        }
+        
+        ◇ Print node
+        √यदि (prakara == "Print") {
+            √sṛj+ति·asm_code ← asm_code + "    ; Print " + current_node["naama"] + "\n"
+            √sṛj+ति·asm_code ← asm_code + "    mov rax, 1        ; sys_write\n"
+            √sṛj+ति·asm_code ← asm_code + "    mov rdi, 1        ; stdout\n"
+            √sṛj+ति·asm_code ← asm_code + "    mov rsi, rsp      ; pointer to value on stack\n"
+            √sṛj+ति·asm_code ← asm_code + "    mov rdx, 8        ; size 8 bytes\n"
+            √sṛj+ति·asm_code ← asm_code + "    syscall\n\n"
+        }
+    }
+    
+    ◇ Program Exit cleanly
+    √sṛj+ति·asm_code ← asm_code + "    ; Syscall Exit\n"
+    √sṛj+ति·asm_code ← asm_code + "    mov rax, 60       ; sys_exit\n"
+    √sṛj+ति·asm_code ← asm_code + "    xor rdi, rdi      ; exit code 0\n"
+    √sṛj+ति·asm_code ← asm_code + "    syscall\n"
+    
+    √vac+ति·"Bare-Metal Assembly generated successfully."
+    √return+ति·asm_code
+}

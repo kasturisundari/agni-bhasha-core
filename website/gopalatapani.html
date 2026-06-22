@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gopala Tapaniya Upanishad | KasturiChain Library</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="sanatan.html"><i class="fas fa-arrow-left"></i> Back to Sanatan Dharma</a></li>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-tag text-center" id="header-tag">SANATANA DHARMA BOOKS</div>
+            <h1 class="text-center massive-text" style="margin-bottom: 1rem;">Gopala <span class="text-gradient">Tapaniya Upanishad</span></h1>
+            <p class="center-para" style="margin-bottom: 3rem;">One of the 108 Upanishads of the Atharvaveda, glorifying Lord Sri Krishna. Immutable, translation-free pure Sanskrit & IAST.</p>
+            
+            <div class="gita-reader dark-glass">
+                <div class="reader-controls" style="display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    <div class="control-group">
+                        <label for="chapter-select">Chapter (Tapanī)</label>
+                        <select id="chapter-select" class="glass-select">
+                            <option value="1">Pūrva Tapanī (पूर्वतापिनी)</option>
+                            <option value="2">Uttara Tapanī (उत्तरतापिनी)</option>
+                        </select>
+                    </div>
+                    <button onclick="prevVerse()" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                    <div class="control-group">
+                        <label for="verse-select">Verse (Mantra)</label>
+                        <select id="verse-select" class="glass-select"></select>
+                    </div>
+                    <button onclick="nextVerse()" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="reader-display">
+                    <div class="sloka-text" id="sanskrit" style="font-size: 1.6rem; line-height: 2.2; letter-spacing: 0.05em;">Loading Immutable Shastra from Samparka Node...</div>
+                    <div class="transliteration" id="translit" style="font-size: 1.2rem; line-height: 1.8; color: var(--gold-secondary); margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+
+    <!-- Reader Logic -->
+    <script>
+        let allData = [];
+        let groupedData = { "1": [], "2": [] };
+        let currentHashBadge = null;
+
+        async function fetchGopala() {
+            try {
+                document.getElementById('sanskrit').innerHTML = "Fetching secure cryptographic state... <i class='fas fa-circle-notch fa-spin'></i>";
+                document.getElementById('translit').innerHTML = "";
+                
+                const response = await fetch("https://kasturisundari.xyz/rpc/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "shastra_jnan",
+                        params: ["gopalatapani"],
+                        id: Date.now()
+                    })
+                });
+                const rpcData = await response.json();
+                if (rpcData.error) throw new Error(rpcData.error.message);
+                
+                allData = rpcData.result.data;
+                const hashStamp = rpcData.result.hash_stamp;
+                
+                // Update immutable hash display
+                if(currentHashBadge) {
+                    currentHashBadge.remove();
+                }
+                const header = document.getElementById('header-tag');
+                if(header) {
+                    currentHashBadge = document.createElement('div');
+                    currentHashBadge.style.cssText = 'font-size: 0.65rem; color: var(--accent-gold); margin-top: 10px; font-family: monospace; word-break: break-all; opacity: 0.8; margin-bottom: 20px;';
+                    currentHashBadge.innerHTML = `<i class="fas fa-link"></i> SHA-256: ${hashStamp}`;
+                    header.parentNode.insertBefore(currentHashBadge, header.nextSibling);
+                }
+
+                if(typeof allData !== 'undefined') {
+                    // Group data by chapter_number ("1" or "2")
+                    groupedData = { "1": [], "2": [] };
+                    allData.forEach(verseObj => {
+                        const ch = verseObj.chapter_number;
+                        if (groupedData[ch]) {
+                            groupedData[ch].push(verseObj);
+                        }
+                    });
+
+                    // Trigger initial population
+                    populateVerses("1");
+                } else {
+                    document.getElementById('sanskrit').textContent = "Failed to load data from node.";
+                }
+            } catch (error) {
+                document.getElementById('sanskrit').textContent = "Gateway Error: " + error.message;
+            }
+        }
+
+        const chapterSelect = document.getElementById('chapter-select');
+        const verseSelect = document.getElementById('verse-select');
+
+        // Handle Chapter change
+        chapterSelect.addEventListener('change', (e) => {
+            populateVerses(e.target.value);
+        });
+
+        // Handle Verse change
+        verseSelect.addEventListener('change', (e) => {
+            displayVerse(chapterSelect.value, e.target.value);
+        });
+
+        function populateVerses(chapterNum) {
+            const verses = groupedData[chapterNum] || [];
+            verseSelect.innerHTML = '';
+            
+            verses.forEach((verseObj) => {
+                const option = document.createElement('option');
+                option.value = verseObj.verse_number;
+                option.textContent = `Verse ${verseObj.verse_number}`;
+                verseSelect.appendChild(option);
+            });
+
+            if(verses.length > 0) {
+                displayVerse(chapterNum, verses[0].verse_number);
+            }
+        }
+
+        function displayVerse(chapterNum, verseNum) {
+            const verses = groupedData[chapterNum] || [];
+            const verseObj = verses.find(v => v.verse_number == verseNum);
+            if (!verseObj) return;
+
+            const displayArea = document.querySelector('.reader-display');
+            displayArea.style.opacity = 0;
+            
+            setTimeout(() => {
+                document.getElementById('sanskrit').innerHTML = verseObj.text.replace(/\n/g, '<br>');
+                document.getElementById('translit').innerHTML = verseObj.transliteration.replace(/\n/g, '<br>');
+                
+                displayArea.style.opacity = 1;
+                displayArea.style.transition = 'opacity 0.4s ease';
+            }, 200);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchGopala();
+        });
+        
+        window.prevVerse = function() {
+            if (verseSelect.selectedIndex > 0) {
+                verseSelect.selectedIndex--;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            } else if (chapterSelect.selectedIndex > 0) {
+                chapterSelect.selectedIndex--;
+                populateVerses(chapterSelect.value);
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            }
+        };
+
+        window.nextVerse = function() {
+            if (verseSelect.selectedIndex < verseSelect.options.length - 1) {
+                verseSelect.selectedIndex++;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            } else if (chapterSelect.selectedIndex < chapterSelect.options.length - 1) {
+                chapterSelect.selectedIndex++;
+                populateVerses(chapterSelect.value);
+                verseSelect.selectedIndex = 0;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            }
+        };
+    </script>
+</body>
+</html>

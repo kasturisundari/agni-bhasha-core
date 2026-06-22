@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Caitanya Caritamrta | KasturiChain</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .book-container {
+            max-width: 900px;
+            margin: 6rem auto 4rem;
+            padding: 3rem;
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            color: #e0e0e0;
+            line-height: 2.0;
+            font-family: var(--font-body);
+        }
+        .hero-img {
+            width: 100%;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid rgba(249, 212, 35, 0.2);
+            object-fit: cover;
+        }
+        .book-title-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .book-title-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.8rem;
+            color: var(--gold-primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(249, 212, 35, 0.3);
+        }
+        .book-title-header h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+        .controls-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        select {
+            background: rgba(10, 10, 15, 0.8);
+            color: var(--text-main);
+            border: 1px solid var(--gold-primary);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        select:hover {
+            box-shadow: 0 0 15px rgba(249, 212, 35, 0.2);
+        }
+        select option {
+            background: #111;
+            color: #fff;
+        }
+        .nav-btn {
+            background: rgba(10, 10, 15, 0.8);
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-primary);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            box-shadow: 0 0 15px rgba(249, 212, 35, 0.2);
+            background: rgba(249, 212, 35, 0.1);
+        }
+        .verse-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+        .verse-card:hover {
+            border-color: rgba(249, 212, 35, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(-2px);
+        }
+        .verse-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .verse-num {
+            font-family: var(--font-heading);
+            color: var(--gold-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .verse-header i {
+            color: var(--gold-primary);
+            opacity: 0.7;
+        }
+        .sloka-text {
+            font-size: 1.5rem;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 2.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+        }
+        .transliteration {
+            font-size: 1.1rem;
+            color: var(--gold-secondary);
+            text-align: center;
+            font-style: italic;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow orb-1" style="width: 800px; height: 800px; opacity: 0.05;"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="sanatan.html" class="active-link">Sanatan Dharma</a></li>
+            <li><a href="dao.html">Sabha DAO</a></li>
+            <li><a href="forum.html">Community Forum</a></li>
+        </ul>
+    </nav>
+
+    <div class="book-container">
+        <div class="book-title-header">
+            <h1>Śrī Caitanya-caritāmṛta</h1>
+            <h2>The nectar of the acts of Lord Caitanya</h2>
+        </div>
+
+        <div class="controls-container">
+            <button onclick="prevVerse()" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+            
+            <select id="lilaSelect" onchange="updateChapterDropdown()">
+                <option value="Cc Adi-lila">Ādi-līlā</option>
+                <option value="Cc Madhya-lila">Madhya-līlā</option>
+                <option value="Cc Antya-lila">Antya-līlā</option>
+            </select>
+            <select id="chapterSelect" onchange="updateVerseDropdown()">
+                <!-- Populated dynamically -->
+            </select>
+            <select id="verseSelect" onchange="renderVerse()">
+                <!-- Populated dynamically -->
+            </select>
+            
+            <button onclick="nextVerse()" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <div id="verses-container"></div>
+    </div>
+
+    <script>
+        const lilaSelect = document.getElementById('lilaSelect');
+        const chapterSelect = document.getElementById('chapterSelect');
+        const verseSelect = document.getElementById('verseSelect');
+        const container = document.getElementById('verses-container');
+
+        function updateChapterDropdown() {
+            const lila = lilaSelect.value;
+            chapterSelect.innerHTML = '';
+            
+            if (typeof ccData !== 'undefined' && ccData[lila]) {
+                const chapters = Object.keys(ccData[lila]).sort((a, b) => parseInt(a) - parseInt(b));
+                chapters.forEach(chap => {
+                    const option = document.createElement('option');
+                    option.value = chap;
+                    option.textContent = `Chapter ${chap}`;
+                    chapterSelect.appendChild(option);
+                });
+            }
+            updateVerseDropdown();
+        }
+
+        function updateVerseDropdown() {
+            const lila = lilaSelect.value;
+            const chapter = chapterSelect.value;
+            verseSelect.innerHTML = '';
+            
+            if (typeof ccData !== 'undefined' && ccData[lila] && ccData[lila][chapter]) {
+                const verses = ccData[lila][chapter];
+                verses.forEach((v, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `Text ${v.verse}`;
+                    verseSelect.appendChild(option);
+                });
+            }
+            renderVerse();
+        }
+
+        function renderVerse() {
+            const lila = lilaSelect.value;
+            const chapter = chapterSelect.value;
+            const verseIndex = verseSelect.value;
+            
+            if (!lila || !chapter || verseIndex === "" || typeof ccData === 'undefined' || !ccData[lila] || !ccData[lila][chapter]) {
+                container.innerHTML = '<p style="text-align:center;">No verses found.</p>';
+                return;
+            }
+
+            container.style.opacity = 0;
+            
+            setTimeout(() => {
+                const v = ccData[lila][chapter][verseIndex];
+                
+                const card = document.createElement('div');
+                card.className = 'verse-card';
+                
+                const header = document.createElement('div');
+                header.className = 'verse-header';
+                header.innerHTML = `
+                    <span class="verse-num">Text ${v.verse}</span>
+                    <i class="fas fa-om"></i>
+                `;
+                
+                const devanagariHtml = v.devanagari.replace(/\n/g, '<br>');
+                const sanskritHtml = v.sanskrit.replace(/\n/g, '<br>');
+                
+                const textDisplay = document.createElement('div');
+                textDisplay.className = 'reader-display';
+                textDisplay.innerHTML = `
+                    <div class="sloka-text">${devanagariHtml}</div>
+                    <div class="transliteration">${sanskritHtml}</div>
+                `;
+                
+                card.appendChild(header);
+                card.appendChild(textDisplay);
+                
+                container.innerHTML = '';
+                container.appendChild(card);
+                
+                container.style.opacity = 1;
+                container.style.transition = 'opacity 0.4s ease';
+            }, 100);
+        }
+
+        function prevVerse() {
+            if (verseSelect.selectedIndex > 0) {
+                verseSelect.selectedIndex--;
+                renderVerse();
+            } else if (chapterSelect.selectedIndex > 0) {
+                chapterSelect.selectedIndex--;
+                updateVerseDropdown();
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                renderVerse();
+            } else if (lilaSelect.selectedIndex > 0) {
+                lilaSelect.selectedIndex--;
+                updateChapterDropdown();
+                chapterSelect.selectedIndex = chapterSelect.options.length - 1;
+                updateVerseDropdown();
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                renderVerse();
+            }
+        }
+
+        function nextVerse() {
+            if (verseSelect.selectedIndex < verseSelect.options.length - 1) {
+                verseSelect.selectedIndex++;
+                renderVerse();
+            } else if (chapterSelect.selectedIndex < chapterSelect.options.length - 1) {
+                chapterSelect.selectedIndex++;
+                updateVerseDropdown();
+                verseSelect.selectedIndex = 0;
+                renderVerse();
+            } else if (lilaSelect.selectedIndex < lilaSelect.options.length - 1) {
+                lilaSelect.selectedIndex++;
+                updateChapterDropdown();
+                chapterSelect.selectedIndex = 0;
+                updateVerseDropdown();
+                verseSelect.selectedIndex = 0;
+                renderVerse();
+            }
+        }
+
+        let ccData = undefined;
+
+        // Initialize when data is loaded
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch("https://kasturisundari.xyz/rpc/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ jsonrpc: "2.0", method: "shastra_jnan", params: ["caitanya"], id: 1 })
+                });
+                const rpcData = await response.json();
+                if (rpcData.error) throw new Error(rpcData.error.message);
+                
+                ccData = rpcData.result.data;
+                const hashStamp = rpcData.result.hash_stamp;
+                
+                const header = document.querySelector('.book-title-header');
+                if(header) {
+                    const hashBadge = document.createElement('div');
+                    hashBadge.style.cssText = 'font-size: 0.65rem; color: #f9d423; margin-top: 10px; font-family: monospace; word-break: break-all; opacity: 0.8; margin-bottom: 20px; text-shadow: none;';
+                    hashBadge.innerHTML = `<i class="fas fa-link"></i> SHA-256: ${hashStamp}`;
+                    header.appendChild(hashBadge);
+                }
+
+                updateChapterDropdown();
+            } catch(error) {
+                container.innerHTML = `<p style="text-align:center;">Error loading sacred text data from Node: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

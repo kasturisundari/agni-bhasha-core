@@ -1,0 +1,30 @@
+◇ ----------------------------------------------------
+◇ Sutra-in-Sutra Compiler: Abstract Syntax Tree Builder (vakya_rachana)
+◇ Phase 2 of Bootstrapping: The Parser
+◇ ----------------------------------------------------
+
+◇ AST Node Struct
+√sṛj+ति·स्वरूप node [
+    "prakara",  ◇ Node Type (VariableDecl, FunctionCall, Print)
+    "naama",    ◇ Identifier Name
+    "mulya"     ◇ Value or Child Nodes
+]
+
+◇ Main Parser Function
+√sṛj+ति·vakya_rachana ← (tokens_list) {
+    √vac+ति·"> Building Abstract Syntax Tree (AST)..."
+    
+    √sṛj+ति·ast_nodes ← []
+    √sṛj+ति·state ← "START"
+    
+    ◇ Simulate parsing a variable declaration: √sṛj+ति·x ← 5
+    √sṛj+ति·decl_node ← node("VarDecl", "x", "5")
+    √sṛj+ति·ast_nodes ← ast_nodes + decl_node
+
+    ◇ Simulate parsing a print statement: √vac+ति·x
+    √sṛj+ति·print_node ← node("Print", "x", "null")
+    √sṛj+ति·ast_nodes ← ast_nodes + print_node
+    
+    √vac+ति·"AST construction complete."
+    √return+ति·ast_nodes
+}

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakshmi Tantra | KasturiChain Library</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="sanatan.html"><i class="fas fa-arrow-left"></i> Back to Sanatan Dharma</a></li>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-tag text-center" id="header-tag">SANATANA DHARMA BOOKS</div>
+            <h1 class="text-center massive-text" style="margin-bottom: 1rem;"><span class="text-gradient">Lakshmi Tantra</span></h1>
+            <p class="center-para" style="margin-bottom: 3rem;">A major Pancaratra text detailing the philosophy and worship of Goddess Lakshmi. Immutable, translation-free pure Sanskrit & IAST.</p>
+            
+            <div class="gita-reader dark-glass">
+                <div class="reader-controls" style="display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    <div class="control-group">
+                        <label for="chapter-select">Chapter</label>
+                        <select id="chapter-select" class="glass-select"></select>
+                    </div>
+                    <button onclick="prevVerse()" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                    <div class="control-group">
+                        <label for="verse-select">Verse</label>
+                        <select id="verse-select" class="glass-select"></select>
+                    </div>
+                    <button onclick="nextVerse()" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="reader-display">
+                    <div class="sloka-text" id="sanskrit" style="font-size: 1.6rem; line-height: 2.2; letter-spacing: 0.05em;">Loading Immutable Shastra from Samparka Node...</div>
+                    <div class="transliteration" id="translit" style="font-size: 1.2rem; line-height: 1.8; color: var(--gold-secondary); margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+
+    <!-- Reader Logic -->
+    <script>
+        let allData = [];
+        let currentHashBadge = null;
+
+        async function fetchShastra() {
+            try {
+                document.getElementById('sanskrit').innerHTML = "Fetching secure cryptographic state... <i class='fas fa-circle-notch fa-spin'></i>";
+                document.getElementById('translit').innerHTML = "";
+                
+                const response = await fetch("https://kasturisundari.xyz/rpc/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "shastra_jnan",
+                        params: ["lakshmitantra"],
+                        id: Date.now()
+                    })
+                });
+                const rpcData = await response.json();
+                if (rpcData.error) throw new Error(rpcData.error.message);
+                
+                const rawData = rpcData.result.data;
+                const hashStamp = rpcData.result.hash_stamp;
+                
+                let flatData = [];
+                if (rawData && rawData.cantos) {
+                    rawData.cantos.forEach(cantoObj => {
+                        cantoObj.chapters.forEach(chapObj => {
+                            chapObj.verses.forEach(vObj => {
+                                flatData.push({
+                                    chapter_number: chapObj.chapter, // Since Lakshmitantra has no cantos logically, just use chapter
+                                    verse_number: vObj.verse,
+                                    text: vObj.text || "",
+                                    transliteration: vObj.transliteration || ""
+                                });
+                            });
+                        });
+                    });
+                } else if (Array.isArray(rawData)) {
+                    flatData = rawData;
+                }
+                
+                allData = flatData;
+
+                if (!currentHashBadge) {
+                    currentHashBadge = document.createElement('div');
+                    currentHashBadge.className = 'hash-badge tooltip';
+                    currentHashBadge.innerHTML = `<i class="fas fa-shield-alt"></i> Verified <span class="tooltiptext">SHA-256: ${hashStamp}</span>`;
+                    document.getElementById('header-tag').appendChild(currentHashBadge);
+                }
+
+                populateChapters();
+            } catch (error) {
+                document.getElementById('sanskrit').innerHTML = `<span style="color:var(--danger)">Error: ${error.message}</span>`;
+            }
+        }
+
+        function populateChapters() {
+            const chapterSelect = document.getElementById('chapter-select');
+            chapterSelect.innerHTML = '';
+            const chapters = [...new Set(allData.map(v => v.chapter_number))].sort((a,b)=>parseFloat(a)-parseFloat(b));
+            
+            chapters.forEach(ch => {
+                const option = document.createElement('option');
+                option.value = ch;
+                option.textContent = `Chapter ${ch}`;
+                chapterSelect.appendChild(option);
+            });
+            
+            if (chapters.length > 0) {
+                populateVerses(chapters[0]);
+                displayVerse(chapters[0], document.getElementById('verse-select').value);
+            }
+        }
+
+        function populateVerses(chapter) {
+            const verseSelect = document.getElementById('verse-select');
+            verseSelect.innerHTML = '';
+            const verses = allData.filter(v => String(v.chapter_number) === String(chapter)).sort((a,b)=>parseFloat(a.verse_number)-parseFloat(b.verse_number));
+            
+            verses.forEach(v => {
+                const option = document.createElement('option');
+                option.value = v.verse_number;
+                option.textContent = `Verse ${v.verse_number}`;
+                verseSelect.appendChild(option);
+            });
+        }
+
+        function displayVerse(chapter, verseNum) {
+            const verse = allData.find(v => String(v.chapter_number) === String(chapter) && String(v.verse_number) === String(verseNum));
+            if (verse) {
+                document.getElementById('sanskrit').innerText = verse.text || "";
+                document.getElementById('translit').innerText = verse.transliteration || "";
+            }
+        }
+
+        document.getElementById('chapter-select').addEventListener('change', (e) => {
+            populateVerses(e.target.value);
+            displayVerse(e.target.value, document.getElementById('verse-select').value);
+        });
+
+        document.getElementById('verse-select').addEventListener('change', (e) => {
+            displayVerse(document.getElementById('chapter-select').value, e.target.value);
+        });
+
+        window.prevVerse = function() {
+            const verseSelect = document.getElementById('verse-select');
+            const chapterSelect = document.getElementById('chapter-select');
+            if (verseSelect.selectedIndex > 0) {
+                verseSelect.selectedIndex--;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            } else if (chapterSelect.selectedIndex > 0) {
+                chapterSelect.selectedIndex--;
+                populateVerses(chapterSelect.value);
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            }
+        };
+
+        window.nextVerse = function() {
+            const verseSelect = document.getElementById('verse-select');
+            const chapterSelect = document.getElementById('chapter-select');
+            if (verseSelect.selectedIndex < verseSelect.options.length - 1) {
+                verseSelect.selectedIndex++;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            } else if (chapterSelect.selectedIndex < chapterSelect.options.length - 1) {
+                chapterSelect.selectedIndex++;
+                populateVerses(chapterSelect.value);
+                verseSelect.selectedIndex = 0;
+                displayVerse(chapterSelect.value, verseSelect.value);
+            }
+        };
+
+        window.onload = fetchShastra;
+    </script>
+</body>
+</html>

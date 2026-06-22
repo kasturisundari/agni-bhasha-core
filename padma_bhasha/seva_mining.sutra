@@ -1,0 +1,148 @@
+◇ ============================================================
+◇ Seva Mining — सेवा (Selfless Service) Reward Distribution
+◇ Contribution-Based Mining: No GPUs, No Capital. Only Merit.
+◇ ============================================================
+
+अधिकार SevaMining {
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Reward Tiers — Based on Contribution Quality
+    ◇ ═══════════════════════════════════════════
+    √sṛj+ति·REWARD_FEATURE_MAJOR ← 500
+    √sṛj+ति·REWARD_FEATURE_STANDARD ← 100
+    √sṛj+ति·REWARD_IDEA_BRILLIANT ← 250
+    √sṛj+ति·REWARD_REFERRAL_COMPLETE ← 200
+    √sṛj+ति·REWARD_BUG_CRITICAL ← 750
+    √sṛj+ति·REWARD_DOCUMENTATION ← 50
+
+    ◇ State
+    √sṛj+ति·contributions ← []
+    √sṛj+ति·contribution_count ← 0
+    √sṛj+ति·total_minted ← 0
+    √sṛj+ति·max_supply_bhaktiā ← 16000000  ◇ Strilinga: IMMUTABLE cap
+    √sṛj+ति·cooldown_map ← []
+    √sṛj+ति·cooldown_muhurta ← 24
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Submit a Contribution (triggers DAO proposal)
+    ◇ ═══════════════════════════════════════════
+    सूत्र submitContribution(contributor, contribution_type, evidence_url, description) {
+        √sṛj+ति·sender ← √bodh+ति·"msg.sender"
+        √nirṇय+ति (sender != contributor) {
+            √vac+ति "ERROR: Only the contributor can submit their own work"
+            √nivṛत+ति
+        }
+
+        ◇ Enforce cooldown (anti-spam)
+        √sṛj+ति·last_submit ← √mā+ति·cooldown_map[contributor]
+        √sṛj+ति·now ← √kāla+ति·"current_nakshatra"
+        √nirṇय+ति (last_submit != शून्य) {
+            √sṛj+ति·elapsed ← √gaṇ+ति·now·last_submit·"-"
+            √nirṇय+ति (elapsed < cooldown_muhurta) {
+                √vac+ति "ERROR: Cooldown active. Wait " cooldown_muhurta " muhurta"
+                √nivṛत+ति
+            }
+        }
+
+        ◇ Determine reward amount
+        √sṛj+ति·reward ← 0
+        √nirṇय+ति (contribution_type == "FEATURE_MAJOR") {
+            √sṛj+ति·reward ← REWARD_FEATURE_MAJOR
+        }
+        √nirṇय+ति (contribution_type == "FEATURE_STANDARD") {
+            √sṛj+ति·reward ← REWARD_FEATURE_STANDARD
+        }
+        √nirṇय+ति (contribution_type == "IDEA_BRILLIANT") {
+            √sṛj+ति·reward ← REWARD_IDEA_BRILLIANT
+        }
+        √nirṇय+ति (contribution_type == "REFERRAL_COMPLETE") {
+            √sṛj+ति·reward ← REWARD_REFERRAL_COMPLETE
+        }
+        √nirṇय+ति (contribution_type == "BUG_CRITICAL") {
+            √sṛj+ति·reward ← REWARD_BUG_CRITICAL
+        }
+        √nirṇय+ति (contribution_type == "DOCUMENTATION") {
+            √sṛj+ति·reward ← REWARD_DOCUMENTATION
+        }
+
+        ◇ Check supply cap (Strilinga protection)
+        √sṛj+ति·projected ← √gaṇ+ति·total_minted·reward
+        √nirṇय+ति (projected > max_supply_bhaktiā) {
+            √vac+ति "ERROR: Would exceed max supply of " max_supply_bhaktiā " Bhakti"
+            √nivṛत+ति
+        }
+
+        ◇ Register contribution
+        √sṛj+ति·id ← contribution_count
+        √yuj+ति·contributions·[
+            id,
+            contributor,
+            contribution_type,
+            description,
+            evidence_url,
+            reward,
+            "PENDING_VOTE",
+            now
+        ]
+        √sṛj+ति·contribution_count ← √gaṇ+ति·contribution_count·1
+        √yuj+ति·cooldown_map·[contributor, now]
+
+        ◇ Auto-create DAO proposal for this contribution
+        √invoke+ति·SabhaDAO·submitProposal(
+            contributor,
+            contribution_type,
+            description,
+            evidence_url,
+            evidence_url
+        )
+
+        √vac+ति "Contribution #" id " submitted for DAO review"
+        √vac+ति "Potential reward: " reward " Bhakti"
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Execute Reward (called after DAO approval)
+    ◇ ═══════════════════════════════════════════
+    सूत्र executeReward(contribution_id) {
+        √sṛj+ति·sender ← √bodh+ति·"msg.sender"
+        ◇ Only SabhaDAO contract can execute rewards
+        √parīkṣ+तुम्·"check_authorized_dao"·sender
+
+        √sṛj+ति·contrib ← √mā+ति·contributions[contribution_id]
+        √nirṇय+ति (contrib[6] != "PENDING_VOTE") {
+            √vac+ति "ERROR: Contribution not pending"
+            √nivṛत+ति
+        }
+
+        ◇ Mint tokens
+        √sṛj+ति·reward ← contrib[5]
+        √sṛj+ति·recipient ← contrib[1]
+
+        √invoke+ति·PadmaToken·mint(reward, recipient)
+        √sṛj+ति·total_minted ← √gaṇ+ति·total_minted·reward
+
+        ◇ Update seva score in DAO
+        √invoke+ति·SabhaDAO·addSevaScore(recipient, reward)
+
+        ◇ Mark as rewarded
+        √yuj+ति·contributions[contribution_id][6]·"REWARDED"
+
+        √vac+ति "✓ " reward " Bhakti minted to " recipient
+        √vac+ति "Total network minted: " total_minted "/" max_supply_bhaktiā
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ View Functions
+    ◇ ═══════════════════════════════════════════
+    सूत्र getTotalMinted() {
+        √nivṛत+ति total_minted
+    }
+
+    सूत्र getRemainingSupply() {
+        √निवृत+ति √gaṇ+ति·max_supply_bhaktiā·total_minted·"-"
+    }
+
+    सूत्र getContribution(id) {
+        √निवृत+ति √mā+ति·contributions[id]
+    }
+}

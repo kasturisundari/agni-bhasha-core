@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedic Vijnana | KasturiChain</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hub-hero { text-align: center; padding: 6rem 5% 4rem; position: relative; overflow: hidden; }
+        .hub-hero h1 { font-family: var(--font-heading); font-size: 4rem; margin-bottom: 1.5rem; text-shadow: 0 0 30px rgba(249, 212, 35, 0.3); }
+        .hub-hero p { max-width: 800px; margin: 0 auto; font-size: 1.2rem; line-height: 1.8; color: var(--text-muted); }
+        
+        .science-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            padding: 4rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .science-card {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(249, 212, 35, 0.1);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .science-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, rgba(249, 212, 35, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+
+        .science-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(249, 212, 35, 0.4);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(249, 212, 35, 0.1);
+        }
+
+        .science-card:hover::after { opacity: 1; }
+
+        .sci-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            color: var(--gold-primary);
+            text-shadow: 0 0 20px rgba(249, 212, 35, 0.4);
+        }
+
+        .science-card h3 { 
+            font-family: var(--font-heading); 
+            font-size: 2rem; 
+            margin-bottom: 1rem; 
+            color: #fff; 
+        }
+        
+        .science-card p { 
+            color: var(--text-muted); 
+            line-height: 1.7; 
+            font-size: 1.05rem; 
+            margin-bottom: 2.5rem;
+        }
+
+        .sci-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(45deg, var(--gold-secondary), var(--gold-primary));
+            color: #000;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        .sci-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(249, 212, 35, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow orb-1" style="width: 1000px; height: 1000px; opacity: 0.05;"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </a>
+        <ul class="nav-links">
+            <li><a href="sanatan.html"><i class="fas fa-arrow-left"></i> Back to Sanatan Dharma</a></li>
+        </ul>
+    </nav>
+
+    <header class="hub-hero">
+        <div class="badge"><i class="fas fa-microscope"></i> Absolute Knowledge</div>
+        <h1><span class="text-gradient">Vedic Vijnana</span></h1>
+        <p>The ancient seers did not just philosophicalize—they quantified the cosmos. Explore the exact, mathematically profound sciences embedded within the Vedas and Puranas, from the measurement of atomic time to celestial mechanics.</p>
+    </header>
+
+    <section class="science-grid">
+        <div class="science-card">
+            <div class="sci-icon"><i class="fas fa-hourglass-half"></i></div>
+            <h3>Kala-Vijnana</h3>
+            <p>The profound science of Time. Discover the Vedic mechanics of Yugas, Manvantaras, and explore real-time astronomical verification of ancient historical events using modern astrophysics.</p>
+            <a href="kala_vijnana.html" class="sci-btn">Explore</a>
+        </div>
+        
+        <div class="science-card" style="opacity: 0.5; filter: grayscale(1);">
+            <div class="sci-icon"><i class="fas fa-atom"></i></div>
+            <h3>Anu-Vijnana</h3>
+            <p>Vedic Particle Physics. Understanding the Paramāṇu (atom) and the fundamental building blocks of material creation as described in the Vaisheshika Sutras. (Coming Soon)</p>
+            <span class="sci-btn" style="background: #333; color: #888; cursor: not-allowed; box-shadow: none;">Locked</span>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+</body>
+</html>

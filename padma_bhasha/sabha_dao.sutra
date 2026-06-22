@@ -1,0 +1,248 @@
+◇ ============================================================
+◇ Sabha DAO — सभा (Assembly) Decentralized Governance
+◇ The Supreme Council of KasturiChain
+◇ Every token holder votes. Weight = Seva (Contribution), not Wealth.
+◇ ============================================================
+
+अधिकार SabhaDAO {
+
+    ◇ ═══════════════════════════════════════════
+    ◇ State Variables (Strilinga = Immutable Core)
+    ◇ ═══════════════════════════════════════════
+    √sṛj+ति·proposals ← []
+    √sṛj+ति·proposal_count ← 0
+    √sṛj+ति·voters ← []
+    √sṛj+ति·seva_scores ← []
+    √sṛj+ति·executed_proposals ← []
+    √sṛj+ति·quorum_threshold ← 51
+    √sṛj+ति·min_seva_to_propose ← 10
+    √sṛj+ति·voting_duration_muhurta ← 72
+
+    ◇ Proposal Types (Enumeration)
+    √sṛj+ति·TYPE_CODE_FEATURE ← "CODE_FEATURE"
+    √sṛj+ति·TYPE_IDEA ← "IDEA"
+    √sṛj+ति·TYPE_REFERRAL ← "REFERRAL_ACHIEVEMENT"
+    √sṛj+ति·TYPE_NETWORK_UPGRADE ← "NETWORK_UPGRADE"
+
+    ◇ Proposal Status
+    √sṛj+ति·STATUS_ACTIVE ← "ACTIVE"
+    √sṛj+ति·STATUS_PASSED ← "PASSED"
+    √sṛj+ति·STATUS_REJECTED ← "REJECTED"
+    √sṛj+ति·STATUS_EXECUTED ← "EXECUTED"
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Register a new member in the Sabha
+    ◇ ═══════════════════════════════════════════
+    सूत्र registerMember(wallet_address) {
+        √sṛj+ति·existing ← √mā+ति·voters[wallet_address]
+        √nirṇay+ति (existing == शून्य) {
+            √yuj+ति·voters·[wallet_address, 1]
+            √yuj+ति·seva_scores·[wallet_address, 0]
+            √vac+ति "Member registered in Sabha: " wallet_address
+        } अन्यथा {
+            √vac+ति "Already a Sabha member: " wallet_address
+        }
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Submit a Proposal
+    ◇ Anyone holding KST can propose. Min seva_score required.
+    ◇ ═══════════════════════════════════════════
+    सूत्र submitProposal(proposer, proposal_type, title, description, github_pr_url) {
+        ◇ Verify proposer is a registered member
+        √sṛj+ति·is_member ← √mā+ति·voters[proposer]
+        √nirṇay+ति (is_member != शून्य) {
+            √vac+ति "ERROR: Must be a registered Sabha member"
+            √nivṛt+ति
+        }
+
+        ◇ Verify minimum seva score for proposing
+        √sṛj+ति·seva ← √mā+ति·seva_scores[proposer]
+        √nirṇay+ति (seva >= min_seva_to_propose) {
+            √vac+ति "ERROR: Insufficient seva score. Need " min_seva_to_propose
+            √nivṛt+ति
+        }
+
+        ◇ Create proposal
+        √sṛj+ति·id ← proposal_count
+        √sṛj+ति·muhurta_now ← √kāla+ति·"current_nakshatra"
+        √sṛj+ति·deadline ← √gaṇ+ति·muhurta_now·voting_duration_muhurta
+
+        √yuj+ति·proposals·[
+            id,
+            proposer,
+            proposal_type,
+            title,
+            description,
+            github_pr_url,
+            STATUS_ACTIVE,
+            0,
+            0,
+            muhurta_now,
+            deadline
+        ]
+
+        √sṛj+ति·proposal_count ← √gaṇ+ति·proposal_count·1
+        √vac+ति "Proposal #" id " submitted: " title
+        √vac+ति "Type: " proposal_type
+        √vac+ति "Voting deadline: Muhurta " deadline
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Cast Vote
+    ◇ 1 person = 1 vote. Weight multiplied by seva_score.
+    ◇ This ensures equality of voice but rewards contribution.
+    ◇ ═══════════════════════════════════════════
+    सूत्र castVote(voter, proposal_id, support) {
+        ◇ Verify voter is registered
+        √sṛj+ति·is_member ← √mā+ति·voters[voter]
+        √nirṇay+ति (is_member == शून्य) {
+            √vac+ति "ERROR: Not a Sabha member"
+            √nivṛt+ति
+        }
+
+        ◇ Verify proposal exists and is active
+        √sṛj+ति·proposal ← √mā+ति·proposals[proposal_id]
+        √nirṇay+ति (proposal[6] != STATUS_ACTIVE) {
+            √vac+ति "ERROR: Proposal not active"
+            √nivṛt+ति
+        }
+
+        ◇ Verify voting period has not expired
+        √sṛj+ति·now ← √kāla+ति·"current_nakshatra"
+        √nirṇay+ति (now > proposal[10]) {
+            √vac+ति "ERROR: Voting period expired"
+            √nivṛt+ति
+        }
+
+        ◇ Prevent double voting
+        √parīkṣ+तुम्·"check_has_voted"·voter·proposal_id
+
+        ◇ Calculate weighted vote
+        √sṛj+ति·seva ← √mā+ति·seva_scores[voter]
+        √sṛj+ति·vote_weight ← √gaṇ+ति·1·seva·0.1  ◇ Base 1 + 10% of seva
+
+        ◇ Apply vote
+        √nirṇay+ति (support == सत्य) {
+            √sṛj+ति·new_yes ← √gaṇ+ति·proposal[7]·vote_weight
+            √yuj+ति·proposals[proposal_id][7]·new_yes
+            √vac+ति "YES vote cast by " voter " (weight: " vote_weight ")"
+        } अन्यथा {
+            √sṛj+ति·new_no ← √gaṇ+ति·proposal[8]·vote_weight
+            √yuj+ति·proposals[proposal_id][8]·new_no
+            √vac+ति "NO vote cast by " voter " (weight: " vote_weight ")"
+        }
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Finalize Proposal
+    ◇ Anyone can call after deadline. Checks quorum + majority.
+    ◇ ═══════════════════════════════════════════
+    सूत्र finalizeProposal(proposal_id) {
+        √sṛj+ति·proposal ← √mā+ति·proposals[proposal_id]
+
+        ◇ Verify voting period is over
+        √sṛj+ति·now ← √kāla+ति·"current_nakshatra"
+        √nirṇay+ति (now < proposal[10]) {
+            √vac+ति "ERROR: Voting still in progress"
+            √nivṛt+ति
+        }
+
+        ◇ Check quorum
+        √sṛj+ति·total_votes ← √gaṇ+ति·proposal[7]·proposal[8]
+        √sṛj+ति·total_members ← √mā+ति·voters
+        √sṛj+ति·participation ← √gaṇ+ति·total_votes·100·"/"·total_members
+
+        √nirṇay+ति (participation < quorum_threshold) {
+            √yuj+ति·proposals[proposal_id][6]·STATUS_REJECTED
+            √vac+ति "Proposal #" proposal_id " REJECTED: Quorum not met (" participation "%)"
+            √nivṛt+ति
+        }
+
+        ◇ Check majority
+        √nirṇay+ति (proposal[7] > proposal[8]) {
+            √yuj+ति·proposals[proposal_id][6]·STATUS_PASSED
+            √vac+ति "✓ Proposal #" proposal_id " PASSED!"
+            √vac+ति "Initiating reward minting for " proposal[1]
+        } अन्यथा {
+            √yuj+ति·proposals[proposal_id][6]·STATUS_REJECTED
+            √vac+ति "✗ Proposal #" proposal_id " REJECTED by majority vote"
+        }
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Execute Passed Proposal — Mint Bhakti Rewards
+    ◇ ═══════════════════════════════════════════
+    सूत्र executeProposal(proposal_id) {
+        √sṛj+ति·proposal ← √mā+ति·proposals[proposal_id]
+        √nirṇay+ति (proposal[6] != STATUS_PASSED) {
+            √vac+ति "ERROR: Can only execute PASSED proposals"
+            √nivṛत+ति
+        }
+
+        ◇ Determine reward based on proposal type
+        √sṛj+ति·reward ← 0
+        √nirṇay+ति (proposal[2] == TYPE_CODE_FEATURE) {
+            √sṛj+ति·reward ← 500
+        }
+        √nirṇय+ति (proposal[2] == TYPE_IDEA) {
+            √sṛj+ति·reward ← 250
+        }
+        √nirṇय+ति (proposal[2] == TYPE_REFERRAL) {
+            √sṛj+ति·reward ← 200
+        }
+        √nirṇय+ति (proposal[2] == TYPE_NETWORK_UPGRADE) {
+            √sṛj+ति·reward ← 1000
+        }
+
+        ◇ Cross-contract call: Mint reward tokens
+        √invoke+ति·PadmaToken·mint(reward, proposal[1])
+
+        ◇ Update contributor seva score
+        √sṛj+ति·current_seva ← √mā+ति·seva_scores[proposal[1]]
+        √sṛj+ति·new_seva ← √gaṇ+ति·current_seva·reward
+        √yuj+ति·seva_scores·[proposal[1], new_seva]
+
+        ◇ Mark as executed
+        √yuj+ति·proposals[proposal_id][6]·STATUS_EXECUTED
+        √yuj+ति·executed_proposals·proposal_id
+
+        √vac+ति "Executed! " reward " Bhakti minted to " proposal[1]
+        √vac+ति "New Seva Score: " new_seva
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Increase Seva Score (called by mining contracts)
+    ◇ ═══════════════════════════════════════════
+    सूत्र addSevaScore(contributor, points) {
+        √sṛj+ति·sender ← √bodh+ति·"msg.sender"
+        ◇ Only authorized contracts can update seva
+        √parīkṣ+तुम्·"check_authorized_contract"·sender
+
+        √sṛj+ति·current ← √mā+ति·seva_scores[contributor]
+        √sṛj+ति·updated ← √gaṇ+ति·current·points
+        √yuj+ति·seva_scores·[contributor, updated]
+        √vac+ति "Seva Score updated for " contributor ": " updated
+    }
+
+    ◇ ═══════════════════════════════════════════
+    ◇ Query Functions (View Only)
+    ◇ ═══════════════════════════════════════════
+    सूत्र getProposal(id) {
+        √nivṛत+ति √mā+ति·proposals[id]
+    }
+
+    सूत्र getSevaScore(wallet) {
+        √nivṛत+ति √mā+ति·seva_scores[wallet]
+    }
+
+    सूत्र getActiveProposals() {
+        √sṛj+ति·active ← []
+        √āvṛt+ति proposal ← proposals {
+            √nirṇय+ति (proposal[6] == STATUS_ACTIVE) {
+                √yuj+ति·active·proposal
+            }
+        }
+        √nivṛत+ति active
+    }
+}

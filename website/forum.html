@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabha Discussions | KasturiChain Forum</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .forum-layout {
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+        
+        /* Sidebar */
+        .forum-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+        
+        .start-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            background: var(--gold-primary);
+            color: var(--bg-dark);
+            font-weight: bold;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(249, 212, 35, 0.3);
+        }
+        
+        .forum-categories {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .category-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: var(--text-muted);
+        }
+        
+        .category-item:hover, .category-item.active {
+            background: rgba(249, 212, 35, 0.1);
+            color: var(--gold-primary);
+        }
+        
+        .category-icon { width: 20px; text-align: center; }
+        .category-name { flex: 1; font-weight: 600; }
+        .category-count { font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 10px; color: #fff;}
+        
+        /* Main Feed */
+        .forum-main { flex: 1; }
+        
+        .forum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .forum-header h2 { font-family: var(--font-heading); font-size: 1.8rem; }
+        
+        .thread-card {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            gap: 1.5rem;
+            transition: border-color 0.3s;
+        }
+        
+        .thread-card:hover { border-color: rgba(249, 212, 35, 0.3); }
+        
+        .thread-votes {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+        }
+        
+        .vote-arrow { cursor: pointer; font-size: 1.2rem; transition: color 0.2s; }
+        .vote-arrow:hover { color: var(--gold-primary); }
+        .vote-score { font-weight: bold; color: var(--text-main); }
+        
+        .thread-content { flex: 1; }
+        
+        .thread-tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            background: rgba(78, 205, 196, 0.15);
+            color: #4ecdc4;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .thread-title { font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; cursor: pointer; transition: color 0.2s;}
+        .thread-title:hover { color: var(--gold-primary); }
+        
+        .thread-excerpt { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5;}
+        
+        .thread-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .meta-author { color: var(--gold-secondary); font-family: monospace; }
+        
+        /* Rich Media in Threads */
+        .thread-media {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .thread-media img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .thread-code {
+            background: #0d0d12;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #e0e0e0;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+        }
+
+        /* Publisher Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .publisher-modal {
+            background: #14141e;
+            border: 1px solid rgba(249, 212, 35, 0.3);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .publisher-modal { transform: translateY(0); }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 { font-family: var(--font-heading); font-size: 1.5rem; margin: 0; }
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .close-modal:hover { color: var(--gold-primary); }
+
+        .modal-body { padding: 1.5rem; }
+        
+        .publisher-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: var(--font-heading);
+            margin-bottom: 1rem;
+            outline: none;
+        }
+
+        .publisher-input::placeholder { color: rgba(255,255,255,0.3); }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.03);
+            padding: 0.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .toolbar-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.5rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toolbar-btn:hover { background: rgba(249, 212, 35, 0.1); color: var(--gold-primary); }
+
+        .publisher-textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            color: #fff;
+            padding: 1rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            min-height: 250px;
+            resize: vertical;
+            outline: none;
+        }
+
+        .publisher-textarea:focus { border-color: rgba(249, 212, 35, 0.3); }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .forum-layout { flex-direction: column; }
+            .forum-sidebar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="sanatan.html">Sanatan Dharma</a></li>
+            <li><a href="dao.html">Sabha DAO</a></li>
+            <li><a href="forum.html" class="active-link">Community Forum</a></li>
+        </ul>
+    </nav>
+
+    <header class="hub-hero" style="padding: 3rem 5% 1rem; text-align: center;">
+        <h1><span class="text-gradient">Sabha Discussions</span></h1>
+        <p class="subtitle" style="max-width: 600px; margin: 0 auto;">Join the community to discuss network upgrades, philosophy, code, and Seva mining.</p>
+    </header>
+
+    <div class="forum-layout">
+        <!-- Sidebar -->
+        <aside class="forum-sidebar">
+            <button class="start-btn" onclick="openPublisherModal()"><i class="fas fa-edit"></i> Start Discussion</button>
+            
+            <div class="forum-categories">
+                <div class="category-item active">
+                    <div class="category-icon"><i class="fas fa-globe"></i></div>
+                    <div class="category-name">All Topics</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon"><i class="fas fa-bullhorn"></i></div>
+                    <div class="category-name">Announcements</div>
+                    <div class="category-count">3</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon"><i class="fas fa-code"></i></div>
+                    <div class="category-name">Core Development</div>
+                    <div class="category-count">14</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon"><i class="fas fa-gem"></i></div>
+                    <div class="category-name">Seva Mining</div>
+                    <div class="category-count">28</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon"><i class="fas fa-om"></i></div>
+                    <div class="category-name">Astika Philosophy</div>
+                    <div class="category-count">56</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Feed -->
+        <main class="forum-main">
+            <div class="forum-header">
+                <h2>Recent Discussions</h2>
+                <div class="filter-group">
+                    <select class="glass-select" style="padding: 0.5rem; font-size: 0.9rem;">
+                        <option>Top (This Week)</option>
+                        <option>Newest</option>
+                        <option>Most Active</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Threads -->
+            <!-- Threads -->
+            <div class="thread-card forum-post">
+                <div class="thread-votes">
+                    <i class="fas fa-chevron-up vote-arrow"></i>
+                    <span class="vote-score">142</span>
+                    <i class="fas fa-chevron-down vote-arrow"></i>
+                </div>
+                <div class="thread-content">
+                    <div class="post-header">
+                        <div class="user-avatar">K</div>
+                        <div class="user-info">
+                            <span class="user-name">Kasturi_Dev</span>
+                            <span class="post-time">2 hours ago</span>
+                        </div>
+                    </div>
+                    <span class="thread-tag">Core Development</span>
+                    <h3 class="thread-title">Visualizing the Quantum Node Architecture</h3>
+                    <p class="thread-excerpt">I've been reviewing the Kasturi VM execution engine. I generated a beautiful visualization of how the quantum node parses the Paninian grammar in real time. We should consider using this aesthetic for the Sabha dashboard.</p>
+                    
+                    <div class="post-media-container">
+                        <img src="assets/quantum_node.png" alt="Quantum Node Visualization">
+                    </div>
+
+                    <div class="thread-meta">
+                        <span><i class="fas fa-comments"></i> 24 Replies</span>
+                        <span><i class="fas fa-share"></i> Share</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thread-card forum-post">
+                <div class="thread-votes">
+                    <i class="fas fa-chevron-up vote-arrow"></i>
+                    <span class="vote-score">89</span>
+                    <i class="fas fa-chevron-down vote-arrow"></i>
+                </div>
+                <div class="thread-content">
+                    <div class="post-header">
+                        <div class="user-avatar" style="background: linear-gradient(45deg, #4ecdc4, #556270);">V</div>
+                        <div class="user-info">
+                            <span class="user-name">Vedic_Hacker</span>
+                            <span class="post-time">5 hours ago</span>
+                        </div>
+                    </div>
+                    <span class="thread-tag" style="background: rgba(138, 35, 135, 0.15); color: #c471ed;">Astika Philosophy</span>
+                    <h3 class="thread-title">Understanding "Shunya" in the VM Evaluator</h3>
+                    <p class="thread-excerpt">Panini’s concept of Lopa (zero replacement) is fascinatingly implemented in the VM's Shunya type. I have attached a small snippet demonstrating how I am handling it in the compiler.</p>
+                    
+                    <div class="thread-code">
+// Sutra Lopa implementation
+fn evaluate_shunya(ctx: &mut Context, id: NodeId) -> Result<(), ExecError> {
+    ctx.memory.deallocate(id);
+    emit_event("LopaExecuted", id);
+    Ok(())
+}
+                    </div>
+
+                    <div class="thread-meta">
+                        <span><i class="fas fa-comments"></i> 18 Replies</span>
+                        <span><i class="fas fa-share"></i> Share</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn-secondary">Load More</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Publisher Modal -->
+    <div class="modal-overlay" id="publisher-modal">
+        <div class="publisher-modal">
+            <div class="modal-header">
+                <h3>Start a Discussion</h3>
+                <button class="close-modal" onclick="closePublisherModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="publisher-input" placeholder="Title of your discussion...">
+                
+                <div class="editor-toolbar">
+                    <button class="toolbar-btn" title="Bold"><i class="fas fa-bold"></i></button>
+                    <button class="toolbar-btn" title="Italic"><i class="fas fa-italic"></i></button>
+                    <button class="toolbar-btn" title="Link"><i class="fas fa-link"></i></button>
+                    <button class="toolbar-btn" title="Quote"><i class="fas fa-quote-right"></i></button>
+                    <button class="toolbar-btn" title="Code Snippet"><i class="fas fa-code"></i></button>
+                    <button class="toolbar-btn" title="Upload Image"><i class="fas fa-image"></i></button>
+                </div>
+
+                <textarea class="publisher-textarea" placeholder="Write your thoughts, share code, or propose ideas... (Markdown supported)"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closePublisherModal()" style="padding: 0.6rem 1.2rem;">Cancel</button>
+                <button class="btn-primary" onclick="submitPost()" style="padding: 0.6rem 1.2rem;">Publish to Sabha <i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

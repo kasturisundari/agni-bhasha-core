@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KasturiChain | The Sovereign Vedic L1</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Dynamic Background Elements -->
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="#philosophy">Philosophy</a></li>
+            <li><a href="sanatan.html">Sanatan Dharma</a></li>
+            <li><a href="dao.html">Sabha DAO</a></li>
+            <li><a href="satyascan.html">SatyaScan</a></li>
+            <li><a href="ide.html">Web IDE</a></li>
+            <li><a href="faucet.html">Faucet</a></li>
+            <li><a href="forum.html">Forum</a></li>
+            <li><a href="javascript:void(0)" id="connect-wallet-btn" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;"><i class="fas fa-wallet"></i> Connect Wallet</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge">v0.1.0 Mainnet Release</div>
+            <h1 class="glitch" data-text="The Sovereign Vedic L1">The Sovereign Vedic L1</h1>
+            <p class="subtitle">The world's first blockchain and smart contract language built entirely on Rishi Panini's ancient Sanskrit grammar. Impossible to hack. Infinite scalability.</p>
+            
+            <div class="hero-buttons">
+                <a href="#technology" class="btn-primary">Discover the Sutra <i class="fas fa-arrow-right"></i></a>
+                <a href="#seva" class="btn-secondary">Start Seva Mining</a>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat">
+                    <span class="stat-val">3,959</span>
+                    <span class="stat-label">Mathematical Sutras</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-val">$0</span>
+                    <span class="stat-label">Reentrancy Hacks</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-val">Rust</span>
+                    <span class="stat-label">Quantum-Ready Core</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image-container">
+            <div class="radhe-hero-frame" style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                <img src="assets/radhe_rani.jpg" alt="Srimati Radhe Rani" style="width: 100%; max-width: 500px; box-shadow: 0 0 50px rgba(249, 212, 35, 0.4); border-radius: 12px;">
+            </div>
+        </div>
+    </header>
+
+    <section id="philosophy" class="section dark-glass">
+        <div class="container two-col">
+            <div class="col-img" style="display: flex; justify-content: center;">
+                <!-- Cosmic Clock Widget moved here -->
+                <div class="cosmic-clock-widget">
+                    <div class="clock-outer-ring"></div>
+                    <div class="clock-middle-ring"></div>
+                    <div class="clock-inner-ring"></div>
+                    <div class="clock-center">
+                        <div class="clock-title">Cosmic Time</div>
+                        <div class="clock-value" id="current-nakshatra">Ashvini</div>
+                        <div class="clock-countdown" id="block-countdown">Next Block: 0.05 Muhurta</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-text">
+                <div class="section-tag">THE PHILOSOPHY</div>
+                <h2>Not Just Code.<br> <span class="text-gradient">Sacred Mathematics.</span></h2>
+                <p>Modern blockchains rely on flawed compilers like Solidity, leading to billions in stolen funds through memory leaks and Reentrancy attacks. KasturiChain fundamentally reinvents execution.</p>
+                <p>We replaced the LLVM backend with the <strong>Ashtadhyayi</strong>—Panini's flawless linguistic algorithm. Sanskrit isn't just an ancient language; it is the most rigorous, zero-ambiguity computational system ever discovered.</p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> Decentralized by Design, Sovereign by Nature</li>
+                    <li><i class="fas fa-check-circle"></i> Pure Rust Implementation</li>
+                    <li><i class="fas fa-check-circle"></i> 100% Pure & Open Source Repository</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="technology" class="section">
+        <div class="container two-col reverse">
+            <div class="col-img">
+                <img src="assets/security.png" alt="Linga Security Vault" class="glow-img floating-slow">
+            </div>
+            <div class="col-text">
+                <div class="section-tag">ZERO-EXPLOIT ENGINE</div>
+                <h2>Linganushasanam:<br> <span class="text-gradient">The Unbreakable Vault</span></h2>
+                <p>In the Sutra programming language, security is enforced at the linguistic compiler level using grammatical gender (Linga):</p>
+                
+                <div class="tech-cards">
+                    <div class="tech-card feminine">
+                        <h3>Strilinga (Feminine)</h3>
+                        <p>Variables ending in <strong>ā</strong> or <strong>ī</strong> (like <em>koṣā</em> - Vault) are cryptographically locked. They cannot be mutated by external functions. Reentrancy is mathematically impossible.</p>
+                    </div>
+                    <div class="tech-card masculine">
+                        <h3>Pumlinga (Masculine)</h3>
+                        <p>Variables ending in <strong>a</strong> act as dynamic actor pointers, freely mutating and executing logic.</p>
+                    </div>
+                </div>
+
+                <div class="live-editor-container">
+                    <div class="code-header">
+                        <span>zero_exploit_vault.sutra</span>
+                        <div class="editor-actions">
+                            <button class="compile-btn" onclick="compileSutra()"><i class="fas fa-play"></i> Compile & Run</button>
+                        </div>
+                    </div>
+                    <textarea id="sutra-editor" spellcheck="false" class="sutra-textarea">◇ The Vault (Strilinga) is permanently safe
+liquidity_pool_koṣā = 1000000
+
+try {
+    ◇ Attempting to mutate Strilinga!
+    liquidity_pool_koṣā = 0
+} catch (error) {
+    √vacति·"SUCCESS: Attack blocked by Linganushasanam!"
+}</textarea>
+                    <div class="compiler-terminal">
+                        <div class="terminal-header">Linganushasanam Output</div>
+                        <div id="compiler-output" class="terminal-body">> System Ready. Waiting for compilation...</div>
+                    </div>
+                </div>
+
+                <!-- Visual AST Builder (المصنف النحوي الحي) -->
+                <div class="ast-visualizer-container">
+                    <div class="ast-header">
+                        <span><i class="fas fa-project-diagram"></i> Live AST Visualizer</span>
+                        <span class="ast-badge">Rishi Panini Grammar Engine</span>
+                    </div>
+                    <div class="ast-canvas" id="ast-canvas">
+                        <div class="ast-placeholder">Type in the editor to visualize the AST</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ज्ञानसागर (The Vedic Knowledge Sphere) -->
+    <section id="gyansagar" class="section dark-glass">
+        <div class="container">
+            <div class="section-tag text-center" style="color: var(--cyan); margin-bottom: 0.5rem;">THE VEDIC ENCYCLOPEDIA</div>
+            <h2 class="text-center massive-text" style="margin-bottom: 1rem;">ज्ञानसागर <br><span class="text-gradient" style="font-size: 2.5rem;">(The Cosmic Knowledge Sphere)</span></h2>
+            <p class="center-para">KasturiChain is not merely a blockchain—it is the world's most authentic digital lighthouse for Sanatan Science. Explore the sovereign, censorship-resistant preservation of universal truths.</p>
+
+            <!-- Gyansagar Tabs -->
+            <div class="gyansagar-nav">
+                <button class="g-tab-btn active" data-target="g-panini"><i class="fas fa-project-diagram"></i> अष्टाध्यायी (Grammar Matrix)</button>
+                <button class="g-tab-btn" data-target="g-nakshatra"><i class="fas fa-star-and-crescent"></i> नक्षत्र वेधशाला (Astro-Clock)</button>
+                <button class="g-tab-btn" data-target="g-chatushkoti"><i class="fas fa-brain"></i> चतुष्कोटि (Vedic Logic)</button>
+                <button class="g-tab-btn" data-target="g-shastra"><i class="fas fa-om"></i> शास्त्र भंडार (Immutable Vault)</button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="gyansagar-content-container">
+                
+                <!-- 1. Panini Grammar Matrix -->
+                <div id="g-panini" class="g-tab-content active">
+                    <div class="two-col">
+                        <div class="col-text">
+                            <h3 class="g-title">अष्टाध्यायी डिजिटल गर्भगृह<br><span>The Rishi Panini Grammar Matrix</span></h3>
+                            <p class="g-desc">Discover the ancient algorithmic perfection of Maharishi Panini. See how Pratyaharas (प्रत्याहार) function as the ancient blueprint for modern Regex and Bitmasking.</p>
+                            <div class="panini-sutra-card">
+                                <div class="p-sutra-header">
+                                    <span class="p-sutra-id">सूत्र १.१.१ (१)</span>
+                                    <button class="p-audio-btn"><i class="fas fa-volume-up"></i></button>
+                                </div>
+                                <div class="p-sutra-text">वृद्धिरादैच् ॥१.१.१॥</div>
+                                <div class="p-sutra-meaning">vṛddhirādaic (The vowels ā, ai, au are termed Vṛddhi)</div>
+                                <div class="p-sutra-code">
+                                    <code># Kasturi Compiler Mapping:
+let vriddhi_set = 0b101010; // Bitmask representation</code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-img g-matrix-grid">
+                            <div class="matrix-cell highlight">अच्</div>
+                            <div class="matrix-cell">हल्</div>
+                            <div class="matrix-cell">अक्</div>
+                            <div class="matrix-cell">इक्</div>
+                            <div class="matrix-cell">उक्</div>
+                            <div class="matrix-cell">यण्</div>
+                            <div class="matrix-cell highlight">एङ्</div>
+                            <div class="matrix-cell">ऐच्</div>
+                            <div class="matrix-cell">अम्</div>
+                            <div class="matrix-cell">यम्</div>
+                            <div class="matrix-cell">ञम्</div>
+                            <div class="matrix-cell">झष्</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Astro-Chronology -->
+                <div id="g-nakshatra" class="g-tab-content">
+                    <div class="two-col reverse">
+                        <div class="col-text">
+                            <h3 class="g-title">नक्षत्र वेधशाला<br><span>Astro-Chronology Ledger</span></h3>
+                            <p class="g-desc">Our consensus does not rely on western UNIX time. KasturiChain synchronizes globally using the precise movement of the 27 Nakshatras, aligning digital truth with cosmic reality.</p>
+                            <div class="nakshatra-info-box">
+                                <div class="n-label">CURRENT COSMIC ALIGNMENT</div>
+                                <div class="n-value text-gradient">चित्रा (Chitra)</div>
+                                <div class="n-sub">Deity: Tvashtar (The Cosmic Architect)</div>
+                                <div class="n-freq">Resonance Frequency: 108.02 Hz</div>
+                            </div>
+                        </div>
+                        <div class="col-img">
+                            <div class="astro-3d-container">
+                                <div class="astro-sphere">
+                                    <div class="astro-ring r1"></div>
+                                    <div class="astro-ring r2"></div>
+                                    <div class="astro-ring r3"></div>
+                                    <div class="astro-core"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Chatushkoti Logic -->
+                <div id="g-chatushkoti" class="g-tab-content">
+                    <div class="two-col">
+                        <div class="col-text">
+                            <h3 class="g-title">चतुष्कोटि तर्कशास्त्र केंद्र<br><span>The Chatushkoti Logic Hub</span></h3>
+                            <p class="g-desc">Breaking free from the limitations of binary (0 and 1) logic, our Kasturi VM operates on the 4-dimensional non-dualistic Vedic logic framework. Watch the memory matrix shift between states.</p>
+                            <ul class="logic-list">
+                                <li><span class="l-badge l-sat">सत्</span> <strong>Sat:</strong> Absolute Truth (1)</li>
+                                <li><span class="l-badge l-asat">असत्</span> <strong>Asat:</strong> Absolute Falsehood (0)</li>
+                                <li><span class="l-badge l-sadasat">सदसत्</span> <strong>Sadasat:</strong> Superposition (Quantum State)</li>
+                                <li><span class="l-badge l-avyaktam">अव्यक्तम्</span> <strong>Avyaktam:</strong> Unmanifest / Incomputable</li>
+                            </ul>
+                        </div>
+                        <div class="col-img">
+                            <div class="logic-simulator">
+                                <div class="sim-node n-sat">सत्</div>
+                                <div class="sim-path p1"></div>
+                                <div class="sim-node n-avyaktam">अव्यक्तम्</div>
+                                <div class="sim-path p2"></div>
+                                <div class="sim-node n-asat">असत्</div>
+                                <div class="sim-center-node n-sadasat">सदसत्</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Shastra Vault -->
+                <div id="g-shastra" class="g-tab-content">
+                    <div class="shastra-vault-layout">
+                        <div class="shastra-sidebar">
+                            <div class="s-lib-item active">श्रीमद् भागवतम् (Srimad Bhagavatam)</div>
+                            <div class="s-lib-item">ऋग्वेद (Rigveda)</div>
+                            <div class="s-lib-item">ईशोपनिषद् (Isha Upanishad)</div>
+                            <div class="s-lib-item">भगवद्गीता (Bhagavad Gita)</div>
+                            <div class="s-lib-item">ब्रह्मसूत्र (Brahma Sutras)</div>
+                        </div>
+                        <div class="shastra-main-view">
+                            <div class="s-view-header">
+                                <h3 class="text-gradient">श्रीमद् भागवतम् स्कन्ध १, अध्याय १, श्लोक १</h3>
+                                <div class="s-blockchain-stamp"><i class="fas fa-link"></i> Immutable Hash: 0x8f2a...c9e4</div>
+                            </div>
+                            <div class="s-verse-box">
+                                <div class="s-audio-player">
+                                    <button class="btn-primary" style="padding: 0.5rem 1rem;"><i class="fas fa-play"></i> Play Authentic Chant</button>
+                                    <div class="audio-wave">
+                                        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                                    </div>
+                                </div>
+                                <p class="s-verse-sanskrit">जन्माद्यस्य यतोऽन्वयादितरतश्चार्थेष्वभिज्ञः स्वराट्<br>तेने ब्रह्म हृदा य आदिकवये मुह्यन्ति यत्सूरयः ।<br>तेजोवारिमृदां यथा विनिमयो यत्र त्रिसर्गोऽमृषा<br>धाम्ना स्वेन सदा निरस्तकुहकं सत्यं परं धीमहि ॥</p>
+                                <p class="s-verse-trans">janmādyasya yato'nvayāditarataścārtheṣvabhijñaḥ svarāṭ<br>tene brahma hṛdā ya ādikavaye muhyanti yatsūrayaḥ |<br>tejovārimṛdāṃ yathā vinimayo yatra trisargo'mṛṣā<br>dhāmnā svena sadā nirastakuhakaṃ satyaṃ paraṃ dhīmahi ||</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Radha Krishna Prasad Charity Section -->
+    <section id="charity" class="section text-center" style="background: linear-gradient(180deg, #0b0c10 0%, rgba(255, 183, 3, 0.05) 50%, #0b0c10 100%);">
+        <div class="container">
+            <div class="section-tag" style="color: #ffb703;">RADHA KRISHNA PRASAD</div>
+            <h2 class="massive-text" style="color: #ffb703; margin-bottom: 1.5rem;"><i class="fas fa-om"></i> Divine Charity Treasury</h2>
+            <p class="center-para" style="max-width: 800px; margin: 0 auto 2rem; color: #e0e0e0; font-size: 1.1rem; line-height: 1.8;">
+                KasturiChain is not built for human greed. It is built for <strong>Seva</strong>. By absolute, immutable mathematical consensus locked into the Genesis Block:
+            </p>
+            <div style="background: rgba(255, 183, 3, 0.1); border: 1px solid rgba(255, 183, 3, 0.2); padding: 2rem; border-radius: 16px; display: inline-block; margin-bottom: 2rem;">
+                <h3 style="font-size: 2.5rem; color: #ffb703; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">50%</h3>
+                <p style="color: #c5c6c7; font-size: 1.1rem;">of all network transaction fees, NFT sales, and block rewards automatically flow into the Charity Treasury.</p>
+            </div>
+            <div class="stats-row" style="justify-content: center; gap: 3rem; margin-bottom: 3rem;">
+                <div class="stat" style="background: transparent; border: none; padding: 0;">
+                    <i class="fas fa-cow" style="font-size: 2.5rem; color: #ffb703; margin-bottom: 1rem;"></i>
+                    <h4 style="color: #fff;">Cow Protection</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 200px;">Direct funding for Goshalas across India.</p>
+                </div>
+                <div class="stat" style="background: transparent; border: none; padding: 0;">
+                    <i class="fas fa-vihara" style="font-size: 2.5rem; color: #ffb703; margin-bottom: 1rem;"></i>
+                    <h4 style="color: #fff;">Braj Dham</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 200px;">Maintaining and restoring sacred temples and pilgrimage routes.</p>
+                </div>
+                <div class="stat" style="background: transparent; border: none; padding: 0;">
+                    <i class="fas fa-hands-helping" style="font-size: 2.5rem; color: #ffb703; margin-bottom: 1rem;"></i>
+                    <h4 style="color: #fff;">Feeding the Needy</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 200px;">Providing Prasad and support for those in poverty.</p>
+                </div>
+            </div>
+            
+            <a href="radha.html" class="btn-primary" style="background: #ffb703; color: #000; border: none;"><i class="fas fa-chart-line"></i> View Live On-Chain Transparency</a>
+        </div>
+    </section>
+
+    <section id="library" class="section">
+        <div class="container text-center">
+            <div class="section-tag text-center">SANATANA DHARMA BOOKS</div>
+            <h2 class="text-center massive-text" style="margin-bottom: 1rem;">The <span class="text-gradient">Sacred Library</span></h2>
+            <p class="center-para" style="margin-bottom: 3rem;">Explore the supreme philosophical discourse. Completely decentralized and stored natively.</p>
+            
+            <a href="library.html" class="btn-primary large-btn" style="margin-top: 1rem;">Enter the Library <i class="fas fa-book-reader"></i></a>
+        </div>
+    </section>
+
+    <section id="seva" class="section dark-glass text-center">
+        <div class="container">
+            <div class="section-tag">COMMUNITY</div>
+            <h2 class="massive-text">Seva Mining is <span class="text-gradient">Live</span></h2>
+            <p class="center-para">KasturiChain doesn't use massive GPU farms. We mine knowledge. Help us digitize the remaining 3,957 rules of Rishi Panini into JSON format, and earn $KST tokens natively on the network.</p>
+            
+            <div class="mining-steps">
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-book-open"></i></div>
+                    <h4>1. Read Ashtadhyayi</h4>
+                    <p>Open the ancient Sanskrit grammar rules.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-code"></i></div>
+                    <h4>2. Format to JSON</h4>
+                    <p>Map the Sutra into the engine's data template.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-coins"></i></div>
+                    <h4>3. Earn $KST</h4>
+                    <p>Submit a Pull Request and get rewarded.</p>
+                </div>
+            </div>
+
+            <a href="dao.html" class="btn-primary large-btn">Enter Sabha DAO <i class="fas fa-landmark"></i></a>
+            <a href="https://github.com/kasturisundari/sutra-lang/tree/main/dataset/ashtadhyayi" class="btn-secondary large-btn" target="_blank" style="margin-left:1rem;">View Seva Template</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+                <p>The sovereign infrastructure for the next generation of decentralized civilization.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Ecosystem</h4>
+                <a href="#">Whitepaper</a>
+                <a href="#">Pyar Wallet</a>
+                <a href="https://github.com/kasturisundari/sutra-lang">GitHub Repo</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+
+    <!-- Faucet Toast -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Gyansagar Tabs Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.g-tab-btn');
+            const contents = document.querySelectorAll('.g-tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active from all tabs & contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    // Add active to clicked tab & corresponding content
+                    tab.classList.add('active');
+                    const targetId = tab.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

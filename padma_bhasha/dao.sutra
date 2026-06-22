@@ -1,0 +1,20 @@
+अधिकार PadmaDAO {
+    √sṛj+ति·proposals ← []
+    √sṛj+ति·votes ← []
+
+    सूत्र propose(description) {
+        √sṛj+ति·id ← √mā+ति·proposals // Array length as ID
+        √yuj+ति·proposals·[id, description, 0] // ID, Description, Votes count
+        √vac+ति "New Proposal Registered: " description
+    }
+
+    सूत्र vote(id) {
+        // Awaits async background verification of voter rights
+        √parīkṣ+तुम्·"check_voter_eligibility"
+        
+        √sṛj+ति·current_votes ← √mā+ति·proposals[id][2]
+        √sṛj+ति·new_votes ← √gaṇ+ति·current_votes·1
+        √yuj+ति·proposals[id][2]·new_votes
+        √vac+ति "Vote casted for proposal " id
+    }
+}

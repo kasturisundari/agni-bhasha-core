@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishna Yajur Veda | KasturiChain Library</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="om">ॐ</span> KasturiChain
+        </div>
+        <ul class="nav-links">
+            <li><a href="sanatan.html"><i class="fas fa-arrow-left"></i> Back to Sanatan Dharma</a></li>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-tag text-center" id="header-tag">SANATANA DHARMA BOOKS</div>
+            <h1 class="text-center massive-text" style="margin-bottom: 1rem;">Krishna <span class="text-gradient">Yajur Veda</span></h1>
+            <p class="center-para" style="margin-bottom: 3rem;">Taittiriya Samhita (Pada Patha) preserving the accented Devanagari text and Latin transliteration. Immutable, translation-free pure Sanskrit & IAST.</p>
+            
+            <div class="gita-reader dark-glass">
+                <div class="reader-controls" style="display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    <div class="control-group">
+                        <label for="kanda-select">Kanda (Book)</label>
+                        <select id="kanda-select" class="glass-select">
+                            <option value="1">Kanda 1</option>
+                            <option value="2">Kanda 2</option>
+                            <option value="3">Kanda 3</option>
+                            <option value="4">Kanda 4</option>
+                            <option value="5">Kanda 5</option>
+                            <option value="6">Kanda 6</option>
+                            <option value="7">Kanda 7</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="prapathaka-select">Prapathaka</label>
+                        <select id="prapathaka-select" class="glass-select"></select>
+                    </div>
+                    <button onclick="prevVerse()" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                    <div class="control-group">
+                        <label for="anuvaka-select">Anuvaka</label>
+                        <select id="anuvaka-select" class="glass-select"></select>
+                    </div>
+                    <div class="control-group">
+                        <label for="verse-select">Mantra (Verse)</label>
+                        <select id="verse-select" class="glass-select"></select>
+                    </div>
+                    <button onclick="nextVerse()" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="reader-display">
+                    <div class="sloka-text" id="sanskrit" style="font-size: 1.6rem; line-height: 2.2; letter-spacing: 0.05em;">Loading Immutable Shastra from Samparka Node...</div>
+                    <div class="transliteration" id="translit" style="font-size: 1.2rem; line-height: 1.8; color: var(--gold-secondary); margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="om">ॐ</span> KasturiChain
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Kasturi Foundation. Sovereign Open Source.</p>
+        </div>
+    </footer>
+
+    <!-- Reader Logic -->
+    <script>
+        let allData = [];
+        let groupedData = {};
+        let currentHashBadge = null;
+
+        async function fetchYajurveda() {
+            try {
+                document.getElementById('sanskrit').innerHTML = "Fetching secure cryptographic state... <i class='fas fa-circle-notch fa-spin'></i>";
+                document.getElementById('translit').innerHTML = "";
+                
+                const response = await fetch("https://kasturisundari.xyz/rpc/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "shastra_jnan",
+                        params: ["krishnayajurveda"],
+                        id: Date.now()
+                    })
+                });
+                const rpcData = await response.json();
+                if (rpcData.error) throw new Error(rpcData.error.message);
+                
+                allData = rpcData.result.data;
+                const hashStamp = rpcData.result.hash_stamp;
+                
+                // Update immutable hash display
+                if(currentHashBadge) {
+                    currentHashBadge.remove();
+                }
+                const header = document.getElementById('header-tag');
+                if(header) {
+                    currentHashBadge = document.createElement('div');
+                    currentHashBadge.style.cssText = 'font-size: 0.65rem; color: var(--accent-gold); margin-top: 10px; font-family: monospace; word-break: break-all; opacity: 0.8; margin-bottom: 20px;';
+                    currentHashBadge.innerHTML = `<i class="fas fa-link"></i> SHA-256: ${hashStamp}`;
+                    header.parentNode.insertBefore(currentHashBadge, header.nextSibling);
+                }
+
+                if(typeof allData !== 'undefined') {
+                    // Group data by Kanda, Prapathaka, and Anuvaka
+                    groupedData = {};
+                    allData.forEach(verseObj => {
+                        const parts = verseObj.chapter_number.split('.');
+                        const kanda = parts[0];
+                        const prapathaka = parts[1];
+                        const anuvaka = parts[2];
+                        
+                        if (!groupedData[kanda]) {
+                            groupedData[kanda] = {};
+                        }
+                        if (!groupedData[kanda][prapathaka]) {
+                            groupedData[kanda][prapathaka] = {};
+                        }
+                        if (!groupedData[kanda][prapathaka][anuvaka]) {
+                            groupedData[kanda][prapathaka][anuvaka] = [];
+                        }
+                        groupedData[kanda][prapathaka][anuvaka].push(verseObj);
+                    });
+
+                    // Trigger initial population
+                    populatePrapathakas(1);
+                } else {
+                    document.getElementById('sanskrit').textContent = "Failed to load data from node.";
+                }
+            } catch (error) {
+                document.getElementById('sanskrit').textContent = "Gateway Error: " + error.message;
+            }
+        }
+
+        const kandaSelect = document.getElementById('kanda-select');
+        const prapathakaSelect = document.getElementById('prapathaka-select');
+        const anuvakaSelect = document.getElementById('anuvaka-select');
+        const verseSelect = document.getElementById('verse-select');
+
+        // Handle Kanda change
+        kandaSelect.addEventListener('change', (e) => {
+            populatePrapathakas(e.target.value);
+        });
+
+        // Handle Prapathaka change
+        prapathakaSelect.addEventListener('change', (e) => {
+            populateAnuvakas(kandaSelect.value, e.target.value);
+        });
+
+        // Handle Anuvaka change
+        anuvakaSelect.addEventListener('change', (e) => {
+            populateVerses(kandaSelect.value, prapathakaSelect.value, e.target.value);
+        });
+
+        // Handle Verse change
+        verseSelect.addEventListener('change', (e) => {
+            displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, e.target.value);
+        });
+
+        function populatePrapathakas(kandaNum) {
+            const prapathakas = groupedData[kandaNum] || {};
+            prapathakaSelect.innerHTML = '';
+            
+            const pKeys = Object.keys(prapathakas).sort((a, b) => parseInt(a) - parseInt(b));
+            pKeys.forEach(pNum => {
+                const option = document.createElement('option');
+                option.value = pNum;
+                option.textContent = `Prapathaka ${pNum}`;
+                prapathakaSelect.appendChild(option);
+            });
+
+            if(pKeys.length > 0) {
+                populateAnuvakas(kandaNum, pKeys[0]);
+            }
+        }
+
+        function populateAnuvakas(kandaNum, prapathakaNum) {
+            const anuvakas = (groupedData[kandaNum] && groupedData[kandaNum][prapathakaNum]) || {};
+            anuvakaSelect.innerHTML = '';
+            
+            const aKeys = Object.keys(anuvakas).sort((a, b) => parseInt(a) - parseInt(b));
+            aKeys.forEach(aNum => {
+                const option = document.createElement('option');
+                option.value = aNum;
+                option.textContent = `Anuvaka ${aNum}`;
+                anuvakaSelect.appendChild(option);
+            });
+
+            if(aKeys.length > 0) {
+                populateVerses(kandaNum, prapathakaNum, aKeys[0]);
+            }
+        }
+
+        function populateVerses(kandaNum, prapathakaNum, anuvakaNum) {
+            const verses = (groupedData[kandaNum] && groupedData[kandaNum][prapathakaNum] && groupedData[kandaNum][prapathakaNum][anuvakaNum]) || [];
+            verseSelect.innerHTML = '';
+            
+            verses.forEach((verseObj) => {
+                const option = document.createElement('option');
+                option.value = verseObj.verse_number;
+                option.textContent = `Mantra ${verseObj.verse_number}`;
+                verseSelect.appendChild(option);
+            });
+
+            if(verses.length > 0) {
+                displayVerse(kandaNum, prapathakaNum, anuvakaNum, verses[0].verse_number);
+            }
+        }
+
+        function displayVerse(kandaNum, prapathakaNum, anuvakaNum, verseNum) {
+            const verses = (groupedData[kandaNum] && groupedData[kandaNum][prapathakaNum] && groupedData[kandaNum][prapathakaNum][anuvakaNum]) || [];
+            const verseObj = verses.find(v => v.verse_number == verseNum);
+            if (!verseObj) return;
+
+            const displayArea = document.querySelector('.reader-display');
+            displayArea.style.opacity = 0;
+            
+            setTimeout(() => {
+                document.getElementById('sanskrit').innerHTML = verseObj.text.replace(/\n/g, '<br>');
+                document.getElementById('translit').innerHTML = verseObj.transliteration.replace(/\n/g, '<br>');
+                
+                displayArea.style.opacity = 1;
+                displayArea.style.transition = 'opacity 0.4s ease';
+            }, 200);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchYajurveda();
+        });
+        
+        window.prevVerse = function() {
+            if (verseSelect.selectedIndex > 0) {
+                verseSelect.selectedIndex--;
+                displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, verseSelect.value);
+            } else if (anuvakaSelect.selectedIndex > 0) {
+                anuvakaSelect.selectedIndex--;
+                populateVerses(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value);
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, verseSelect.value);
+            } else if (prapathakaSelect.selectedIndex > 0) {
+                prapathakaSelect.selectedIndex--;
+                populateAnuvakas(kandaSelect.value, prapathakaSelect.value);
+                anuvakaSelect.selectedIndex = anuvakaSelect.options.length - 1;
+                populateVerses(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value);
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, verseSelect.value);
+            } else if (kandaSelect.selectedIndex > 0) {
+                kandaSelect.selectedIndex--;
+                populatePrapathakas(kandaSelect.value);
+                prapathakaSelect.selectedIndex = prapathakaSelect.options.length - 1;
+                populateAnuvakas(kandaSelect.value, prapathakaSelect.value);
+                anuvakaSelect.selectedIndex = anuvakaSelect.options.length - 1;
+                populateVerses(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value);
+                verseSelect.selectedIndex = verseSelect.options.length - 1;
+                displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, verseSelect.value);
+            }
+        };
+
+        window.nextVerse = function() {
+            if (verseSelect.selectedIndex < verseSelect.options.length - 1) {
+                verseSelect.selectedIndex++;
+                displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, verseSelect.value);
+            } else if (anuvakaSelect.selectedIndex < anuvakaSelect.options.length - 1) {
+                anuvakaSelect.selectedIndex++;
+                populateVerses(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value);
+                verseSelect.selectedIndex = 0;
+                displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, verseSelect.value);
+            } else if (prapathakaSelect.selectedIndex < prapathakaSelect.options.length - 1) {
+                prapathakaSelect.selectedIndex++;
+                populateAnuvakas(kandaSelect.value, prapathakaSelect.value);
+                anuvakaSelect.selectedIndex = 0;
+                populateVerses(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value);
+                verseSelect.selectedIndex = 0;
+                displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, verseSelect.value);
+            } else if (kandaSelect.selectedIndex < kandaSelect.options.length - 1) {
+                kandaSelect.selectedIndex++;
+                populatePrapathakas(kandaSelect.value);
+                prapathakaSelect.selectedIndex = 0;
+                populateAnuvakas(kandaSelect.value, prapathakaSelect.value);
+                anuvakaSelect.selectedIndex = 0;
+                populateVerses(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value);
+                verseSelect.selectedIndex = 0;
+                displayVerse(kandaSelect.value, prapathakaSelect.value, anuvakaSelect.value, verseSelect.value);
+            }
+        };
+    </script>
+</body>
+</html>
